@@ -13,11 +13,9 @@ import java.beans.PropertyChangeListener;
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "logged in";
-    private final LoggedInViewModel loggedInViewModel;
-
-    JLabel username;
-
     final JButton logOut;
+    private final LoggedInViewModel loggedInViewModel;
+    JLabel username;
 
     /**
      * A window with a title and a JButton.

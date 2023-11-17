@@ -26,5 +26,7 @@ public class SignupInputData {
         return repeatPassword;
     }
 
-    String getPreferredLanguage() { return preferredLanguage; }
+    String getPreferredLanguage() {
+        return preferredLanguage;
+    }
 }

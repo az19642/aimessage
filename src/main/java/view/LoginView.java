@@ -16,16 +16,13 @@ import java.beans.PropertyChangeListener;
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "log in";
-    private final LoginViewModel loginViewModel;
-
     final JTextField usernameInputField = new JTextField(15);
-    private final JLabel usernameErrorField = new JLabel();
-
     final JPasswordField passwordInputField = new JPasswordField(15);
-    private final JLabel passwordErrorField = new JLabel();
-
     final JButton logIn;
     final JButton cancel;
+    private final LoginViewModel loginViewModel;
+    private final JLabel usernameErrorField = new JLabel();
+    private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
 
     public LoginView(LoginViewModel loginViewModel, LoginController controller) {

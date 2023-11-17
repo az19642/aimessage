@@ -7,24 +7,17 @@ import java.beans.PropertyChangeSupport;
 
 public class LoginViewModel extends ViewModel {
 
+    public static final String LOGIN_BUTTON_LABEL = "Log in";
+    public static final String CANCEL_BUTTON_LABEL = "Cancel";
     public final String TITLE_LABEL = "Log In View";
     public final String USERNAME_LABEL = "Enter username";
     public final String PASSWORD_LABEL = "Enter password";
-
-    public static final String LOGIN_BUTTON_LABEL = "Log in";
-    public static final String CANCEL_BUTTON_LABEL = "Cancel";
-
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private LoginState state = new LoginState();
 
     public LoginViewModel() {
         super("log in");
     }
-
-    public void setState(LoginState state) {
-        this.state = state;
-    }
-
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     // This is what the Signup Presenter will call to let the ViewModel know
     // to alert the View
@@ -38,5 +31,9 @@ public class LoginViewModel extends ViewModel {
 
     public LoginState getState() {
         return state;
+    }
+
+    public void setState(LoginState state) {
+        this.state = state;
     }
 }

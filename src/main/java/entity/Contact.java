@@ -1,14 +1,13 @@
 package entity;
 
-import java.util.List;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
  * Represents a contact to a user in the software
  * Notice that the lastMessageTime is used to sort the contacts of the user
  */
-
 public class Contact {
 
     private final String name;
@@ -30,6 +29,7 @@ public class Contact {
     public LocalDateTime getLastMessageTime() {
         return lastMessageTime;
     }
+
     public String getPreferredLanguage() {
         return preferredLanguage;
     }

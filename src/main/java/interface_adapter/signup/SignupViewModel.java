@@ -15,18 +15,12 @@ public class SignupViewModel extends ViewModel {
 
     public static final String SIGNUP_BUTTON_LABEL = "Sign up";
     public static final String CANCEL_BUTTON_LABEL = "Cancel";
-
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private SignupState state = new SignupState();
 
     public SignupViewModel() {
         super("sign up");
     }
-
-    public void setState(SignupState state) {
-        this.state = state;
-    }
-
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     // This is what the Signup Presenter will call to let the ViewModel know
     // to alert the View
@@ -40,5 +34,9 @@ public class SignupViewModel extends ViewModel {
 
     public SignupState getState() {
         return state;
+    }
+
+    public void setState(SignupState state) {
+        this.state = state;
     }
 }
