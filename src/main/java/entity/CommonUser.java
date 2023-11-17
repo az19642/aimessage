@@ -1,22 +1,29 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * This class represents a common user of the software
+ * Every user will have a unique username
+ *
+ */
 
 class CommonUser implements User {
 
     private final String name;
     private final String password;
+    private String preferredLanguage;
+    private List<Contact> contacts;
     private final LocalDateTime creationTime;
 
-    /**
-     * Requires: password is valid.
-     *
-     * @param name
-     * @param password
-     */
-    CommonUser(String name, String password, LocalDateTime creationTime) {
+    CommonUser(String name, String password, String preferredLanguage,
+               LocalDateTime creationTime, List<Contact> contacts) {
         this.name = name;
         this.password = password;
+        this.preferredLanguage = preferredLanguage;
+        this.contacts = contacts;
         this.creationTime = creationTime;
     }
 
@@ -29,6 +36,12 @@ class CommonUser implements User {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String getPreferredLanguage() { return preferredLanguage; }
+
+    @Override
+    public List<Contact> getContacts() { return contacts; }
 
     @Override
     public LocalDateTime getCreationTime() {
