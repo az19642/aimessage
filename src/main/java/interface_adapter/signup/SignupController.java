@@ -6,6 +6,7 @@ import use_case.signup.SignupInputData;
 public class SignupController {
 
     final SignupInputBoundary userSignupUseCaseInteractor;
+
     public SignupController(SignupInputBoundary userSignupUseCaseInteractor) {
         this.userSignupUseCaseInteractor = userSignupUseCaseInteractor;
     }

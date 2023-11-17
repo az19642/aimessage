@@ -1,7 +1,6 @@
 package entity;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -11,14 +10,13 @@ import java.util.List;
 public class CommonUserFactory implements UserFactory {
 
     /**
-     *
      * Requires: password is valid.
      *
-     * @param name the username of the user
-     * @param password the users password
+     * @param name              the username of the user
+     * @param password          the users password
      * @param preferredLanguage the users preferred language
-     * @param creationTime the time the users account was created
-     * @param contacts the contacts associated with the user
+     * @param creationTime      the time the users account was created
+     * @param contacts          the contacts associated with the user
      * @return An instance of the user entity
      */
     @Override

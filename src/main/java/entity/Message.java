@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 /**
  * This class represents a message between a user and contact
  */
-
 public class Message {
     private final String content;
     private final String sender;

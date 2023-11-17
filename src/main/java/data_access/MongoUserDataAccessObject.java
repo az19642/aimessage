@@ -1,21 +1,22 @@
 package data_access;
 
-import com.mongodb.client.model.IndexOptions;
-import entity.*;
-
-import org.bson.Document;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import use_case.signup.SignupUserDataAccessInterface;
+import com.mongodb.client.model.IndexOptions;
+import entity.*;
+import org.bson.Document;
 import use_case.login.LoginUserDataAccessInterface;
-
-import static com.mongodb.client.model.Filters.eq;
+import use_case.signup.SignupUserDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 /**
  * This class is the data access objects which deals with all interactions with the database
@@ -24,7 +25,6 @@ import java.util.*;
  * These three collections have an important relationship
  * The Users collection has a field which is a mapping of contacts to conversation ids
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
- *
  */
 
 public class MongoUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
@@ -59,12 +59,10 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
 
     /**
-     *
      * Saves a new user to the database, notice that the contacts map will be empty
      * Do not use this to update an existing user, use the update method instead.
      *
      * @param user a new user with the name, password, and preferred language attributes filled in.
-     *
      */
     @Override
     public void save(User user) {
@@ -82,13 +80,11 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
 
     /**
-     *
      * Updates an existing user, call this method whenever a change has been made to user
      * For example when a new contact is added or removed.
      * Notice that this method is private as whenever a change is made
      *
      * @param user an existing user in the database
-     *
      */
     private void update(User user) {
 
@@ -112,7 +108,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * Adds a contact to the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
      *
-     * @param user the current user
+     * @param user        the current user
      * @param contactName the contacts name
      */
     public void addContact(User user, String contactName) {
@@ -125,7 +121,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * If the username and password do not match a user, or the username is not valid null will be returned
      * Otherwise it will return the user with the given username.
      *
-     * @param name the username of the user
+     * @param name     the username of the user
      * @param password the password of the user
      * @return User with given username and password if valid, otherwise return null
      */
@@ -149,7 +145,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
             HashMap<String, Object> contactToChatID = new HashMap<>(contactsDocument);
 
             // Each iteration will configure one contact of the user contact list
-            for (String contact: contactToChatID.keySet()) {
+            for (String contact : contactToChatID.keySet()) {
                 Document contactDoc = userRecords.find(eq("name", contact)).first();
                 Document convoDoc = conversationRecords.find(eq("ID", contactToChatID.get(contact))).first();
 
@@ -159,13 +155,13 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
                 List<Integer> messagesIDs = convoDoc.getList("messagesIDs", Integer.class);
 
                 // Iterates over all message Ids finding the message and converting it to the message entity
-                for (Integer messageID: messagesIDs) {
+                for (Integer messageID : messagesIDs) {
                     Document messageDoc = messageRecords.find(eq("ID", messageID)).first();
                     messages.add(messageFactory.create(messageDoc.getString("content"),
                             messageDoc.getString("sender")));
                 }
 
-                LocalDateTime lastMessageTime =  convoDoc.getDate("lastMessageTime").toInstant().
+                LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().
                         atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 // Combining all the efforts now to create a contact
