@@ -54,7 +54,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
         // This code will make the look-up faster
         userRecords.createIndex(new Document("name", 1), new IndexOptions().unique(true));
         conversationRecords.createIndex(new Document("ID", 1), new IndexOptions().unique(true));
-        userRecords.createIndex(new Document("ID", 1), new IndexOptions().unique(true));
+        messageRecords.createIndex(new Document("ID", 1), new IndexOptions().unique(true));
     }
 
 
