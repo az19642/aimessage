@@ -1,10 +1,12 @@
 package app;
 
+import data_access.GPTDataAccessObject;
 import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.password_generator.PasswordGeneratorViewModel;
 import interface_adapter.signup.SignupViewModel;
 import view.LoggedInView;
 import view.LoginView;
@@ -40,6 +42,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
 
         MongoUserDataAccessObject userDataAccessObject;
         userDataAccessObject = new MongoUserDataAccessObject(
@@ -47,7 +50,10 @@ public class Main {
                 new CommonUserFactory()
         );
 
-        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel, userDataAccessObject);
+        GPTDataAccessObject gptDataAccessObject;
+        gptDataAccessObject = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
+
+        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel, userDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);

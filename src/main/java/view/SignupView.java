@@ -5,6 +5,7 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.password_generator.PasswordGeneratorController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.beans.PropertyChangeListener;
 /**
  * Represents the view for the signup screen.
  * Allows users to input their desired username, password, and repeat password,
- * and provides signup and cancel buttons.
+ * and provides signup, login, and password generation buttons.
  */
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "sign up";
@@ -33,9 +34,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private final JButton signUp;
     private final JButton goToLogin;
+    private final JButton generatePassword;
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel, LoginViewModel loginViewModel,
-                      ViewManagerModel viewManagerModel) {
+                      ViewManagerModel viewManagerModel, PasswordGeneratorController passwordGeneratorController) {
 
         this.signupController = controller;
         this.signupViewModel = signupViewModel;
@@ -45,7 +47,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         signupViewModel.addPropertyChangeListener(this);
 
         // Set up main panel with grid layout
-        GridLayout gridLayout = new GridLayout(6, 3);
+        GridLayout gridLayout = new GridLayout(7, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
@@ -62,6 +64,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
         goToLogin = new JButton(SignupViewModel.GO_TO_LOGIN_BUTTON_LABEL);
+        generatePassword = new JButton(SignupViewModel.GENERATE_PASSWORD_LABEL);
 
         signUp.addActionListener(evt -> {
             if (evt.getSource().equals(signUp)) {
@@ -136,6 +139,17 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             }
         });
 
+        generatePassword.addActionListener(evt -> {
+            if (evt.getSource().equals(generatePassword)) {
+                String generatedPassword = passwordGeneratorController.execute("Generate a secure password.");
+                JOptionPane.showMessageDialog(SignupView.this, generatedPassword);
+                passwordInputField.setText(generatedPassword);
+                SignupState currentState = signupViewModel.getState();
+                currentState.setPassword(generatedPassword);
+                signupViewModel.setState(currentState);
+            }
+        });
+
         // Add components to main panel in correct order; empty labels are for spacing
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameInputField);
@@ -143,6 +157,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         mainPanel.add(passwordLabel);
         mainPanel.add(passwordInputField);
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(generatePassword);
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(repeatPasswordLabel);
