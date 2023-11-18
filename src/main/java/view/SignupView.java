@@ -39,11 +39,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         signupViewModel.addPropertyChangeListener(this);
 
-
+        // Set up main panel with grid layout
         GridLayout gridLayout = new GridLayout(6, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
-        JPanel panel = new JPanel(gridLayout);
+        JPanel mainPanel = new JPanel(gridLayout);
 
         JLabel usernameLabel = new JLabel(SignupViewModel.USERNAME_LABEL);
         JLabel passwordLabel = new JLabel(SignupViewModel.PASSWORD_LABEL);
@@ -131,31 +131,39 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             }
         });
 
-        panel.add(usernameLabel);
-        panel.add(usernameInputField);
-        panel.add(new JLabel(""));
+        // Add components to main panel in correct order; empty labels are for spacing
+        mainPanel.add(usernameLabel);
+        mainPanel.add(usernameInputField);
+        mainPanel.add(new JLabel(""));
 
-        panel.add(passwordLabel);
-        panel.add(passwordInputField);
-        panel.add(new JLabel(""));
+        mainPanel.add(passwordLabel);
+        mainPanel.add(passwordInputField);
+        mainPanel.add(new JLabel(""));
 
-        panel.add(repeatPasswordLabel);
-        panel.add(repeatPasswordInputField);
-        panel.add(new JLabel(""));
+        mainPanel.add(repeatPasswordLabel);
+        mainPanel.add(repeatPasswordInputField);
+        mainPanel.add(new JLabel(""));
 
-        panel.add(new JLabel(""));
-        panel.add(signUp);
-        panel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(signUp);
+        mainPanel.add(new JLabel(""));
 
-        panel.add(new JLabel(""));
-        panel.add(new JLabel(""));
-        panel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
 
-        panel.add(haveAccountLabel);
-        panel.add(goToLogin);
-        panel.add(new JLabel(""));
+        mainPanel.add(haveAccountLabel);
+        mainPanel.add(goToLogin);
+        mainPanel.add(new JLabel(""));
 
-        this.add(panel);
+        // Create a grid panel to produce pseudo margins on the top and bottom; centers main panel
+        JPanel pseudoMarginsPanel = new JPanel(new GridLayout(3, 1));
+        pseudoMarginsPanel.add(new JLabel(""));
+        pseudoMarginsPanel.add(mainPanel);
+        pseudoMarginsPanel.add(new JLabel(""));
+
+        // Add everything to (this) signup view panel
+        this.add(pseudoMarginsPanel);
     }
 
     /**
