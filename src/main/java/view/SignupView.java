@@ -40,7 +40,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         signupViewModel.addPropertyChangeListener(this);
 
 
-        GridLayout gridLayout = new GridLayout(6, 2);
+        GridLayout gridLayout = new GridLayout(6, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel panel = new JPanel(gridLayout);
@@ -133,21 +133,27 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         panel.add(usernameLabel);
         panel.add(usernameInputField);
+        panel.add(new JLabel(""));
 
         panel.add(passwordLabel);
         panel.add(passwordInputField);
+        panel.add(new JLabel(""));
 
         panel.add(repeatPasswordLabel);
         panel.add(repeatPasswordInputField);
+        panel.add(new JLabel(""));
 
-        panel.add(new JLabel("")); // blank cell
+        panel.add(new JLabel(""));
         panel.add(signUp);
+        panel.add(new JLabel(""));
 
+        panel.add(new JLabel(""));
         panel.add(new JLabel(""));
         panel.add(new JLabel(""));
 
         panel.add(haveAccountLabel);
         panel.add(goToLogin);
+        panel.add(new JLabel(""));
 
         this.add(panel);
     }
