@@ -6,6 +6,9 @@ import entity.UserFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Implements the signup use case by interacting with the data layer and presenting the result.
+ */
 public class SignupInteractor implements SignupInputBoundary {
     final SignupUserDataAccessInterface userDataAccessObject;
     final SignupOutputBoundary userPresenter;
@@ -19,6 +22,11 @@ public class SignupInteractor implements SignupInputBoundary {
         this.userFactory = userFactory;
     }
 
+    /**
+     * Executes the signup use case with the provided input data.
+     *
+     * @param signupInputData The input data for the signup use case.
+     */
     @Override
     public void execute(SignupInputData signupInputData) {
         if (userDataAccessObject.userExists(signupInputData.getUsername())) {

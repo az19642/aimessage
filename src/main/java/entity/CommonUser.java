@@ -24,26 +24,51 @@ class CommonUser implements User {
         this.creationTime = creationTime;
     }
 
+    /**
+     * Retrieves the name associated with this user.
+     *
+     * @return The name of this user.
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Retrieves the password associated with this user.
+     *
+     * @return The password of this user.
+     */
     @Override
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Retrieves the preferred language of the user
+     *
+     * @return the preferred language of this user
+     */
     @Override
     public String getPreferredLanguage() {
         return preferredLanguage;
     }
 
+    /**
+     * Retrieves the List of contacts associated with this user.
+     *
+     * @return the List of contacts of this user
+     */
     @Override
     public List<Contact> getContacts() {
         return contacts;
     }
 
+    /**
+     * Retrieves the creation time associated with this object.
+     *
+     * @return the creation time of the object
+     */
     @Override
     public LocalDateTime getCreationTime() {
         return creationTime;

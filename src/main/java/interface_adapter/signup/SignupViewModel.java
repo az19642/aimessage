@@ -5,6 +5,9 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel representing the state of the sign-up view.
+ */
 public class SignupViewModel extends ViewModel {
 
     public static final String CLEAR_BUTTON_LABEL = "Clear";
@@ -22,20 +25,36 @@ public class SignupViewModel extends ViewModel {
         super("sign up");
     }
 
-    // This is what the Signup Presenter will call to let the ViewModel know
-    // to alert the View
+    /**
+     * Notifies listeners that a property in the ViewModel has changed.
+     */
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+    /**
+     * Adds a property change listener to the ViewModel.
+     *
+     * @param listener The listener to be added.
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Gets the current state of the sign-up view.
+     *
+     * @return The current state of the sign-up view.
+     */
     public SignupState getState() {
         return state;
     }
 
+    /**
+     * Sets the state of the sign-up view.
+     *
+     * @param state The new state to be set.
+     */
     public void setState(SignupState state) {
         this.state = state;
     }

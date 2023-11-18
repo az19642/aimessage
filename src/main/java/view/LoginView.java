@@ -13,6 +13,10 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Represents the view for the login screen.
+ * Allows users to input their username and password, and provides login and cancel buttons.
+ */
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "log in";
@@ -107,18 +111,30 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     * React to a button click that results in evt.
+     * Reacts to a button click event.
+     *
+     * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }
 
+    /**
+     * Handles property change events.
+     *
+     * @param evt The PropertyChangeEvent representing the change.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoginState state = (LoginState) evt.getNewValue();
         setFields(state);
     }
 
+    /**
+     * Sets the fields based on the provided LoginState.
+     *
+     * @param state The LoginState to set the fields from.
+     */
     private void setFields(LoginState state) {
         usernameInputField.setText(state.getUsername());
     }

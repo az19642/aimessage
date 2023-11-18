@@ -13,6 +13,11 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Represents the view for the signup screen.
+ * Allows users to input their desired username, password, and repeat password,
+ * and provides signup and cancel buttons.
+ */
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "sign up";
 
@@ -142,12 +147,19 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     }
 
     /**
-     * React to a button click that results in evt.
+     * Reacts to a button click event.
+     *
+     * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
         JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
     }
 
+    /**
+     * Handles property change events.
+     *
+     * @param evt The PropertyChangeEvent representing the change.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         SignupState state = (SignupState) evt.getNewValue();

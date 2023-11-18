@@ -2,6 +2,9 @@ package use_case.login;
 
 import entity.User;
 
+/**
+ * Implements the login use case.
+ */
 public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
     final LoginOutputBoundary loginPresenter;
@@ -12,6 +15,11 @@ public class LoginInteractor implements LoginInputBoundary {
         this.loginPresenter = loginOutputBoundary;
     }
 
+    /**
+     * Executes the login use case with the provided login input data.
+     *
+     * @param loginInputData The input data for the login use case.
+     */
     @Override
     public void execute(LoginInputData loginInputData) {
         String username = loginInputData.getUsername();

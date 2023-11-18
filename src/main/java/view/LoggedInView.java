@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Represents the view for the logged-in screen.
+ * Displays user information and provides a logout button.
+ */
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "logged in";
@@ -45,12 +49,19 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     }
 
     /**
-     * React to a button click that results in evt.
+     * Reacts to a button click event.
+     *
+     * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }
 
+    /**
+     * Handles property change events.
+     *
+     * @param evt The PropertyChangeEvent representing the change.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
