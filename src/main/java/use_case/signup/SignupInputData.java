@@ -1,5 +1,8 @@
 package use_case.signup;
 
+/**
+ * Represents the input data for the signup use case.
+ */
 public class SignupInputData {
 
     final private String username;
@@ -14,18 +17,38 @@ public class SignupInputData {
         this.preferredLanguage = preferredLanguage;
     }
 
+    /**
+     * Gets the username chosen during the signup process.
+     *
+     * @return The username.
+     */
     String getUsername() {
         return username;
     }
 
+    /**
+     * Gets the password chosen during the signup process.
+     *
+     * @return The password.
+     */
     String getPassword() {
         return password;
     }
 
+    /**
+     * Gets the repeated password entered during the signup process for confirmation.
+     *
+     * @return The repeated password.
+     */
     public String getRepeatPassword() {
         return repeatPassword;
     }
 
+    /**
+     * Gets the preferred language selected during the signup process.
+     *
+     * @return The preferred language.
+     */
     String getPreferredLanguage() {
         return preferredLanguage;
     }

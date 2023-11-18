@@ -9,6 +9,9 @@ import use_case.signup.SignupOutputData;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Presenter responsible for handling the output of the signup use case and updating the corresponding ViewModel.
+ */
 public class SignupPresenter implements SignupOutputBoundary {
 
     private final SignupViewModel signupViewModel;
@@ -23,6 +26,11 @@ public class SignupPresenter implements SignupOutputBoundary {
         this.loginViewModel = loginViewModel;
     }
 
+    /**
+     * Prepares the view for a successful signup by updating the login state and switching to the login view.
+     *
+     * @param response The output data containing information about the successful signup.
+     */
     @Override
     public void prepareSuccessView(SignupOutputData response) {
         // On success, switch to the login view.
@@ -38,6 +46,11 @@ public class SignupPresenter implements SignupOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
+    /**
+     * Prepares the view for a failed signup by updating the signup state with an error message.
+     *
+     * @param error The error message indicating the reason for the signup failure.
+     */
     @Override
     public void prepareFailView(String error) {
         SignupState signupState = signupViewModel.getState();

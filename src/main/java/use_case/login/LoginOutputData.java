@@ -1,5 +1,8 @@
 package use_case.login;
 
+/**
+ * Represents the output data for the login use case.
+ */
 public class LoginOutputData {
 
     private final String username;
@@ -10,6 +13,11 @@ public class LoginOutputData {
         this.useCaseFailed = useCaseFailed;
     }
 
+    /**
+     * Gets the username of the logged-in user.
+     *
+     * @return The username of the logged-in user.
+     */
     public String getUsername() {
         return username;
     }

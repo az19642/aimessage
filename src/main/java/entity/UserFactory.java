@@ -3,6 +3,9 @@ package entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Factory interface responsible for creating instances of the {@link User} class.
+ */
 public interface UserFactory {
 
     /**

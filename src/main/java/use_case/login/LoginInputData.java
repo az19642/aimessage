@@ -1,5 +1,8 @@
 package use_case.login;
 
+/**
+ * Represents the input data for the login use case.
+ */
 public class LoginInputData {
 
     final private String username;
@@ -10,10 +13,20 @@ public class LoginInputData {
         this.password = password;
     }
 
+    /**
+     * Gets the username for login.
+     *
+     * @return The username for login.
+     */
     String getUsername() {
         return username;
     }
 
+    /**
+     * Gets the password for login.
+     *
+     * @return The password for login.
+     */
     String getPassword() {
         return password;
     }
