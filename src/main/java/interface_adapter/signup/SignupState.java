@@ -11,6 +11,11 @@ public class SignupState {
     private String repeatPassword = "";
     private String repeatPasswordError = null;
 
+    /**
+     * Constructs a new SignupState by copying the values from the provided SignupState.
+     *
+     * @param copy The SignupState to copy values from.
+     */
     public SignupState(SignupState copy) {
         username = copy.username;
         usernameError = copy.usernameError;
