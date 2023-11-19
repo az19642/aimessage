@@ -28,8 +28,6 @@ class SignupInteractorTest {
         SignupOutputBoundary successPresenter = new SignupOutputBoundary() {
             @Override
             public void prepareSuccessView(SignupOutputData user) {
-                LocalDateTime responseTime = LocalDateTime.parse(user.getCreationTime());
-
                 assertEquals("user", user.getUsername());
                 assertNotNull(user.getCreationTime());
                 assertTrue(userRepository.userExists("user"));
