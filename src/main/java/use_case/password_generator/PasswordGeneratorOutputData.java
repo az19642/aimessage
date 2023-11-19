@@ -17,6 +17,11 @@ public class PasswordGeneratorOutputData {
         this.useCaseFailed = useCaseFailed;
     }
 
+    /**
+     * Gets the generated password.
+     *
+     * @return The generated password.
+     */
     public String getGeneratedPassword() {
         return generatedPassword;
     }

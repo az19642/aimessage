@@ -10,6 +10,11 @@ public class SignupController {
 
     final SignupInputBoundary userSignupUseCaseInteractor;
 
+    /**
+     * Constructs a new SignupController with the specified SignupInputBoundary.
+     *
+     * @param userSignupUseCaseInteractor The SignupInputBoundary to be used by the controller.
+     */
     public SignupController(SignupInputBoundary userSignupUseCaseInteractor) {
         this.userSignupUseCaseInteractor = userSignupUseCaseInteractor;
     }

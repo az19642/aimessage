@@ -22,6 +22,9 @@ public class SignupViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private SignupState state = new SignupState();
 
+    /**
+     * Constructs a new SignupViewModel with a default view name.
+     */
     public SignupViewModel() {
         super("sign up");
     }
