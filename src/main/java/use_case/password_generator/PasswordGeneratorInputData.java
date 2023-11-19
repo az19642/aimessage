@@ -5,4 +5,5 @@ package use_case.password_generator;
  * Currently, this class is empty because no input data is needed to generate a password with the API.
  */
 public class PasswordGeneratorInputData {
+    public PasswordGeneratorInputData() {};
 }
