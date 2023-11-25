@@ -22,11 +22,7 @@ public class LoginInteractor implements LoginInputBoundary {
      */
     @Override
     public void execute(LoginInputData loginInputData) {
-        String username = loginInputData.getUsername();
-        String password = loginInputData.getPassword();
-
-        User user = userDataAccessObject.getUser(username, password);
-
+        User user = userDataAccessObject.getUser(loginInputData.getUsername(), loginInputData.getPassword());
         if (user == null) {
             loginPresenter.prepareFailView("Incorrect username or password");
         } else {

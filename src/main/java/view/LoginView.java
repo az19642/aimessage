@@ -8,8 +8,6 @@ import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
@@ -19,7 +17,7 @@ import java.beans.PropertyChangeListener;
  * Represents the view for the login screen.
  * Allows users to input their username and password, and provides login and cancel buttons.
  */
-public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
+public class LoginView extends JPanel implements PropertyChangeListener {
 
     public final String viewName = "log in";
     private final JTextField usernameInputField = new JTextField(15);
@@ -65,6 +63,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 );
             }
         });
+
         cancel.addActionListener(evt -> {
             if (evt.getSource().equals(cancel)) {
                 viewManagerModel.setActiveView(signupViewModel.getViewName());
@@ -128,15 +127,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         pseudoMarginsPanel.add(new JLabel(""));
 
         this.add(pseudoMarginsPanel);
-    }
-
-    /**
-     * Reacts to a button click event.
-     *
-     * @param evt The ActionEvent representing the button click.
-     */
-    public void actionPerformed(ActionEvent evt) {
-        System.out.println("Click " + evt.getActionCommand());
     }
 
     /**
