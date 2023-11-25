@@ -1,8 +1,10 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,15 +27,20 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     private final JButton logIn;
     private final JButton cancel;
     private final LoginViewModel loginViewModel;
+    private final SignupViewModel signupViewModel;
+    private final ViewManagerModel viewManagerModel;
     private final JLabel usernameErrorField = new JLabel();
     private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
 
-    public LoginView(LoginViewModel loginViewModel, LoginController controller) {
+    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController controller,
+                     ViewManagerModel viewManagerModel) {
 
         this.loginController = controller;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
+        this.signupViewModel = signupViewModel;
 
         GridLayout gridLayout = new GridLayout(4, 3);
         gridLayout.setHgap(10);
@@ -50,17 +57,20 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
 
         logIn.addActionListener(evt -> {
-                    if (evt.getSource().equals(logIn)) {
-                        LoginState currentState = loginViewModel.getState();
-                        loginController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword()
-                        );
-                    }
-                }
-        );
-
-        cancel.addActionListener(this);
+            if (evt.getSource().equals(logIn)) {
+                LoginState currentState = loginViewModel.getState();
+                loginController.execute(
+                        currentState.getUsername(),
+                        currentState.getPassword()
+                );
+            }
+        });
+        cancel.addActionListener(evt -> {
+            if (evt.getSource().equals(cancel)) {
+                viewManagerModel.setActiveView(signupViewModel.getViewName());
+                viewManagerModel.firePropertyChanged();
+            }
+        });
 
         usernameInputField.addKeyListener(new KeyListener() {
             @Override
