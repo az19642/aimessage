@@ -25,6 +25,16 @@ public class LoginUseCaseFactory {
     private LoginUseCaseFactory() {
     }
 
+    /**
+     * Creates and configures a LoginView along with its associated controllers and use case components.
+     *
+     * @param viewManagerModel     The view manager model for managing application views.
+     * @param loginViewModel       The view model for the login interface.
+     * @param signupViewModel      The view model for the signup interface.
+     * @param loggedInViewModel    The view model for the logged in interface.
+     * @param userDataAccessObject The data access object for user-related operations.
+     * @return A configured LoginView
+     */
     public static LoginView create(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
@@ -32,22 +42,17 @@ public class LoginUseCaseFactory {
             LoggedInViewModel loggedInViewModel,
             LoginUserDataAccessInterface userDataAccessObject) {
 
-        try {
-            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel,
-                    userDataAccessObject);
-            return new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Could not open user data file.");
-        }
+        LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel,
+                userDataAccessObject);
+        return new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
 
-        return null;
     }
 
     private static LoginController createLoginUseCase(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
-            LoginUserDataAccessInterface userDataAccessObject) throws IOException {
+            LoginUserDataAccessInterface userDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel,
