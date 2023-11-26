@@ -23,7 +23,6 @@ import java.beans.PropertyChangeListener;
  */
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "sign up";
-
     private final SignupViewModel signupViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -48,17 +47,35 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         signupViewModel.addPropertyChangeListener(this);
 
         // Set up main panel with grid layout
-        GridLayout gridLayout = new GridLayout(8, 3);
+        GridLayout gridLayout = new GridLayout(12, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
+        mainPanel.setBackground(Color.WHITE);
+
+        JLabel titleLabel = new JLabel(SignupViewModel.TITLE_LABEL);
+        titleLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
+
+        JLabel groupLabel = new JLabel(SignupViewModel.GROUP_LABEL);
+        groupLabel.setFont(new Font("Helvetica", Font.BOLD, 12));
 
         JLabel usernameLabel = new JLabel(SignupViewModel.USERNAME_LABEL);
-        JLabel passwordLabel = new JLabel(SignupViewModel.PASSWORD_LABEL);
-        JLabel repeatPasswordLabel = new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL);
-        JLabel preferredLanguageLabel = new JLabel(SignupViewModel.PREFERRED_LANGUAGE_LABEL);
-        JLabel haveAccountLabel = new JLabel(SignupViewModel.HAVE_ACCOUNT_LABEL);
+        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
 
+        JLabel passwordLabel = new JLabel(SignupViewModel.PASSWORD_LABEL);
+        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+
+        JLabel repeatPasswordLabel = new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL);
+        repeatPasswordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+
+        JLabel preferredLanguageLabel = new JLabel(SignupViewModel.PREFERRED_LANGUAGE_LABEL);
+        preferredLanguageLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+
+        JLabel haveAccountLabel = new JLabel(SignupViewModel.HAVE_ACCOUNT_LABEL);
+        haveAccountLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        groupLabel.setHorizontalAlignment(JLabel.CENTER);
         usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
         passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
         repeatPasswordLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -66,12 +83,29 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         haveAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
 
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
+        signUp.setFont(new Font("Helvetica", Font.PLAIN, 12));
         goToLogin = new JButton(SignupViewModel.GO_TO_LOGIN_BUTTON_LABEL);
+        goToLogin.setFont(new Font("Helvetica", Font.PLAIN, 12));
         generatePassword = new JButton(SignupViewModel.GENERATE_PASSWORD_LABEL);
+        generatePassword.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
         // Create a dropdown menu with language options
         String[] languages = {"English", "French", "Korean", "Arabic", "Chinese", "Spanish"};
         languageDropdown = new JComboBox<>(languages);
+        languageDropdown.setFont(new Font("Helvetica", Font.PLAIN, 12));
+
+        // Styling for input fields
+        Dimension inputFieldSize = new Dimension(100, 30);
+        Color inputFieldBackground = new Color(240, 240, 240);
+
+        usernameInputField.setPreferredSize(inputFieldSize);
+        usernameInputField.setBackground(inputFieldBackground);
+
+        passwordInputField.setPreferredSize(inputFieldSize);
+        passwordInputField.setBackground(inputFieldBackground);
+
+        repeatPasswordInputField.setPreferredSize(inputFieldSize);
+        repeatPasswordInputField.setBackground(inputFieldBackground);
 
         signUp.addActionListener(evt -> {
             if (evt.getSource().equals(signUp)) {
@@ -159,6 +193,22 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         });
 
         // Add components to main panel in correct order; empty labels are for spacing
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(titleLabel);
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(groupLabel);
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameInputField);
         mainPanel.add(new JLabel(""));
@@ -193,9 +243,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         // Create a grid panel to produce pseudo margins on the top and bottom; centers main panel
         JPanel pseudoMarginsPanel = new JPanel(new GridLayout(3, 1));
+        pseudoMarginsPanel.setBorder(BorderFactory.createEmptyBorder(-400, 0, 0, 0));
+
         pseudoMarginsPanel.add(new JLabel(""));
         pseudoMarginsPanel.add(mainPanel);
         pseudoMarginsPanel.add(new JLabel(""));
+
+        pseudoMarginsPanel.setBackground(Color.WHITE);
 
         // Add everything to (this) signup view panel
         this.add(pseudoMarginsPanel);
