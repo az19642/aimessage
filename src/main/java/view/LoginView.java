@@ -31,32 +31,34 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
 
-    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController controller,
+    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
                      ViewManagerModel viewManagerModel) {
 
-        this.loginController = controller;
+        this.loginController = loginController;
         this.loginViewModel = loginViewModel;
-        this.loginViewModel.addPropertyChangeListener(this);
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
+
+        loginViewModel.addPropertyChangeListener(this);
 
         GridLayout gridLayout = new GridLayout(4, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
-        mainPanel.setBackground(Color.WHITE);
 
         JLabel usernameLabel = new JLabel(LoginViewModel.USERNAME_LABEL);
-        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
         JLabel passwordLabel = new JLabel(LoginViewModel.PASSWORD_LABEL);
+
+        logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
+        cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
+
+        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
         passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
 
         usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
         passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         logIn.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
         cancel.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
         // Styling for input fields
@@ -69,6 +71,18 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         passwordInputField.setPreferredSize(inputFieldSize);
         passwordInputField.setBackground(inputFieldBackground);
 
+        addListeners();
+
+        addComponents(mainPanel, usernameLabel, passwordLabel);
+
+        mainPanel.setBackground(Color.WHITE);
+
+        this.add(mainPanel);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    }
+
+
+    private void addListeners() {
         logIn.addActionListener(evt -> {
             if (evt.getSource().equals(logIn)) {
                 LoginState currentState = loginViewModel.getState();
@@ -119,7 +133,9 @@ public class LoginView extends JPanel implements PropertyChangeListener {
             public void keyReleased(KeyEvent e) {
             }
         });
+    }
 
+    private void addComponents(JPanel mainPanel, JLabel usernameLabel, JLabel passwordLabel) {
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameInputField);
         mainPanel.add(new JLabel(""));
