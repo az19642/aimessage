@@ -1,4 +1,4 @@
-# CSC207 Project: AiMessage
+# AiMessage
 **Problem Domain**: Messaging System
 
 ### Specification
