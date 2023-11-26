@@ -14,6 +14,9 @@ import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginUserDataAccessInterface;
 import view.LoginView;
 
+/**
+ * A factory class responsible for creating and initializing components related to the login use case.
+ */
 public class LoginUseCaseFactory {
 
     /**
