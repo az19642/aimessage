@@ -2,10 +2,10 @@ package view;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.password_generator.PasswordGeneratorController;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
-import interface_adapter.password_generator.PasswordGeneratorController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,13 +36,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JButton generatePassword;
     private final JComboBox<String> languageDropdown;
 
+    private final PasswordGeneratorController passwordGeneratorController;
+
     /**
      * Constructs a SignupView.
      *
-     * @param controller               The SignupController for handling signup actions.
-     * @param signupViewModel         The SignupViewModel for managing the signup view's state.
-     * @param loginViewModel          The LoginViewModel for managing the login view's state.
-     * @param viewManagerModel        The ViewManagerModel for controlling the active view.
+     * @param controller                  The SignupController for handling signup actions.
+     * @param signupViewModel             The SignupViewModel for managing the signup view's state.
+     * @param loginViewModel              The LoginViewModel for managing the login view's state.
+     * @param viewManagerModel            The ViewManagerModel for controlling the active view.
      * @param passwordGeneratorController The PasswordGeneratorController for generating secure passwords.
      */
     public SignupView(SignupController controller, SignupViewModel signupViewModel, LoginViewModel loginViewModel,
@@ -52,6 +54,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.signupViewModel = signupViewModel;
         this.loginViewModel = loginViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.passwordGeneratorController = passwordGeneratorController;
 
         signupViewModel.addPropertyChangeListener(this);
 
@@ -60,7 +63,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
-        mainPanel.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel(SignupViewModel.TITLE_LABEL);
         titleLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
@@ -116,24 +118,22 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         repeatPasswordInputField.setPreferredSize(inputFieldSize);
         repeatPasswordInputField.setBackground(inputFieldBackground);
 
-        signUp.addActionListener(evt -> {
-            if (evt.getSource().equals(signUp)) {
-                SignupState currentState = signupViewModel.getState();
-                String preferredLanguage = languageDropdown.getItemAt(languageDropdown.getSelectedIndex());
+        // Calls helper method to add appropriate listeners to components
+        addListeners();
 
-                signupController.execute(currentState.getUsername(), currentState.getPassword(),
-                        currentState.getRepeatPassword(), preferredLanguage
-                );
-            }
-        });
+        // Calls helper method to add all components to mainPanel in the correct order
+        addComponents(mainPanel, titleLabel, groupLabel, usernameLabel, passwordLabel, repeatPasswordLabel,
+                preferredLanguageLabel, haveAccountLabel);
 
-        goToLogin.addActionListener(evt -> {
-            if (evt.getSource().equals(goToLogin)) {
-                viewManagerModel.setActiveView(loginViewModel.getViewName());
-                viewManagerModel.firePropertyChanged();
-            }
-        });
+        mainPanel.setBackground(Color.WHITE);
 
+        // Add everything to parent (this) frame signup view panel
+        this.add(mainPanel);
+        // Set parent layout to vertical box layout
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    }
+
+    private void addListeners() {
         usernameInputField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -201,17 +201,35 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             }
         });
 
-        // Add components to main panel in correct order; empty labels are for spacing
+        signUp.addActionListener(evt -> {
+            if (evt.getSource().equals(signUp)) {
+                SignupState currentState = signupViewModel.getState();
+                String preferredLanguage = languageDropdown.getItemAt(languageDropdown.getSelectedIndex());
+
+                signupController.execute(currentState.getUsername(), currentState.getPassword(),
+                        currentState.getRepeatPassword(), preferredLanguage
+                );
+            }
+        });
+
+        goToLogin.addActionListener(evt -> {
+            if (evt.getSource().equals(goToLogin)) {
+                viewManagerModel.setActiveView(loginViewModel.getViewName());
+                viewManagerModel.firePropertyChanged();
+            }
+        });
+    }
+
+    private void addComponents(JPanel mainPanel, JLabel titleLabel, JLabel groupLabel, JLabel usernameLabel,
+                               JLabel passwordLabel, JLabel repeatPasswordLabel, JLabel preferredLanguageLabel,
+                               JLabel haveAccountLabel) {
+        // Empty labels are for spacing
         mainPanel.add(new JLabel(""));
         mainPanel.add(titleLabel);
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(new JLabel(""));
         mainPanel.add(groupLabel);
-        mainPanel.add(new JLabel(""));
-
-        mainPanel.add(new JLabel(""));
-        mainPanel.add(new JLabel(""));
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(new JLabel(""));
@@ -249,19 +267,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         mainPanel.add(haveAccountLabel);
         mainPanel.add(goToLogin);
         mainPanel.add(new JLabel(""));
-
-        // Create a grid panel to produce pseudo margins on the top and bottom; centers main panel
-        JPanel pseudoMarginsPanel = new JPanel(new GridLayout(3, 1));
-        pseudoMarginsPanel.setBorder(BorderFactory.createEmptyBorder(-400, 0, 0, 0));
-
-        pseudoMarginsPanel.add(new JLabel(""));
-        pseudoMarginsPanel.add(mainPanel);
-        pseudoMarginsPanel.add(new JLabel(""));
-
-        pseudoMarginsPanel.setBackground(Color.WHITE);
-
-        // Add everything to (this) signup view panel
-        this.add(pseudoMarginsPanel);
     }
 
     /**
