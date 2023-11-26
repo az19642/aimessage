@@ -9,6 +9,8 @@ public class LoginState {
     private String password = "";
     private String passwordError = null;
 
+    private String loginError = null;
+
     public LoginState(LoginState copy) {
         username = copy.username;
         usernameError = copy.usernameError;
@@ -90,5 +92,25 @@ public class LoginState {
      */
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
+    }
+
+    /**
+     * Sets the error message related to the login process.
+     * Compared to the username and password errors, this error is more generic.
+     *
+     * @param loginError The new error message to be set.
+     */
+    public void setLoginError(String loginError) {
+        this.loginError = loginError;
+    }
+
+    /**
+     * Gets the error message related to the login process.
+     * Compared to the username and password errors, this error is more generic.
+     *
+     * @return The error message related to the login process.
+     */
+    public String getLoginError() {
+        return loginError;
     }
 }
