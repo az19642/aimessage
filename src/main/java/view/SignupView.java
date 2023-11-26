@@ -36,6 +36,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JButton generatePassword;
     private final JComboBox<String> languageDropdown;
 
+    /**
+     * Constructs a SignupView.
+     *
+     * @param controller               The SignupController for handling signup actions.
+     * @param signupViewModel         The SignupViewModel for managing the signup view's state.
+     * @param loginViewModel          The LoginViewModel for managing the login view's state.
+     * @param viewManagerModel        The ViewManagerModel for controlling the active view.
+     * @param passwordGeneratorController The PasswordGeneratorController for generating secure passwords.
+     */
     public SignupView(SignupController controller, SignupViewModel signupViewModel, LoginViewModel loginViewModel,
                       ViewManagerModel viewManagerModel, PasswordGeneratorController passwordGeneratorController) {
 
