@@ -26,17 +26,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final SignupViewModel signupViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final JComboBox<String> languageDropdown;
+    private final SignupController signupController;
+    private final PasswordGeneratorController passwordGeneratorController;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
-    private final SignupController signupController;
-
     private final JButton signUp;
     private final JButton goToLogin;
     private final JButton generatePassword;
-    private final JComboBox<String> languageDropdown;
-
-    private final PasswordGeneratorController passwordGeneratorController;
 
     /**
      * Constructs a SignupView.
@@ -65,24 +63,24 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         JPanel mainPanel = new JPanel(gridLayout);
 
         JLabel titleLabel = new JLabel(SignupViewModel.TITLE_LABEL);
-        titleLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
-
         JLabel groupLabel = new JLabel(SignupViewModel.GROUP_LABEL);
-        groupLabel.setFont(new Font("Helvetica", Font.BOLD, 12));
-
         JLabel usernameLabel = new JLabel(SignupViewModel.USERNAME_LABEL);
-        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-
         JLabel passwordLabel = new JLabel(SignupViewModel.PASSWORD_LABEL);
-        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-
         JLabel repeatPasswordLabel = new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL);
-        repeatPasswordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-
         JLabel preferredLanguageLabel = new JLabel(SignupViewModel.PREFERRED_LANGUAGE_LABEL);
-        preferredLanguageLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-
         JLabel haveAccountLabel = new JLabel(SignupViewModel.HAVE_ACCOUNT_LABEL);
+
+        languageDropdown = new JComboBox<>(SignupViewModel.languages);
+        generatePassword = new JButton(SignupViewModel.GENERATE_PASSWORD_LABEL);
+        signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
+        goToLogin = new JButton(SignupViewModel.GO_TO_LOGIN_BUTTON_LABEL);
+
+        titleLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
+        groupLabel.setFont(new Font("Helvetica", Font.BOLD, 12));
+        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+        repeatPasswordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+        preferredLanguageLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
         haveAccountLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
 
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -93,16 +91,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         preferredLanguageLabel.setHorizontalAlignment(JLabel.RIGHT);
         haveAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
         signUp.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        goToLogin = new JButton(SignupViewModel.GO_TO_LOGIN_BUTTON_LABEL);
         goToLogin.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        generatePassword = new JButton(SignupViewModel.GENERATE_PASSWORD_LABEL);
         generatePassword.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
-        // Create a dropdown menu with language options
-        String[] languages = {"English", "French", "Korean", "Arabic", "Chinese", "Spanish"};
-        languageDropdown = new JComboBox<>(languages);
         languageDropdown.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
         // Styling for input fields
@@ -207,8 +199,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 String preferredLanguage = languageDropdown.getItemAt(languageDropdown.getSelectedIndex());
 
                 signupController.execute(currentState.getUsername(), currentState.getPassword(),
-                        currentState.getRepeatPassword(), preferredLanguage
-                );
+                        currentState.getRepeatPassword(), preferredLanguage);
             }
         });
 
@@ -275,7 +266,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
      * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
-        JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
+        // Will delete this method in the future if we decide that SignupView will not implement ActionListener
     }
 
     /**
