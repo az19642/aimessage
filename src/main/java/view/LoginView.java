@@ -31,6 +31,14 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
 
+    /**
+     * Constructs a new instance of the LoginView.
+     *
+     * @param loginViewModel     The ViewModel responsible for managing login-related data.
+     * @param signupViewModel    The ViewModel for signup-related functionality.
+     * @param loginController    The controller handling login actions.
+     * @param viewManagerModel   The model managing the active view in the application.
+     */
     public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
                      ViewManagerModel viewManagerModel) {
 
