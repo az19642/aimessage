@@ -44,15 +44,30 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
+        mainPanel.setBackground(Color.WHITE);
 
         JLabel usernameLabel = new JLabel(LoginViewModel.USERNAME_LABEL);
+        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
         JLabel passwordLabel = new JLabel(LoginViewModel.PASSWORD_LABEL);
+        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
 
         usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
         passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
 
         logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
+        logIn.setFont(new Font("Helvetica", Font.PLAIN, 12));
         cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
+        cancel.setFont(new Font("Helvetica", Font.PLAIN, 12));
+
+        // Styling for input fields
+        Dimension inputFieldSize = new Dimension(100, 30);
+        Color inputFieldBackground = new Color(240, 240, 240);
+
+        usernameInputField.setPreferredSize(inputFieldSize);
+        usernameInputField.setBackground(inputFieldBackground);
+
+        passwordInputField.setPreferredSize(inputFieldSize);
+        passwordInputField.setBackground(inputFieldBackground);
 
         logIn.addActionListener(evt -> {
             if (evt.getSource().equals(logIn)) {
@@ -125,6 +140,8 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         pseudoMarginsPanel.add(new JLabel(""));
         pseudoMarginsPanel.add(mainPanel);
         pseudoMarginsPanel.add(new JLabel(""));
+
+        pseudoMarginsPanel.setBackground(Color.WHITE);
 
         this.add(pseudoMarginsPanel);
     }
