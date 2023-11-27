@@ -100,23 +100,12 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         languageDropdown.setFont(helveticaFontTwelve);
 
-        // Styling for input fields
-        Color inputFieldBackground = new Color(240, 240, 240);
-
-        usernameInputField.setBackground(inputFieldBackground);
-
-        passwordInputField.setBackground(inputFieldBackground);
-
-        repeatPasswordInputField.setBackground(inputFieldBackground);
-
         // Calls helper method to add appropriate listeners to components
         addListeners();
 
         // Calls helper method to add all components to mainPanel in the correct order
         addComponents(mainPanel, titleLabel, groupLabel, usernameLabel, passwordLabel, repeatPasswordLabel,
                 preferredLanguageLabel, haveAccountLabel);
-
-        mainPanel.setBackground(Color.WHITE);
 
         // Add everything to parent (this) frame signup view panel
         this.add(mainPanel);

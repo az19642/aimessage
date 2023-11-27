@@ -71,18 +71,9 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         logIn.setFont(helveticaFontTwelve);
         cancel.setFont(helveticaFontTwelve);
 
-        // Styling for input fields
-        Color inputFieldBackground = new Color(240, 240, 240);
-
-        usernameInputField.setBackground(inputFieldBackground);
-
-        passwordInputField.setBackground(inputFieldBackground);
-
         addListeners();
 
         addComponents(mainPanel, usernameLabel, passwordLabel);
-
-        mainPanel.setBackground(Color.WHITE);
 
         this.add(mainPanel);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
