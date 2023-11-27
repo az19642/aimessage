@@ -113,7 +113,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     /**
      * Adds a contact to the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
-     *
+     * <p>
      * There are four cases for the state after this function returns
      * 1. Contact successfully added
      * 2. Contact does not exist in database
@@ -130,7 +130,9 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
         Document userDB = userRecords.find(eq("name", user.getName())).first();
 
         // If the contact does not exist
-        if (contact == null) { return "USER DNE"; }
+        if (contact == null) {
+            return "USER DNE";
+        }
 
         // Retrieving hash map of contacts to convo id
         Object contactToChatIDOfContactdb = contact.get("contactToChatID");
@@ -144,7 +146,9 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
             HashMap<String, Object> contactToChatIDOfUser = new HashMap<>(contactsOfUserDocument);
 
             // Checks whether they are already contacts
-            if (contactToChatIDOfContact.containsKey(user.getName())) { return  "ALREADY A CONTACT"; }
+            if (contactToChatIDOfContact.containsKey(user.getName())) {
+                return "ALREADY A CONTACT";
+            }
 
             // Add conversation to database and fetch its ID
             ObjectId id = addConversation();
@@ -171,14 +175,10 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
     /**
-     *
-     *
      * A helper function to update the contacts field of a given user in the database
-     *
      *
      * @param contactToChatID
      * @param user
-     *
      */
 
     private void updateContactsDB(HashMap<String, Object> contactToChatID, Document user) {
@@ -203,11 +203,11 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * Preconditions:
      * - The contact is in the database
      * - The contact is one of the users contacts
-     *
+     * <p>
      * Deletes a contact of the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
      *
-     * @param user the current user
+     * @param user          the current user
      * @param contactEntity the contacts entity
      */
     public void deleteContact(User user, Contact contactEntity) {
@@ -246,7 +246,6 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
     /**
-     *
      * Creates a new entry in the conversation collection
      *
      * @return The id associated with the newly added entry
@@ -256,14 +255,12 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
                 .append("messagesIDs", new ArrayList<>())
                 .append("lastMessageTime", LocalDateTime.now());
 
-       return conversationRecords.insertOne(convoDoc).getInsertedId().asObjectId().getValue();
+        return conversationRecords.insertOne(convoDoc).getInsertedId().asObjectId().getValue();
 
     }
 
     /**
-     *
      * Delete a new entry in the conversation collection
-     *
      */
     public void removeConversation(Document convo) {
 

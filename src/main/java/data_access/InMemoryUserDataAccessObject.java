@@ -16,13 +16,17 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
      * @return whether the user exists
      */
     @Override
-    public boolean userExists(String identifier) { return accounts.containsKey(identifier); }
+    public boolean userExists(String identifier) {
+        return accounts.containsKey(identifier);
+    }
 
     /**
      * @param user the data to save
      */
     @Override
-    public void save(User user) { accounts.put(user.getName(), user); }
+    public void save(User user) {
+        accounts.put(user.getName(), user);
+    }
 
     /**
      * @param username the username of the user
@@ -30,5 +34,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
      * @return the user based on the given input
      */
     @Override
-    public User getUser(String username, String password) { return accounts.get(username); }
+    public User getUser(String username, String password) {
+        return accounts.get(username);
+    }
 }

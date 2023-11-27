@@ -38,11 +38,11 @@ public class SignupUseCaseFactory {
     /**
      * Creates and configures a SignupView along with its associated controllers and use case components.
      *
-     * @param viewManagerModel            The view manager model for managing application views.
-     * @param loginViewModel              The view model for the login interface.
-     * @param signupViewModel             The view model for the signup interface.
-     * @param userDataAccessObject        The data access object for user-related operations.
-     * @param passwordGeneratorViewModel  The view model for the password generator interface.
+     * @param viewManagerModel                  The view manager model for managing application views.
+     * @param loginViewModel                    The view model for the login interface.
+     * @param signupViewModel                   The view model for the signup interface.
+     * @param userDataAccessObject              The data access object for user-related operations.
+     * @param passwordGeneratorViewModel        The view model for the password generator interface.
      * @param passwordGeneratorDataAccessObject The data access object for password generation operations.
      * @return A configured SignupView or null if there's an error opening the user data file.
      */
