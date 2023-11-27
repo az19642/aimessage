@@ -1,5 +1,6 @@
 package app;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import data_access.GPTDataAccessObject;
 import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -21,6 +22,8 @@ public class Main {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
+        // Set the Java Swing look and feel to FlatLaf.
+        FlatLightLaf.setup();
         // The main application window.
         JFrame application = new JFrame("AiMessage");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
