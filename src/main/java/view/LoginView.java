@@ -30,6 +30,8 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final JLabel usernameErrorField = new JLabel();
     private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
+    private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
+    private final Font helveticaFontFourteen = new Font("Helvetica", Font.PLAIN, 14);
 
     /**
      * Constructs a new instance of the LoginView.
@@ -49,7 +51,7 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
         loginViewModel.addPropertyChangeListener(this);
 
-        GridLayout gridLayout = new GridLayout(4, 3);
+        GridLayout gridLayout = new GridLayout(10, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
@@ -60,23 +62,20 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
 
-        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+        usernameLabel.setFont(helveticaFontFourteen);
+        passwordLabel.setFont(helveticaFontFourteen);
 
         usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
         passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        logIn.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        cancel.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        logIn.setFont(helveticaFontTwelve);
+        cancel.setFont(helveticaFontTwelve);
 
         // Styling for input fields
-        Dimension inputFieldSize = new Dimension(100, 30);
         Color inputFieldBackground = new Color(240, 240, 240);
 
-        usernameInputField.setPreferredSize(inputFieldSize);
         usernameInputField.setBackground(inputFieldBackground);
 
-        passwordInputField.setPreferredSize(inputFieldSize);
         passwordInputField.setBackground(inputFieldBackground);
 
         addListeners();
@@ -88,7 +87,6 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         this.add(mainPanel);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
-
 
     private void addListeners() {
         logIn.addActionListener(evt -> {
@@ -144,12 +142,28 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     }
 
     private void addComponents(JPanel mainPanel, JLabel usernameLabel, JLabel passwordLabel) {
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameInputField);
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(passwordLabel);
         mainPanel.add(passwordInputField);
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(new JLabel(""));
@@ -160,14 +174,13 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         mainPanel.add(cancel);
         mainPanel.add(new JLabel(""));
 
-        JPanel pseudoMarginsPanel = new JPanel(new GridLayout(3, 1));
-        pseudoMarginsPanel.add(new JLabel(""));
-        pseudoMarginsPanel.add(mainPanel);
-        pseudoMarginsPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
 
-        pseudoMarginsPanel.setBackground(Color.WHITE);
-
-        this.add(pseudoMarginsPanel);
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
     }
 
     /**

@@ -35,6 +35,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JButton signUp;
     private final JButton goToLogin;
     private final JButton generatePassword;
+    private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
+    private final Font helveticaFontFourteen = new Font("Helvetica", Font.PLAIN, 14);
+
 
     /**
      * Constructs a SignupView.
@@ -76,12 +79,12 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         goToLogin = new JButton(SignupViewModel.GO_TO_LOGIN_BUTTON_LABEL);
 
         titleLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
-        groupLabel.setFont(new Font("Helvetica", Font.BOLD, 12));
-        usernameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-        passwordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-        repeatPasswordLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-        preferredLanguageLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-        haveAccountLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+        groupLabel.setFont(helveticaFontTwelve);
+        usernameLabel.setFont(helveticaFontFourteen);
+        passwordLabel.setFont(helveticaFontFourteen);
+        repeatPasswordLabel.setFont(helveticaFontFourteen);
+        preferredLanguageLabel.setFont(helveticaFontFourteen);
+        haveAccountLabel.setFont(helveticaFontFourteen);
 
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         groupLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -91,23 +94,19 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         preferredLanguageLabel.setHorizontalAlignment(JLabel.RIGHT);
         haveAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        signUp.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        goToLogin.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        generatePassword.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        signUp.setFont(helveticaFontTwelve);
+        goToLogin.setFont(helveticaFontTwelve);
+        generatePassword.setFont(helveticaFontTwelve);
 
-        languageDropdown.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        languageDropdown.setFont(helveticaFontTwelve);
 
         // Styling for input fields
-        Dimension inputFieldSize = new Dimension(100, 30);
         Color inputFieldBackground = new Color(240, 240, 240);
 
-        usernameInputField.setPreferredSize(inputFieldSize);
         usernameInputField.setBackground(inputFieldBackground);
 
-        passwordInputField.setPreferredSize(inputFieldSize);
         passwordInputField.setBackground(inputFieldBackground);
 
-        repeatPasswordInputField.setPreferredSize(inputFieldSize);
         repeatPasswordInputField.setBackground(inputFieldBackground);
 
         // Calls helper method to add appropriate listeners to components
