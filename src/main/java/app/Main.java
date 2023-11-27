@@ -18,8 +18,10 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
+
 
         // The main application window.
         JFrame application = new JFrame("AiMessage");
@@ -39,6 +41,7 @@ public class Main {
         // This information will be changed by a presenter object that is reporting the
         // results from the use case. The ViewModels are observable, and will
         // be observed by the Views.
+
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
