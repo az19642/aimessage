@@ -1,12 +1,17 @@
 package data_access;
 
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import entity.*;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -53,8 +58,9 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
         // This code will make the look-up faster
         userRecords.createIndex(new Document("name", 1), new IndexOptions().unique(true));
-        conversationRecords.createIndex(new Document("ID", 1), new IndexOptions().unique(true));
-        messageRecords.createIndex(new Document("ID", 1), new IndexOptions().unique(true));
+        conversationRecords.createIndex(new Document("_id", 1));
+        messageRecords.createIndex(new Document("_id", 1));
+
     }
 
 
@@ -108,13 +114,162 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * Adds a contact to the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
      *
-     * @param user        the current user
-     * @param contactName the contacts name
+     * There are four cases for the state after this function returns
+     * 1. Contact successfully added
+     * 2. Contact does not exist in database
+     * 3. Contact is already a contact to the user
+     * 4. Unexpected error occurred
+     *
+     * @param user the current user
+     * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
      */
-    public void addContact(User user, String contactName) {
+    public String addContact(User user, String contactName) {
+
+        // Fetch the contact and user
+        Document contact = userRecords.find(eq("name", contactName)).first();
+        Document userDB = userRecords.find(eq("name", user.getName())).first();
+
+        // If the contact does not exist
+        if (contact == null) { return "USER DNE"; }
+
+        // Retrieving hash map of contacts to convo id
+        Object contactToChatIDOfContactdb = contact.get("contactToChatID");
+        Object contactToChatIDOfUserdb = userDB.get("contactToChatID");
+
+        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument
+                && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
+
+            // Convert the BSON Document back to a HashMap
+            HashMap<String, Object> contactToChatIDOfContact = new HashMap<>(contactsOfContactDocument);
+            HashMap<String, Object> contactToChatIDOfUser = new HashMap<>(contactsOfUserDocument);
+
+            // Checks whether they are already contacts
+            if (contactToChatIDOfContact.containsKey(user.getName())) { return  "ALREADY A CONTACT"; }
+
+            // Add conversation to database and fetch its ID
+            ObjectId id = addConversation();
+
+
+            contactToChatIDOfContact.put(user.getName(), id);
+            contactToChatIDOfUser.put(contactName, id);
+
+            // Adds user to the map of contacts to the contact
+            updateContactsDB(contactToChatIDOfContact, contact);
+
+            // Adds the contact to the map of contacts of the user
+            updateContactsDB(contactToChatIDOfUser, userDB);
+
+            // Update to the in memory list of contacts
+            user.getContacts().add(contactFactory.create(contactName,
+                    contact.getString("preferredLanguage"), LocalDateTime.now(), new ArrayList<>()));
+
+            return "PASS";
+
+        }
+        // Should never enter here
+        return "FAILED";
+    }
+
+    /**
+     *
+     *
+     * A helper function to update the contacts field of a given user in the database
+     *
+     *
+     * @param contactToChatID
+     * @param user
+     *
+     */
+
+    private void updateContactsDB(HashMap<String, Object> contactToChatID, Document user) {
+
+        // Creates instructions to update the contact to chat id field
+        Bson updates = Updates.combine(
+                Updates.set("contactToChatID", contactToChatID));
+
+        // Instructs the driver to insert a new document if none match the query
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            // Updates the first document with the username, so it will only update one
+            userRecords.updateOne(user, updates, options);
+
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+        }
+    }
+
+    /**
+     * Preconditions:
+     * - The contact is in the database
+     * - The contact is one of the users contacts
+     *
+     * Deletes a contact of the user, and will also update the contact such that the user will be a contact for them.
+     * Precondition: The given username is a valid contact.
+     *
+     * @param user the current user
+     * @param contactEntity the contacts entity
+     */
+    public void deleteContact(User user, Contact contactEntity) {
+
+        // Fetch the contact and user
+        Document contact = userRecords.find(eq("name", contactEntity.getName())).first();
+        Document userDB = userRecords.find(eq("name", user.getName())).first();
+
+        // Retrieving hash map of contacts to convo id
+        Object contactToChatIDOfContactdb = contact.get("contactToChatID");
+        Object contactToChatIDOfUserdb = userDB.get("contactToChatID");
+
+        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument
+                && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
+
+            // Convert the BSON Document back to a HashMap
+            HashMap<String, Object> contactToChatIDOfContact = new HashMap<>(contactsOfContactDocument);
+            HashMap<String, Object> contactToChatIDOfUser = new HashMap<>(contactsOfUserDocument);
+
+            // Add conversation to database and fetch its ID
+            removeConversation(conversationRecords.find(eq("_id",
+                    contactToChatIDOfContact.get(user.getName()))).first());
+
+            contactToChatIDOfContact.remove(user.getName());
+            contactToChatIDOfUser.remove(contactEntity.getName());
+
+            // Adds user to the map of contacts to the contact
+            updateContactsDB(contactToChatIDOfContact, contact);
+
+            // Adds the contact to the map of contacts of the user
+            updateContactsDB(contactToChatIDOfUser, userDB);
+
+            // Update to the in memory list of contacts
+            user.getContacts().remove(contactEntity);
+        }
+    }
+
+    /**
+     *
+     * Creates a new entry in the conversation collection
+     *
+     * @return The id associated with the newly added entry
+     */
+    public ObjectId addConversation() {
+        Document convoDoc = new Document()
+                .append("messagesIDs", new ArrayList<>())
+                .append("lastMessageTime", LocalDateTime.now());
+
+       return conversationRecords.insertOne(convoDoc).getInsertedId().asObjectId().getValue();
 
     }
 
+    /**
+     *
+     * Delete a new entry in the conversation collection
+     *
+     */
+    public void removeConversation(Document convo) {
+
+        conversationRecords.deleteOne(convo);
+
+    }
 
     /**
      * This method should be called when the user would like to log in
@@ -146,8 +301,9 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
             // Each iteration will configure one contact of the user contact list
             for (String contact : contactToChatID.keySet()) {
+
                 Document contactDoc = userRecords.find(eq("name", contact)).first();
-                Document convoDoc = conversationRecords.find(eq("ID", contactToChatID.get(contact))).first();
+                Document convoDoc = conversationRecords.find(eq("_id", contactToChatID.get(contact))).first();
 
                 ArrayList<Message> messages = new ArrayList<>();
 
@@ -156,7 +312,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
                 // Iterates over all message Ids finding the message and converting it to the message entity
                 for (Integer messageID : messagesIDs) {
-                    Document messageDoc = messageRecords.find(eq("ID", messageID)).first();
+                    Document messageDoc = messageRecords.find(eq("_id", messageID)).first();
                     messages.add(messageFactory.create(messageDoc.getString("content"),
                             messageDoc.getString("sender")));
                 }
