@@ -26,13 +26,4 @@ public class TextToSpeechOutputData {
      * @return True if the audio was played successfully, false otherwise.
      */
     public boolean getSpeechResult() { return audioPlayed; }
-
-    /**
-     * Gets whether the text-to-speech use case encountered a failure.
-     *
-     * @return True if the text-to-speech use case encountered a failure, false otherwise.
-     */
-    public boolean isUseCaseFailed() {
-        return useCaseFailed;
-    }
 }
