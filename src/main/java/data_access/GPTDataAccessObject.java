@@ -4,15 +4,22 @@ import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
-import use_case.password_generator.PasswordGeneratorUserDataAccessInterface;
+import com.theokanning.openai.audio.CreateSpeechRequest;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
+import use_case.password_generator.PasswordGeneratorUserDataAccessInterface;
+import use_case.text_to_speech.TextToSpeechDataAccessInterface;
+
+import okhttp3.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
  */
-public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface {
+public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface {
     private final OpenAiService service;
 
     /**
@@ -56,6 +63,41 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to generate a password.";
+        }
+    }
+
+    /**
+     * Generates audio from the provided text using a text-to-speech service and plays it.
+     *
+     * @param text The text to be converted to audio.
+     * @throws IOException If an I/O error occurs while processing the audio content.
+     */
+    public void generateAudio(String text) {
+        CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder()
+                .model("tts-1")
+                .input(text)
+                .voice("alloy")
+                .build();
+
+        try {
+            ResponseBody speech = service.createSpeech(createSpeechRequest);
+
+            // Play the MP3 directly without saving to a file
+            playMP3(new ByteArrayInputStream(speech.bytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void playMP3(InputStream inputStream) {
+        try {
+            AdvancedPlayer player = new AdvancedPlayer(inputStream);
+
+            // Start playing the MP3 file
+            player.play();
+
+        } catch (JavaLayerException e) {
+            e.printStackTrace();
         }
     }
 }
