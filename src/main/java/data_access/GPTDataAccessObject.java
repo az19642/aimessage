@@ -46,6 +46,7 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
      * @param prompt The prompt for generating the password.
      * @return The generated secure password as a string.
      */
+    @Override
     public String generateSecurePassword(String prompt) {
         List<ChatMessage> messages = new ArrayList<>();
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
@@ -73,6 +74,7 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
      * @return {@code true} if the audio generation and playback were successful; {@code false} otherwise.
      * @throws IOException If an I/O error occurs during the processing of the audio content.
      */
+    @Override
     public boolean generateAudio(String message) {
         CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder()
                 .model("tts-1")
