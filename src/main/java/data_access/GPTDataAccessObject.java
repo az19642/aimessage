@@ -69,13 +69,14 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
     /**
      * Generates audio from the provided text using a text-to-speech service and plays it.
      *
-     * @param text The text to be converted to audio.
-     * @throws IOException If an I/O error occurs while processing the audio content.
+     * @param message The text to be converted into audio.
+     * @return {@code true} if the audio generation and playback were successful; {@code false} otherwise.
+     * @throws IOException If an I/O error occurs during the processing of the audio content.
      */
-    public void generateAudio(String text) {
+    public boolean generateAudio(String message) {
         CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder()
                 .model("tts-1")
-                .input(text)
+                .input(message)
                 .voice("alloy")
                 .build();
 
@@ -84,8 +85,10 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
 
             // Play the MP3 directly without saving to a file
             playMP3(new ByteArrayInputStream(speech.bytes()));
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
