@@ -5,6 +5,7 @@ import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 import use_case.password_generator.PasswordGeneratorUserDataAccessInterface;
+import use_case.suggested_reply_generator.ReplySuggesterUserDataAccessInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
  */
-public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface {
+public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, ReplySuggesterUserDataAccessInterface {
     private final OpenAiService service;
 
     /**
@@ -56,6 +57,30 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to generate a password.";
+        }
+    }
+
+    /**
+     * @param prompt
+     * @return
+     */
+    @Override
+    public String generateSuggestedReply(String prompt) {
+        List<ChatMessage> messages = new ArrayList<>();
+        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        messages.add(userMessage);
+
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+                .builder()
+                .model("gpt-4")
+                .messages(messages)
+                .build();
+
+        try {
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            return responseMessage.getContent();
+        } catch (Exception e) {
+            return "Error: Failed to suggest a reply.";
         }
     }
 }
