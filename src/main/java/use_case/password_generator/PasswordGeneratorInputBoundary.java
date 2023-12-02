@@ -5,5 +5,5 @@ package use_case.password_generator;
  * Defines the method signature for executing the Password Generator based on a given prompt.
  */
 public interface PasswordGeneratorInputBoundary {
-    String execute(String prompt);
+    void execute(String prompt);
 }

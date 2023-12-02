@@ -54,7 +54,7 @@ public class SignupUseCaseFactory {
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel, userDataAccessObject);
             PasswordGeneratorController passwordGeneratorController = createUserPasswordGeneratorUseCase(viewManagerModel, passwordGeneratorViewModel, passwordGeneratorDataAccessObject);
-            return new SignupView(signupController, signupViewModel, loginViewModel, viewManagerModel, passwordGeneratorController);
+            return new SignupView(signupController, signupViewModel, passwordGeneratorViewModel, loginViewModel, viewManagerModel, passwordGeneratorController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
