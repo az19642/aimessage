@@ -12,6 +12,7 @@ import entity.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import use_case.load_contacts_to_view.LoadContactsToViewDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -32,7 +33,8 @@ import static com.mongodb.client.model.Filters.eq;
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
  */
 
-public class MongoUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
+public class MongoDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface,
+        LoadContactsToViewDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -40,7 +42,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     private final ContactFactory contactFactory;
     private final MessageFactory messageFactory;
 
-    public MongoUserDataAccessObject(String adminPassword, UserFactory userFactory) {
+    public MongoDataAccessObject(String adminPassword, UserFactory userFactory) {
         String uri = String.format(
                 "mongodb+srv://langAdmin:%s@languality.a8dkfut.mongodb.net/?retryWrites=true&w=majority",
                 adminPassword
