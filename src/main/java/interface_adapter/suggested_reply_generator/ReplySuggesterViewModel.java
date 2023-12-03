@@ -15,7 +15,7 @@ public class ReplySuggesterViewModel extends ViewModel {
     /**
      * Constructs a new ReplySuggesterViewModel with a default message.
      */
-    public ReplySuggesterViewModel(){
+    public ReplySuggesterViewModel() {
         super("Suggest a reply under 200 characters.");
     }
 
@@ -24,9 +24,12 @@ public class ReplySuggesterViewModel extends ViewModel {
      *
      * @param state The new state to set.
      */
-    public void setState(ReplySuggesterState state) { this.state = state; }
+    public void setState(ReplySuggesterState state) {
+        this.state = state;
+    }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+
     /**
      * Notifies listeners that a property in the ViewModel has changed.
      */
@@ -50,5 +53,7 @@ public class ReplySuggesterViewModel extends ViewModel {
      *
      * @return The current state of the suggested reply generator.
      */
-    public ReplySuggesterState getState() { return state; }
+    public ReplySuggesterState getState() {
+        return state;
+    }
 }

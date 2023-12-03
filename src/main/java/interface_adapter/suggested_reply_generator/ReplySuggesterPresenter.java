@@ -15,7 +15,7 @@ public class ReplySuggesterPresenter implements ReplySuggesterOutputBoundary {
     /**
      * Constructs a new ReplySuggesterPresenter with the provided ViewManagerModel and ReplySuggesterViewModel.
      *
-     * @param viewManagerModel The model responsible for managing views in the application.
+     * @param viewManagerModel        The model responsible for managing views in the application.
      * @param replySuggesterViewModel The view model for the Suggested Reply Generator interface.
      */
     public ReplySuggesterPresenter(ReplySuggesterViewModel replySuggesterViewModel, ViewManagerModel viewManagerModel) {

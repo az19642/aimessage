@@ -22,5 +22,7 @@ public class ReplySuggesterController {
      *
      * @param prompt The prompt or request for generating the suggested reply.
      */
-    public void execute(String prompt) { replySuggesterUseCaseInteractor.execute(prompt); }
+    public void execute(String prompt) {
+        replySuggesterUseCaseInteractor.execute(prompt);
+    }
 }

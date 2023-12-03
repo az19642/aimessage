@@ -11,7 +11,7 @@ public class ReplySuggesterInteractor implements ReplySuggesterInputBoundary {
      * Constructs a new ReplySuggesterInteractor with the provided data access object and presenter.
      *
      * @param replySuggesterDataAccessObject The data access object for suggested reply generation operations.
-     * @param replySuggesterPresenter  The presenter for handling output related to the suggested reply generation use case.
+     * @param replySuggesterPresenter        The presenter for handling output related to the suggested reply generation use case.
      */
     public ReplySuggesterInteractor(ReplySuggesterUserDataAccessInterface replySuggesterDataAccessObject, ReplySuggesterOutputBoundary replySuggesterPresenter) {
         this.replySuggesterDataAccessObject = replySuggesterDataAccessObject;
@@ -23,7 +23,6 @@ public class ReplySuggesterInteractor implements ReplySuggesterInputBoundary {
      * Prepares the view for a successful response and delegates suggested reply generation to the data access object.
      *
      * @param prompt The prompt or request for generating the suggested reply.
-     *
      */
     public void execute(String prompt) {
         String generatedReply = replySuggesterDataAccessObject.generateSuggestedReply(prompt);

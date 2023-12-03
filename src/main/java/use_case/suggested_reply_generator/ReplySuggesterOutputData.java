@@ -22,5 +22,7 @@ public class ReplySuggesterOutputData {
      *
      * @return The suggested reply.
      */
-    public String getGeneratedReply() { return generatedReply; }
+    public String getGeneratedReply() {
+        return generatedReply;
+    }
 }

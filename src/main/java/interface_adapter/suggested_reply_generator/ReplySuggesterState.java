@@ -17,7 +17,8 @@ public class ReplySuggesterState {
         replySuggesterError = copy.replySuggesterError;
     }
 
-    public ReplySuggesterState() {}
+    public ReplySuggesterState() {
+    }
 
     /**
      * Gets the generated suggested reply from API call.
@@ -42,7 +43,9 @@ public class ReplySuggesterState {
      *
      * @return The error message as a string.
      */
-    public String getReplySuggesterError() { return replySuggesterError; }
+    public String getReplySuggesterError() {
+        return replySuggesterError;
+    }
 
     /**
      * Sets the error message associated with the Suggested Reply Generator.

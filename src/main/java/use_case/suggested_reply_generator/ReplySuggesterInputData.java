@@ -9,5 +9,7 @@ public class ReplySuggesterInputData {
      * Constructs a new ReplySuggesterInputData instance.
      * Not used because suggest reply generation requires no input data from the user.
      */
-    public ReplySuggesterInputData() {};
+    public ReplySuggesterInputData() {
+    }
+
 }
