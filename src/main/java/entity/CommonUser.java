@@ -64,6 +64,18 @@ class CommonUser implements User {
         return contacts;
     }
 
+    @Override
+    public Contact getContact(String contactName) {
+
+        for(Contact contact: contacts) {
+            if (contact.getName().equals(contactName)) {
+                return contact;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Retrieves the creation time associated with this object.
      *

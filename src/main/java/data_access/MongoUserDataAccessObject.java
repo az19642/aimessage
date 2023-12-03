@@ -13,6 +13,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.mutating_contacts.MutatingContactsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.time.LocalDateTime;
@@ -32,13 +33,15 @@ import static com.mongodb.client.model.Filters.eq;
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
  */
 
-public class MongoUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
+public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
+        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
     private final UserFactory userFactory;
     private final ContactFactory contactFactory;
     private final MessageFactory messageFactory;
+    private User user;
 
     public MongoUserDataAccessObject(String adminPassword, UserFactory userFactory) {
         String uri = String.format(
@@ -49,6 +52,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
         this.userFactory = userFactory;
         this.contactFactory = new ContactFactory();
         this.messageFactory = new MessageFactory();
+        this.user = null;
 
         MongoClient mongoClient = MongoClients.create(uri);
         MongoDatabase database = mongoClient.getDatabase("langualityDB");
@@ -123,6 +127,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * @param user the current user
      * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
      */
+    @Override
     public String addContact(User user, String contactName) {
 
         // Fetch the contact and user
@@ -210,6 +215,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * @param user          the current user
      * @param contactEntity the contacts entity
      */
+    @Override
     public void deleteContact(User user, Contact contactEntity) {
 
         // Fetch the contact and user
@@ -275,15 +281,14 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      *
      * @param name     the username of the user
      * @param password the password of the user
-     * @return User with given username and password if valid, otherwise return null
      */
     @Override
-    public User getUser(String name, String password) {
+    public void setUser(String name, String password) {
 
         Document dbUser = userRecords.find(eq("name", name)).first();
 
         if (dbUser == null || !dbUser.getString("password").equals(password)) {
-            return null;
+            this.user = null;
         }
 
         // Fetch the contacts information, which includes the conversation
@@ -324,13 +329,23 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
             }
         } else {
             System.out.println("The 'contacts' field does not contain a HashMap.");
-            return null;
+            this.user = null;
         }
 
         // Creates the user getting the string and date information
-        return userFactory.create(name, password,
+        this.user = userFactory.create(name, password,
                 dbUser.getString("preferredLanguage"), dbUser.getDate("creationTime").toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDateTime(), contacts);
+    }
+
+    /**
+     * getter for user attribute
+     * setUser should have been called once before this was called
+     * @return the user attribute
+     */
+    @Override
+    public User getUser() {
+        return this.user;
     }
 }
