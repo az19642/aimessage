@@ -5,13 +5,25 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * Represents the ViewModel for the suggested reply generator screen.
+ * Manages the state and property change listeners for suggested reply generation.
+ */
 public class ReplySuggesterViewModel extends ViewModel {
     private ReplySuggesterState state = new ReplySuggesterState();
 
+    /**
+     * Constructs a new ReplySuggesterViewModel with a default message.
+     */
     public ReplySuggesterViewModel(){
         super("Suggest a reply under 200 characters.");
     }
 
+    /**
+     * Sets the state of the suggested reply generator.
+     *
+     * @param state The new state to set.
+     */
     public void setState(ReplySuggesterState state) { this.state = state; }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -33,5 +45,10 @@ public class ReplySuggesterViewModel extends ViewModel {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Gets the current state of the suggested reply generator.
+     *
+     * @return The current state of the suggested reply generator.
+     */
     public ReplySuggesterState getState() { return state; }
 }

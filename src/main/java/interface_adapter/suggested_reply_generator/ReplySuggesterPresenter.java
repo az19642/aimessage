@@ -4,18 +4,30 @@ import interface_adapter.ViewManagerModel;
 import use_case.suggested_reply_generator.ReplySuggesterOutputBoundary;
 import use_case.suggested_reply_generator.ReplySuggesterOutputData;
 
+/**
+ * The presenter class responsible for handling the presentation logic related to the Suggested Reply Generator use case.
+ */
 public class ReplySuggesterPresenter implements ReplySuggesterOutputBoundary {
 
     private final ReplySuggesterViewModel replySuggesterViewModel;
     private ViewManagerModel viewManagerModel;
 
+    /**
+     * Constructs a new ReplySuggesterPresenter with the provided ViewManagerModel and ReplySuggesterViewModel.
+     *
+     * @param viewManagerModel The model responsible for managing views in the application.
+     * @param replySuggesterViewModel The view model for the Suggested Reply Generator interface.
+     */
     public ReplySuggesterPresenter(ReplySuggesterViewModel replySuggesterViewModel, ViewManagerModel viewManagerModel) {
         this.replySuggesterViewModel = replySuggesterViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
     /**
-     * @param response
+     * Prepares the view for a successful response from the Suggested Reply Generator use case.
+     * Updates the view model and view manager to reflect the success state.
+     *
+     * @param response The output data from the Suggested Reply Generator use case.
      */
     @Override
     public void prepareSuccessView(ReplySuggesterOutputData response) {
@@ -29,7 +41,9 @@ public class ReplySuggesterPresenter implements ReplySuggesterOutputBoundary {
     }
 
     /**
-     * @param error
+     * Prepares the view for a failed response from the Suggested Reply Generator use case.
+     *
+     * @param error The error message associated with the failed operation.
      */
     @Override
     public void prepareFailView(String error) {

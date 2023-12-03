@@ -61,8 +61,10 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
     }
 
     /**
-     * @param prompt
-     * @return
+     * Generates a suggested reply based on the provided prompt and last message of the other user using the GPT model.
+     *
+     * @param prompt The prompt for generating the suggested reply.
+     * @return The generated suggested reply as a string.
      */
     @Override
     public String generateSuggestedReply(String prompt) {
