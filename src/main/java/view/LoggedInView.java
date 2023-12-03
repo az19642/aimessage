@@ -1,8 +1,10 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.load_contacts_to_view.LoadContactsToViewController;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,46 +20,101 @@ import java.util.Map;
  */
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    // Constants
     public final String viewName = "logged in";
+
+    // Components
     private final JButton reload;
+    private final JButton home;
+    private final JButton add;
+    private final JButton delete;
+    private final JTextField contactInputField = new JTextField(15);
+    private final SignupViewModel signupViewModel;
     private final LoggedInViewModel loggedInViewModel;
+    private final ViewManagerModel viewManagerModel;
     private final LoadContactsToViewController loadContactsToViewController;
-    private JList<Map.Entry<String, String>> contactToLastMessage;
+    private final JList<Map.Entry<String, String>> contactToLastMessage;
+    private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
+    private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
 
 
     /**
-     * A window with a title and a JButton.
+     * Constructor for the logged-in view.
+     *
+     * @param loggedInViewModel           ViewModel for the logged-in state.
+     * @param loadContactsToViewController Controller for loading contacts.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel,
+    public LoggedInView(SignupViewModel signupViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                         LoadContactsToViewController loadContactsToViewController) {
+        this.signupViewModel = signupViewModel;
+        this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.loadContactsToViewController = loadContactsToViewController;
 
-        reload = new JButton("Reload contacts (for testing purposes)");
-        reload.addActionListener(this);
-
         JPanel buttons = new JPanel();
+
+        JLabel titleLabel = new JLabel(LoggedInViewModel.TITLE_LABEL);
+
+        reload = new JButton("Reload contacts (for testing purposes)");
+        home = new JButton(LoggedInViewModel.HOME_BUTTON_LABEL);
+        add = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
+        delete = new JButton(LoggedInViewModel.DELETE_BUTTON_LABEL);
+
+        titleLabel.setFont(helveticaFontFifteen);
+        home.setFont(helveticaFontTwelve);
+        reload.setFont(helveticaFontTwelve);
+
+        Color inputFieldBackground = new Color(255, 255, 255);
+        contactInputField.setBackground(inputFieldBackground);
+
+        buttons.add(titleLabel);
+        buttons.add(contactInputField);
+        buttons.add(add);
+        buttons.add(delete);
         buttons.add(reload);
+        buttons.add(home);
+
+        reload.addActionListener(this);
 
         contactToLastMessage = new JList<>();
         contactToLastMessage.setCellRenderer(new ContactToLastMessageCellRenderer());
 
-        this.add(new JScrollPane(contactToLastMessage));
+        JPanel titlePanel = new JPanel();
+        titlePanel.add(titleLabel);
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
 
-        this.add(buttons);
+        this.add(titlePanel, BorderLayout.NORTH);
+        this.add(new JScrollPane(contactToLastMessage), BorderLayout.CENTER);
+        this.add(buttons, BorderLayout.SOUTH);
+
+        home.addActionListener(evt -> {
+            if (evt.getSource().equals(home)) {
+                viewManagerModel.setActiveView(signupViewModel.getViewName());
+                viewManagerModel.firePropertyChanged();
+            }
+        });
     }
 
-
-    private static class ContactToLastMessageCellRenderer extends JLabel implements ListCellRenderer<Map.Entry<String
-            , String>> {
+    private static class ContactToLastMessageCellRenderer extends JLabel implements ListCellRenderer<Map.Entry<String, String>> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Map.Entry<String, String>> list,
                                                       Map.Entry<String, String> contact, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
-            setText(contact.getKey() + " | " + contact.getValue());
+            setText("<html><div style='margin: 5px;'>" +
+                    "<b>" + contact.getKey() + "</b> | " + contact.getValue() +
+                    "</div></html>");
+            customizeCellAppearance(list, isSelected);
+            return this;
+        }
+
+        private void customizeCellAppearance(JList<?> list, boolean isSelected) {
+            setOpaque(true);
+
+            // Set a nicer font
+            setFont(new Font("Arial", Font.PLAIN, 14));
+
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
@@ -65,10 +122,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
-            setEnabled(list.isEnabled());
-            setFont(list.getFont());
-            setOpaque(true);
-            return this;
         }
     }
 

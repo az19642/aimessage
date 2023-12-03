@@ -25,6 +25,17 @@ public class LoadContactsToViewInteractor implements LoadContactsToViewInputBoun
     public void execute(LoadContactsToViewInputData loadContactsToViewInputData) {
         Map<String, String> contactToMessage = new HashMap<>(); // TODO use DAO to update this accordingly
         contactToMessage.put("Andy", "Hello, this is the first message!");
+        contactToMessage.put("Chris", "This UI looks amazing guys");
+        contactToMessage.put("Jonathan", "Call me Johnny.");
+        contactToMessage.put("a", "Hello, this is the first message!");
+        contactToMessage.put("b", "This UI looks amazing guys");
+        contactToMessage.put("c", "Call me Johnny.");
+        contactToMessage.put("d", "Hello, this is the first message!");
+        contactToMessage.put("e", "This UI looks amazing guys");
+        contactToMessage.put("f", "Call me Johnny.");
+        contactToMessage.put("g", "Hello, this is the first message!");
+        contactToMessage.put("h", "This UI looks amazing guys");
+        contactToMessage.put("i", "Call me Johnny.");
         LoadContactsToViewOutputData loadContactsToViewOutputData = new LoadContactsToViewOutputData(contactToMessage);
         updateLoggedInStatePresenter.prepareSuccessView(loadContactsToViewOutputData);
     }
