@@ -64,7 +64,7 @@ public class Main {
                 loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = LoadContactsToViewUseCaseFactory.create(signupViewModel, loggedInViewModel, viewManagerModel, mongoDataAccessObject);
+        LoggedInView loggedInView = LoadContactsToViewUseCaseFactory.create(loggedInViewModel, viewManagerModel, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

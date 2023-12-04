@@ -16,12 +16,12 @@ import view.LoggedInView;
  */
 public class LoadContactsToViewUseCaseFactory {
 
-    public static LoggedInView create(SignupViewModel signupViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
+    public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                                       LoadContactsToViewDataAccessInterface mongoDataAccessObject) {
 
         LoadContactsToViewController loadContactsToViewController =
                 createLoadContactsToViewController(loggedInViewModel, mongoDataAccessObject);
-        return new LoggedInView(signupViewModel, loggedInViewModel, viewManagerModel, loadContactsToViewController);
+        return new LoggedInView(loggedInViewModel, viewManagerModel, loadContactsToViewController);
 
     }
 

@@ -10,7 +10,6 @@ import java.beans.PropertyChangeSupport;
  */
 public class LoggedInViewModel extends ViewModel {
     public static final String TITLE_LABEL = "Contacts";
-    public static final String HOME_BUTTON_LABEL = "Go Home";
     public static final String ADD_BUTTON_LABEL = "Add Contact";
     public static final String DELETE_BUTTON_LABEL = "Delete Contact";
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);

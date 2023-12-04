@@ -25,11 +25,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     // Components
     private final JButton reload;
-    private final JButton home;
     private final JButton add;
     private final JButton delete;
     private final JTextField contactInputField = new JTextField(15);
-    private final SignupViewModel signupViewModel;
     private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
     private final LoadContactsToViewController loadContactsToViewController;
@@ -44,9 +42,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      * @param loggedInViewModel           ViewModel for the logged-in state.
      * @param loadContactsToViewController Controller for loading contacts.
      */
-    public LoggedInView(SignupViewModel signupViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
+    public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                         LoadContactsToViewController loadContactsToViewController) {
-        this.signupViewModel = signupViewModel;
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
@@ -57,12 +54,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         JLabel titleLabel = new JLabel(LoggedInViewModel.TITLE_LABEL);
 
         reload = new JButton("Reload contacts (for testing purposes)");
-        home = new JButton(LoggedInViewModel.HOME_BUTTON_LABEL);
         add = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
         delete = new JButton(LoggedInViewModel.DELETE_BUTTON_LABEL);
 
         titleLabel.setFont(helveticaFontFifteen);
-        home.setFont(helveticaFontTwelve);
         reload.setFont(helveticaFontTwelve);
 
         Color inputFieldBackground = new Color(255, 255, 255);
@@ -73,7 +68,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         buttons.add(add);
         buttons.add(delete);
         buttons.add(reload);
-        buttons.add(home);
 
         reload.addActionListener(this);
 
@@ -88,13 +82,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.add(titlePanel, BorderLayout.NORTH);
         this.add(new JScrollPane(contactToLastMessage), BorderLayout.CENTER);
         this.add(buttons, BorderLayout.SOUTH);
-
-        home.addActionListener(evt -> {
-            if (evt.getSource().equals(home)) {
-                viewManagerModel.setActiveView(signupViewModel.getViewName());
-                viewManagerModel.firePropertyChanged();
-            }
-        });
     }
 
     private static class ContactToLastMessageCellRenderer extends JLabel implements ListCellRenderer<Map.Entry<String, String>> {
