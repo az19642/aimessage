@@ -1,8 +1,10 @@
 package app;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.load_contacts_to_view.LoadContactsToViewController;
 import interface_adapter.load_contacts_to_view.LoadContactsToViewPresenter;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.signup.SignupViewModel;
 import use_case.load_contacts_to_view.LoadContactsToViewDataAccessInterface;
 import use_case.load_contacts_to_view.LoadContactsToViewInputBoundary;
 import use_case.load_contacts_to_view.LoadContactsToViewInteractor;
@@ -14,12 +16,12 @@ import view.LoggedInView;
  */
 public class LoadContactsToViewUseCaseFactory {
 
-    public static LoggedInView create(LoggedInViewModel loggedInViewModel,
+    public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                                       LoadContactsToViewDataAccessInterface mongoDataAccessObject) {
 
         LoadContactsToViewController loadContactsToViewController =
                 createLoadContactsToViewController(loggedInViewModel, mongoDataAccessObject);
-        return new LoggedInView(loggedInViewModel, loadContactsToViewController);
+        return new LoggedInView(loggedInViewModel, viewManagerModel, loadContactsToViewController);
 
     }
 
