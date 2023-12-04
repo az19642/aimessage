@@ -27,11 +27,9 @@ public class MutatingContactsInteractor implements MutatingContactsInputBoundary
     @Override
     public void execute(MutatingContactsInputData mutatingContactsInputData) {
 
-        User user = this.mutatingContactsUserDataAccessInterface.getUser();
-
         if (mutatingContactsInputData.getAddContact()) {
             String result = this.mutatingContactsUserDataAccessInterface.addContact(
-                    user, mutatingContactsInputData.getContactName());
+                    mutatingContactsInputData.getContactName());
 
             if (result.equals("PASS")) {
                 mutatingContactsPresenter.prepareSuccessView();
@@ -45,8 +43,7 @@ public class MutatingContactsInteractor implements MutatingContactsInputBoundary
             }
 
         } else {
-            this.mutatingContactsUserDataAccessInterface.deleteContact(
-                    user, user.getContact(mutatingContactsInputData.getContactName()));
+            this.mutatingContactsUserDataAccessInterface.deleteContact(mutatingContactsInputData.getContactName());
             mutatingContactsPresenter.prepareSuccessView();
         }
     }

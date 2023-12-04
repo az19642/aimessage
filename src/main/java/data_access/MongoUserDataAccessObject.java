@@ -88,19 +88,6 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
     }
 
-
-    /**
-     * Updates an existing user, call this method whenever a change has been made to user
-     * For example when a new contact is added or removed.
-     * Notice that this method is private as whenever a change is made
-     *
-     * @param user an existing user in the database
-     */
-    private void update(User user) {
-
-    }
-
-
     /**
      * Returns whether a user with the given username exists
      *
@@ -124,11 +111,10 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * 3. Contact is already a contact to the user
      * 4. Unexpected error occurred
      *
-     * @param user the current user
      * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
      */
     @Override
-    public String addContact(User user, String contactName) {
+    public String addContact(String contactName) {
 
         // Fetch the contact and user
         Document contact = userRecords.find(eq("name", contactName)).first();
@@ -212,11 +198,12 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * Deletes a contact of the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
      *
-     * @param user          the current user
-     * @param contactEntity the contacts entity
+     * @param contactName the contacts name
      */
     @Override
-    public void deleteContact(User user, Contact contactEntity) {
+    public void deleteContact(String contactName) {
+
+        Contact contactEntity = user.getContact(contactName);
 
         // Fetch the contact and user
         Document contact = userRecords.find(eq("name", contactEntity.getName())).first();

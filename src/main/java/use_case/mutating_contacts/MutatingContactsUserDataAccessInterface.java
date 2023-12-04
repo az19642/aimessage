@@ -15,10 +15,9 @@ public interface MutatingContactsUserDataAccessInterface {
      * 3. Contact is already a contact to the user
      * 4. Unexpected error occurred
      *
-     * @param user the current user
      * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
      */
-    String addContact(User user, String contactName);
+    String addContact(String contactName);
 
     /**
      * Preconditions:
@@ -28,10 +27,9 @@ public interface MutatingContactsUserDataAccessInterface {
      * Deletes a contact of the user, and will also update the contact such that the user will be a contact for them.
      * Precondition: The given username is a valid contact.
      *
-     * @param user          the current user
-     * @param contactEntity the contacts entity
+     * @param contactName the contacts name
      */
-    void deleteContact(User user, Contact contactEntity);
+    void deleteContact(String contactName);
 
     /**
      * getter for user attribute
