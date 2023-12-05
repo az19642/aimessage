@@ -25,7 +25,12 @@ class LoginInteractorTest {
         // Create a mock data access interface that returns a user with the given username and password.
         LoginUserDataAccessInterface userDataAccessInterface = new LoginUserDataAccessInterface() {
             @Override
-            public User getUser(String username, String password) {
+            public void setUser(String username, String password) {
+
+            }
+
+            @Override
+            public User getUser() {
                 return userFactory.create(
                         "andy123",
                         "password123",
@@ -65,7 +70,12 @@ class LoginInteractorTest {
         // Create a mock data access interface that returns null when the username is queried.
         LoginUserDataAccessInterface userDataAccessInterface = new LoginUserDataAccessInterface() {
             @Override
-            public User getUser(String username, String password) {
+            public void setUser(String username, String password) {
+
+            }
+
+            @Override
+            public User getUser() {
                 return null;
             }
         };

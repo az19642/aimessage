@@ -12,7 +12,13 @@ public interface LoginUserDataAccessInterface {
      *
      * @param username The username of the user to retrieve.
      * @param password The password of the user to retrieve.
-     * @return The user with the specified username and password, or null if not found.
      */
-    User getUser(String username, String password);
+    void setUser(String username, String password);
+
+    /**
+     * getter for user attribute
+     * setUser should have been called once before this was called
+     * @return the user attribute
+     */
+    User getUser();
 }

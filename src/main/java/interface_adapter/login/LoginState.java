@@ -8,7 +8,6 @@ public class LoginState {
     private String usernameError = null;
     private String password = "";
     private String passwordError = null;
-
     private String loginError = null;
 
     public LoginState(LoginState copy) {

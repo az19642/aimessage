@@ -26,4 +26,5 @@ public class PasswordGeneratorController {
     public void execute(String prompt) {
         passwordGeneratorUseCaseInteractor.execute(prompt);
     }
+
 }
