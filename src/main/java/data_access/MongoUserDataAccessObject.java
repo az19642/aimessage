@@ -13,6 +13,7 @@ import entity.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import use_case.load_contacts_to_view.LoadContactsToViewDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.mutating_contacts.MutatingContactsUserDataAccessInterface;
 import use_case.send_message.SendMessageUserDataAccessInterface;
@@ -21,7 +22,6 @@ import use_case.signup.SignupUserDataAccessInterface;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,7 +37,7 @@ import static com.mongodb.client.model.Filters.eq;
  */
 
 public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
-        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, SendMessageUserDataAccessInterface {
+        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, SendMessageUserDataAccessInterface, LoadContactsToViewDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
