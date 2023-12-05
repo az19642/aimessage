@@ -21,6 +21,7 @@ import java.util.List;
  * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
  */
 public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface, ReplySuggesterUserDataAccessInterface {
+
     private final OpenAiService service;
 
     /**
@@ -106,7 +107,6 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
             e.printStackTrace();
         }
     }
-
     /**
      * Generates a suggested reply based on the provided prompt and last message of the other user using the GPT model.
      *

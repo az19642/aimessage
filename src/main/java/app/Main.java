@@ -15,14 +15,11 @@ import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
-
-
         // The main application window.
         JFrame application = new JFrame("AiMessage");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
