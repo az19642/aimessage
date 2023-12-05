@@ -57,4 +57,11 @@ public class Contact {
     public List<Message> getMessages() {
         return messages;
     }
+
+    /**
+     * Updates the last message time to the current time
+     * This method should be called when a new message was sent or received
+     */
+    public void updateLastMessageTime() { lastMessageTime = LocalDateTime.now(); }
+
 }

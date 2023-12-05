@@ -37,6 +37,16 @@ public interface User {
     List<Contact> getContacts();
 
     /**
+     * Returns a contact given the contact name
+     * If not a contact returns null
+     *
+     * @param contactName the name of the contact
+     * @return the contact entity with the given contact name
+     */
+    Contact getContact(String contactName);
+
+
+    /**
      * Gets the timestamp when the user was created.
      *
      * @return The timestamp of the user creation.

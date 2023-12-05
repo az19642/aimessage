@@ -24,16 +24,13 @@ public class PasswordGeneratorInteractor implements PasswordGeneratorInputBounda
      * Prepares the view for a successful response and delegates password generation to the data access object.
      *
      * @param prompt The prompt or request for generating the password.
-     * @return The generated password as a string.
      */
     @Override
-    public String execute(String prompt) {
+    public void execute(String prompt) {
         String generatedPassword = passwordGeneratorDataAccessObject.generateSecurePassword(prompt);
 
         PasswordGeneratorOutputData passwordGeneratorOutputData =
                 new PasswordGeneratorOutputData(generatedPassword, false);
         passwordGeneratorPresenter.prepareSuccessView(passwordGeneratorOutputData);
-
-        return generatedPassword;
     }
 }

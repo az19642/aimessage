@@ -22,9 +22,9 @@ public class PasswordGeneratorController {
      * Executes the Password Generator use case to generate a password based on the given prompt.
      *
      * @param prompt The prompt or request for generating the password.
-     * @return The generated password as a string.
      */
-    public String execute(String prompt) {
-        return passwordGeneratorUseCaseInteractor.execute(prompt);
+    public void execute(String prompt) {
+        passwordGeneratorUseCaseInteractor.execute(prompt);
     }
+
 }

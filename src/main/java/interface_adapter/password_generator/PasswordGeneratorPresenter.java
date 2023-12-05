@@ -33,6 +33,7 @@ public class PasswordGeneratorPresenter implements PasswordGeneratorOutputBounda
     @Override
     public void prepareSuccessView(PasswordGeneratorOutputData response) {
         PasswordGeneratorState passwordGeneratorState = passwordGeneratorViewModel.getState();
+        passwordGeneratorState.setGeneratedPassword(response.getGeneratedPassword());
         this.passwordGeneratorViewModel.setState(passwordGeneratorState);
         this.passwordGeneratorViewModel.firePropertyChanged();
 

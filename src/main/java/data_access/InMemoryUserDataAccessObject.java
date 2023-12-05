@@ -10,6 +10,7 @@ import java.util.Map;
 public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
 
     private final Map<String, User> accounts = new HashMap<>();
+    private User user = null;
 
     /**
      * @param identifier the user's username
@@ -34,7 +35,12 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
      * @return the user based on the given input
      */
     @Override
-    public User getUser(String username, String password) {
-        return accounts.get(username);
+    public void setUser(String username, String password) {
+        this.user = accounts.get(username);
+    }
+
+    @Override
+    public User getUser(){
+        return this.user;
     }
 }
