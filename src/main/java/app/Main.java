@@ -1,7 +1,7 @@
 package app;
 
 import data_access.GPTDataAccessObject;
-import data_access.MongoDataAccessObject;
+import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
@@ -44,8 +44,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
 
-        MongoDataAccessObject mongoDataAccessObject;
-        mongoDataAccessObject = new MongoDataAccessObject(
+        MongoUserDataAccessObject mongoUserDataAccessObject = new MongoUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -54,14 +53,14 @@ public class Main {
         gptDataAccessObject = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                mongoDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
+                mongoUserDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                loggedInViewModel, mongoDataAccessObject);
+                loggedInViewModel, mongoUserDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = LoadContactsToViewUseCaseFactory.create(loggedInViewModel, viewManagerModel, mongoDataAccessObject);
+        LoggedInView loggedInView = LoadContactsToViewUseCaseFactory.create(loggedInViewModel, viewManagerModel, mongoUserDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

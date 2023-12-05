@@ -1,6 +1,11 @@
 package use_case.load_contacts_to_view;
 
+import entity.Contact;
+import entity.Message;
+import entity.User;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,24 +23,22 @@ public class LoadContactsToViewInteractor implements LoadContactsToViewInputBoun
 
     /**
      * This method is called by the controller to execute the use case.
+     *
      * @param loadContactsToViewInputData the input data for the use case.
      */
 
     @Override
     public void execute(LoadContactsToViewInputData loadContactsToViewInputData) {
-        Map<String, String> contactToMessage = new HashMap<>(); // TODO use DAO to update this accordingly
-        contactToMessage.put("Andy", "Hello, this is the first message!");
-        contactToMessage.put("Chris", "This UI looks amazing guys");
-        contactToMessage.put("Jonathan", "Test.");
-        contactToMessage.put("a", "Hello, this is the first message!");
-        contactToMessage.put("b", "This UI looks amazing guys");
-        contactToMessage.put("c", "Test 2.");
-        contactToMessage.put("d", "Hello, this is the first message!");
-        contactToMessage.put("e", "This UI looks amazing guys");
-        contactToMessage.put("f", "sup.");
-        contactToMessage.put("g", "Hello, this is the first message!");
-        contactToMessage.put("h", "This UI looks amazing guys");
-        contactToMessage.put("i", "hello.");
+        Map<String, String> contactToMessage = new HashMap<>();
+        User currentUser = userDataAccessObject.getUser();
+        String lastMessage = "";
+        for (Contact contact : currentUser.getContacts()) {
+            List<Message> messageList = contact.getMessages();
+            if (!messageList.isEmpty()) {
+                lastMessage = messageList.get(messageList.size() - 1).getContent();
+            }
+            contactToMessage.put(contact.getName(), lastMessage);
+        }
         LoadContactsToViewOutputData loadContactsToViewOutputData = new LoadContactsToViewOutputData(contactToMessage);
         updateLoggedInStatePresenter.prepareSuccessView(loadContactsToViewOutputData);
     }
