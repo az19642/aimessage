@@ -1,6 +1,6 @@
 package use_case.signup;
 
-import data_access.InMemoryUserDataAccessObject;
+import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.User;
 import entity.UserFactory;
@@ -22,15 +22,18 @@ class SignupInteractorTest {
      */
     @Test
     void successTest() {
-        SignupInputData inputData = new SignupInputData("user", "pass", "pass", "EN");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPwd", "English");
+        MongoUserDataAccessObject userRepository = new MongoUserDataAccessObject(
+                System.getenv("MONGO_PASSWORD"),
+                new CommonUserFactory()
+        );
 
         SignupOutputBoundary successPresenter = new SignupOutputBoundary() {
             @Override
             public void prepareSuccessView(SignupOutputData user) {
-                assertEquals("user", user.getUsername());
+                assertEquals("testUser2", user.getUsername());
                 assertNotNull(user.getCreationTime());
-                assertTrue(userRepository.userExists("user"));
+                assertTrue(userRepository.userExists("testUser2"));
             }
 
             @Override
@@ -40,6 +43,8 @@ class SignupInteractorTest {
         };
         SignupInputBoundary interactor = new SignupInteractor(userRepository, successPresenter, new CommonUserFactory());
         interactor.execute(inputData);
+
+        userRepository.deleteUser("testUser2");
     }
 
     /**
@@ -47,8 +52,11 @@ class SignupInteractorTest {
      */
     @Test
     void failurePasswordDontMatchTest() {
-        SignupInputData inputData = new SignupInputData("user", "pass", "password", "EN");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPassword", "English");
+        SignupUserDataAccessInterface userRepository = new MongoUserDataAccessObject(
+                System.getenv("MONGO_PASSWORD"),
+                new CommonUserFactory()
+        );
 
         SignupOutputBoundary failurePresenter = new SignupOutputBoundary() {
             @Override
@@ -64,6 +72,8 @@ class SignupInteractorTest {
 
         SignupInputBoundary interactor = new SignupInteractor(userRepository, failurePresenter, new CommonUserFactory());
         interactor.execute(inputData);
+
+        userRepository.deleteUser("testUser2");
     }
 
     /**
@@ -71,11 +81,14 @@ class SignupInteractorTest {
      */
     @Test
     void failureUserExistsTest() {
-        SignupInputData inputData = new SignupInputData("user", "pass", "pass", "EN");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPwd", "English");
+        SignupUserDataAccessInterface userRepository = new MongoUserDataAccessObject(
+                System.getenv("MONGO_PASSWORD"),
+                new CommonUserFactory()
+        );
 
         UserFactory factory = new CommonUserFactory();
-        User user = factory.create("user", "password", "EN" ,LocalDateTime.now(), new ArrayList<>());
+        User user = factory.create("testUser2", "testPwd", "English" ,LocalDateTime.now(), new ArrayList<>());
         userRepository.save(user);
 
         SignupOutputBoundary failurePresenter = new SignupOutputBoundary() {
@@ -92,5 +105,7 @@ class SignupInteractorTest {
 
         SignupInputBoundary interactor = new SignupInteractor(userRepository, failurePresenter, new CommonUserFactory());
         interactor.execute(inputData);
+
+        userRepository.deleteUser("testUser2");
     }
 }
