@@ -9,5 +9,5 @@ public class PasswordGeneratorInputData {
      * Constructs a new PasswordGeneratorInputData instance.
      * Not used because password generation requires no input data from the user.
      */
-    public PasswordGeneratorInputData() {};
+    public PasswordGeneratorInputData() {}
 }

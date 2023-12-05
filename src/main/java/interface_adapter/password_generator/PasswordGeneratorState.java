@@ -4,6 +4,7 @@ package interface_adapter.password_generator;
  * The state class that holds information related to the Password Generator interface, including error messages.
  */
 public class PasswordGeneratorState {
+    private String generatedPassword = "";
 
     private String passwordGeneratorError = null;
 
@@ -13,10 +14,29 @@ public class PasswordGeneratorState {
      * @param copy The PasswordGeneratorState to copy the content from.
      */
     public PasswordGeneratorState(PasswordGeneratorState copy) {
+        generatedPassword = copy.generatedPassword;
         passwordGeneratorError = copy.passwordGeneratorError;
     }
 
     public PasswordGeneratorState() {
+    }
+
+    /**
+     * Gets the generated password from API call.
+     *
+     * @return The generated password from API call.
+     */
+    public String getGeneratedPassword() {
+        return generatedPassword;
+    }
+
+    /**
+     * Sets the generated password from API call.
+     *
+     * @param generatedPassword The new generated password to be set.
+     */
+    public void setGeneratedPassword(String generatedPassword) {
+        this.generatedPassword = generatedPassword;
     }
 
     /**

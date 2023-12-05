@@ -30,17 +30,28 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final JLabel usernameErrorField = new JLabel();
     private final JLabel passwordErrorField = new JLabel();
     private final LoginController loginController;
+    private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
+    private final Font helveticaFontFourteen = new Font("Helvetica", Font.PLAIN, 14);
 
-    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController controller,
+    /**
+     * Constructs a new instance of the LoginView.
+     *
+     * @param loginViewModel     The ViewModel responsible for managing login-related data.
+     * @param signupViewModel    The ViewModel for signup-related functionality.
+     * @param loginController    The controller handling login actions.
+     * @param viewManagerModel   The model managing the active view in the application.
+     */
+    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
                      ViewManagerModel viewManagerModel) {
 
-        this.loginController = controller;
+        this.loginController = loginController;
         this.loginViewModel = loginViewModel;
-        this.loginViewModel.addPropertyChangeListener(this);
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
 
-        GridLayout gridLayout = new GridLayout(4, 3);
+        loginViewModel.addPropertyChangeListener(this);
+
+        GridLayout gridLayout = new GridLayout(10, 3);
         gridLayout.setHgap(10);
         gridLayout.setVgap(10);
         JPanel mainPanel = new JPanel(gridLayout);
@@ -48,12 +59,36 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         JLabel usernameLabel = new JLabel(LoginViewModel.USERNAME_LABEL);
         JLabel passwordLabel = new JLabel(LoginViewModel.PASSWORD_LABEL);
 
-        usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
-        passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
-
         logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         cancel = new JButton(LoginViewModel.CANCEL_BUTTON_LABEL);
 
+        usernameLabel.setFont(helveticaFontFourteen);
+        passwordLabel.setFont(helveticaFontFourteen);
+
+        usernameLabel.setHorizontalAlignment(JLabel.RIGHT);
+        passwordLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        logIn.setFont(helveticaFontTwelve);
+        cancel.setFont(helveticaFontTwelve);
+
+        // Styling for input fields
+        Color inputFieldBackground = new Color(240, 240, 240);
+
+        usernameInputField.setBackground(inputFieldBackground);
+
+        passwordInputField.setBackground(inputFieldBackground);
+
+        addListeners();
+
+        addComponents(mainPanel, usernameLabel, passwordLabel);
+
+        mainPanel.setBackground(Color.WHITE);
+
+        this.add(mainPanel);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    }
+
+    private void addListeners() {
         logIn.addActionListener(evt -> {
             if (evt.getSource().equals(logIn)) {
                 LoginState currentState = loginViewModel.getState();
@@ -104,6 +139,16 @@ public class LoginView extends JPanel implements PropertyChangeListener {
             public void keyReleased(KeyEvent e) {
             }
         });
+    }
+
+    private void addComponents(JPanel mainPanel, JLabel usernameLabel, JLabel passwordLabel) {
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
 
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameInputField);
@@ -114,6 +159,14 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         mainPanel.add(new JLabel(""));
 
         mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+
+        mainPanel.add(new JLabel(""));
         mainPanel.add(logIn);
         mainPanel.add(new JLabel(""));
 
@@ -121,12 +174,13 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         mainPanel.add(cancel);
         mainPanel.add(new JLabel(""));
 
-        JPanel pseudoMarginsPanel = new JPanel(new GridLayout(3, 1));
-        pseudoMarginsPanel.add(new JLabel(""));
-        pseudoMarginsPanel.add(mainPanel);
-        pseudoMarginsPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
 
-        this.add(pseudoMarginsPanel);
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
+        mainPanel.add(new JLabel(""));
     }
 
     /**

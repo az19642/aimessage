@@ -10,6 +10,8 @@ public class SignupState {
     private String passwordError = null;
     private String repeatPassword = "";
     private String repeatPasswordError = null;
+    private String preferredLanguage = "";
+    private String preferredLanguageError = null;
 
     /**
      * Constructs a new SignupState by copying the values from the provided SignupState.
@@ -23,6 +25,8 @@ public class SignupState {
         passwordError = copy.passwordError;
         repeatPassword = copy.repeatPassword;
         repeatPasswordError = copy.repeatPasswordError;
+        preferredLanguage = copy.preferredLanguage;
+        preferredLanguageError = copy.preferredLanguageError;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -137,6 +141,34 @@ public class SignupState {
     public void setRepeatPasswordError(String repeatPasswordError) {
         this.repeatPasswordError = repeatPasswordError;
     }
+
+    /**
+     * Gets the preferred language entered during signup.
+     *
+     * @return The preferred language entered during signup.
+     */
+    public String getPreferredLanguage() {return preferredLanguage;}
+
+    /**
+     * Sets the preferred language entered during signup.
+     *
+     * @param preferredLanguage The new preferred language to be set.
+     */
+    public void setPreferredLanguage(String preferredLanguage) {this.preferredLanguage = preferredLanguage;}
+
+    /**
+     * Gets the error message related to the preferred language during signup.
+     *
+     * @return The error message related to the preferred language during signup.
+     */
+    public String getPreferredLanguageError() {return preferredLanguageError;}
+
+    /**
+     * Sets the error message related to the preferred language during signup.
+     *
+     * @param preferredLanguageError The new error message to be set.
+     */
+    public void setPreferredLanguageError(String preferredLanguageError) {this.preferredLanguageError = preferredLanguageError;}
 
     /**
      * Provides a string representation of the SignupState for debugging purposes.
