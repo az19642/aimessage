@@ -1,7 +1,6 @@
 package interface_adapter.send_message;
 
 
-import use_case.mutating_contacts.MutatingContactsOutputBoundary;
 import use_case.send_message.SendMessageOutputBoundary;
 
 /**
