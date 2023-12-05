@@ -13,6 +13,8 @@ import use_case.text_to_speech.TextToSpeechDataAccessInterface;
 import use_case.suggested_reply_generator.ReplySuggesterUserDataAccessInterface;
 
 import okhttp3.*;
+import use_case.translator.TranslatorDataAccessInterface;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,8 @@ import java.util.List;
 /**
  * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
  */
-public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface, ReplySuggesterUserDataAccessInterface {
+public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface,
+        ReplySuggesterUserDataAccessInterface, TranslatorDataAccessInterface {
 
     private final OpenAiService service;
 
@@ -107,6 +110,7 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
             e.printStackTrace();
         }
     }
+
     /**
      * Generates a suggested reply based on the provided prompt and last message of the other user using the GPT model.
      *
@@ -130,6 +134,28 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to suggest a reply.";
+        }
+    }
+
+    @Override
+    public String translate(String textToTranslate, String targetLanguage) {
+        List<ChatMessage> messages = new ArrayList<>();
+        String prompt = String.format("Translate the following into %s: %s", targetLanguage, textToTranslate);
+        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        messages.add(userMessage);
+
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+                .builder()
+                .model("gpt-4")
+                .messages(messages)
+                // No maxTokens set to let it depend on the input text
+                .build();
+
+        try {
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            return responseMessage.getContent();
+        } catch (Exception e) {
+            return "Error: Failed to generate a translation.";
         }
     }
 }
