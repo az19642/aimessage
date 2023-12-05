@@ -137,6 +137,13 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
         }
     }
 
+    /**
+     * Translates the given text into the specified target language using the GPT-4 language model.
+     *
+     * @param textToTranslate The text to be translated.
+     * @param targetLanguage  The target language into which the text should be translated.
+     * @return The translated text or an error message if the translation fails.
+     */
     @Override
     public String translate(String textToTranslate, String targetLanguage) {
         List<ChatMessage> messages = new ArrayList<>();
