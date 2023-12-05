@@ -11,8 +11,9 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
     }
 
     @Override
-    public void execute(String textToTranslate, String targetLanguage) {
-        String translatedMessage = translatorDataAccessObject.translate(textToTranslate, targetLanguage);
+    public void execute(TranslatorInputData translatorInputData) {
+        String translatedMessage = translatorDataAccessObject.translate(translatorInputData.getMessage(),
+                translatorInputData.getTargetLanguage());
 
         TranslatorOutputData translatorOutputData =
                 new TranslatorOutputData(translatedMessage, false);

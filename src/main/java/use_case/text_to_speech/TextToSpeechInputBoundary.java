@@ -5,5 +5,5 @@ package use_case.text_to_speech;
  * Implementations of this interface are responsible for executing the text-to-speech operation.
  */
 public interface TextToSpeechInputBoundary {
-    void execute(String message);
+    void execute(TextToSpeechInputData textToSpeechInputData);
 }

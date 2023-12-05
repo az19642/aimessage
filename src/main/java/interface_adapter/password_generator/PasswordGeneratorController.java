@@ -1,6 +1,7 @@
 package interface_adapter.password_generator;
 
 import use_case.password_generator.PasswordGeneratorInputBoundary;
+import use_case.password_generator.PasswordGeneratorInputData;
 
 /**
  * The controller class responsible for executing the Password Generator use case.
@@ -24,7 +25,8 @@ public class PasswordGeneratorController {
      * @param prompt The prompt or request for generating the password.
      */
     public void execute(String prompt) {
-        passwordGeneratorUseCaseInteractor.execute(prompt);
+        PasswordGeneratorInputData passwordGeneratorInputData = new PasswordGeneratorInputData(prompt);
+        passwordGeneratorUseCaseInteractor.execute(passwordGeneratorInputData);
     }
 
 }

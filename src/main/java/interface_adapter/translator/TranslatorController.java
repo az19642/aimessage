@@ -1,6 +1,7 @@
 package interface_adapter.translator;
 
 import use_case.translator.TranslatorInputBoundary;
+import use_case.translator.TranslatorInputData;
 
 public class TranslatorController {
     private final TranslatorInputBoundary translatorUseCaseInteractor;
@@ -10,6 +11,7 @@ public class TranslatorController {
     }
 
     public void execute(String textToTranslate, String targetLanguage) {
-        translatorUseCaseInteractor.execute(textToTranslate, targetLanguage);
+        TranslatorInputData translatorInputData = new TranslatorInputData(textToTranslate, targetLanguage);
+        translatorUseCaseInteractor.execute(translatorInputData);
     }
 }

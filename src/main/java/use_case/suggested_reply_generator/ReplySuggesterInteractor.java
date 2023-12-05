@@ -22,10 +22,10 @@ public class ReplySuggesterInteractor implements ReplySuggesterInputBoundary {
      * Executes the Suggested Reply Generator use case based on the provided prompt.
      * Prepares the view for a successful response and delegates suggested reply generation to the data access object.
      *
-     * @param prompt The prompt or request for generating the suggested reply.
+     * @param replySuggesterInputData The prompt or request for generating the suggested reply.
      */
-    public void execute(String prompt) {
-        String generatedReply = replySuggesterDataAccessObject.generateSuggestedReply(prompt);
+    public void execute(ReplySuggesterInputData replySuggesterInputData) {
+        String generatedReply = replySuggesterDataAccessObject.generateSuggestedReply(replySuggesterInputData.getPrompt());
 
         ReplySuggesterOutputData replySuggesterOutputData = new ReplySuggesterOutputData(generatedReply, false);
         replySuggesterPresenter.prepareSuccessView(replySuggesterOutputData);
