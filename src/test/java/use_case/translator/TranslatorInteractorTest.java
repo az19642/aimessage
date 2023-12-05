@@ -9,7 +9,10 @@ class TranslatorInteractorTest {
 
     @Test
     void successTest() {
-        TranslatorInputData inputData = new TranslatorInputData();
+        String message = "What courses are you taking?";
+        String targetLanguage = "French";
+
+        TranslatorInputData inputData = new TranslatorInputData(message, targetLanguage);
         TranslatorDataAccessInterface translatorDataAccessInterface =
                 new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
@@ -28,9 +31,6 @@ class TranslatorInteractorTest {
         TranslatorInputBoundary interactor =
                 new TranslatorInteractor(translatorDataAccessInterface, successPresenter);
 
-        String message = "What courses are you taking?";
-        String targetLanguage = "French";
-
-        interactor.execute(message, targetLanguage);
+        interactor.execute(inputData);
     }
 }
