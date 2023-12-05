@@ -23,12 +23,10 @@ public class LoadContactsToViewInteractor implements LoadContactsToViewInputBoun
 
     /**
      * This method is called by the controller to execute the use case.
-     *
-     * @param loadContactsToViewInputData the input data for the use case.
      */
 
     @Override
-    public void execute(LoadContactsToViewInputData loadContactsToViewInputData) {
+    public void execute() {
         Map<String, String> contactToMessage = new HashMap<>();
         User currentUser = userDataAccessObject.getUser();
         String lastMessage = "";

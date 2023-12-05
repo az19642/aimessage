@@ -1,6 +1,10 @@
 package use_case.load_contacts_to_view;
 
 import java.util.Map;
+
+/**
+ * The output data of the use case.
+ */
 public class LoadContactsToViewOutputData {
 
     private final Map<String, String> contactToLastMessage;

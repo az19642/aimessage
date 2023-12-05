@@ -119,7 +119,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      */
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == reload) {
-            loadContactsToViewController.execute(loggedInViewModel.getState().getUsername());
+            loadContactsToViewController.execute();
         }
     }
 
@@ -132,7 +132,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
         if (state.getContactToLastMessage() == null) { // first time loading
-            loadContactsToViewController.execute(state.getUsername());
+            loadContactsToViewController.execute();
         } else {
             DefaultListModel<Map.Entry<String, String>> listModel = new DefaultListModel<>();
             for (Map.Entry<String, String> contact : state.getContactToLastMessage().entrySet()) {

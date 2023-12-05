@@ -1,7 +1,6 @@
 package interface_adapter.load_contacts_to_view;
 
 import use_case.load_contacts_to_view.LoadContactsToViewInputBoundary;
-import use_case.load_contacts_to_view.LoadContactsToViewInputData;
 
 /**
  * Controller responsible for handling the input of the login use case and passing it to the interactor.
@@ -21,12 +20,8 @@ public class LoadContactsToViewController {
 
     /**
      * Executes the use case.
-     *
-     * @param username the username of the user whose contacts are to be loaded.
      */
-    public void execute(String username) {
-        LoadContactsToViewInputData loadContactsToViewInputData = new LoadContactsToViewInputData(username);
-
-        loadContactsToViewInteractor.execute(loadContactsToViewInputData);
+    public void execute() {
+        loadContactsToViewInteractor.execute();
     }
 }
