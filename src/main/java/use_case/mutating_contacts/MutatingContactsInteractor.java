@@ -37,6 +37,8 @@ public class MutatingContactsInteractor implements MutatingContactsInputBoundary
                 mutatingContactsPresenter.prepareFailView("The user does not exist");
             } else if (result.equals("ALREADY A CONTACT")) {
                 mutatingContactsPresenter.prepareFailView("The user is already a contact");
+            } else if (result.equals("CANNOT ADD SELF")) {
+                mutatingContactsPresenter.prepareFailView("Cannot add yourself as a contact");
             } else {
                 // Should never enter here
                 mutatingContactsPresenter.prepareFailView("Unexpected error, please try again");

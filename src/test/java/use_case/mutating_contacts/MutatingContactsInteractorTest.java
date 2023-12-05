@@ -6,6 +6,9 @@ import entity.CommonUserFactory;
 import org.junit.jupiter.api.Test;
 import use_case.password_generator.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,10 +16,11 @@ public class MutatingContactsInteractorTest {
     @Test
     void execute() {
         MutatingContactsInputData inputData = new MutatingContactsInputData("test", true);
-        MutatingContactsUserDataAccessInterface mutatingContactsUserDataAccessInterface = new MongoUserDataAccessObject(
+        MongoUserDataAccessObject mutatingContactsUserDataAccessInterface = new MongoUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
+        mutatingContactsUserDataAccessInterface.setUser("test", "test");
 
         MutatingContactsOutputBoundary mutatingContactsPresenter = new MutatingContactsOutputBoundary() {
             @Override
