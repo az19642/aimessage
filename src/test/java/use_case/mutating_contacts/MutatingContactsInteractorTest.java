@@ -3,7 +3,6 @@ package use_case.mutating_contacts;
 import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class MutatingContactsInteractorTest {
@@ -14,6 +13,7 @@ public class MutatingContactsInteractorTest {
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
+        mutatingContactsUserDataAccessInterface.setUser("test", "test");
 
         mutatingContactsUserDataAccessInterface.setUser("test", "test");
 

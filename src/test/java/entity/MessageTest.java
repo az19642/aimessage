@@ -13,7 +13,7 @@ class MessageTest {
 
     @Test
     void getMessageTime() {
-        Message hiMessage = new Message("Hello", "Sender");
+        Message hiMessage = new Message("Hello", "Sender", LocalDateTime.now());
         assertNotNull(hiMessage.getMessageTime());
     }
 }

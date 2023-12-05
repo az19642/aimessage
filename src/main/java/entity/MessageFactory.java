@@ -1,6 +1,8 @@
 package entity;
 
 
+import java.time.LocalDateTime;
+
 /**
  * This class is a factory class for the message class
  */
@@ -11,7 +13,7 @@ public class MessageFactory {
      * @param sender  the name of the sender of the message
      * @return an instance of the message class
      */
-    public Message create(String content, String sender) {
-        return new Message(content, sender);
+    public Message create(String content, String sender, LocalDateTime messageTime) {
+        return new Message(content, sender, messageTime);
     }
 }

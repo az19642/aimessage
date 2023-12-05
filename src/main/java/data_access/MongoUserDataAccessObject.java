@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
@@ -14,11 +15,13 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.mutating_contacts.MutatingContactsUserDataAccessInterface;
+import use_case.send_message.SendMessageUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +37,7 @@ import static com.mongodb.client.model.Filters.eq;
  */
 
 public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
-        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface {
+        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, SendMessageUserDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -173,15 +176,15 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     /**
      * A helper function to update the contacts field of a given user in the database
      *
-     * @param contactToChatID
-     * @param user
+     * @param contactToChatID The map mapping the contact name to the corresponding conversation ID
+     * @param user The user in the database entry to be updated
      */
-
     private void updateContactsDB(HashMap<String, Object> contactToChatID, Document user) {
 
         // Creates instructions to update the contact to chat id field
         Bson updates = Updates.combine(
-                Updates.set("contactToChatID", contactToChatID));
+                Updates.set("contactToChatID", contactToChatID)
+        );
 
         // Instructs the driver to insert a new document if none match the query
         UpdateOptions options = new UpdateOptions().upsert(true);
@@ -248,7 +251,7 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      *
      * @return The id associated with the newly added entry
      */
-    public ObjectId addConversation() {
+    private ObjectId addConversation() {
         Document convoDoc = new Document()
                 .append("messagesIDs", new ArrayList<>())
                 .append("lastMessageTime", LocalDateTime.now());
@@ -265,6 +268,98 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
         conversationRecords.deleteOne(convo);
 
     }
+
+    /**
+     * Creates a new message entry in the database between the user and the given contact
+     * Also updates the entities
+     * Precondition: The given contact name is a valid contact for the user.
+     *
+     * @param contactName the contacts name
+     * @param messageContent the content of the message to be sent
+     */
+    public void sendMessage(String contactName, String messageContent) {
+
+        Document userDB = userRecords.find(eq("name", user.getName())).first();
+
+        Object contactToChatID = userDB.get("contactToChatID");
+
+        if (contactToChatID instanceof Document contactToChatIDDB) {
+
+            // Converting column of contact to chat ID to map
+            HashMap<String, Object> mapContactToChatID = new HashMap<>(contactToChatIDDB);
+
+            // Adding message as an entry in the message collection
+            // This will also return the ID associated with it
+            ObjectId id = addMessage(messageContent);
+
+            Document conversation = conversationRecords.find(eq("_id",
+                    mapContactToChatID.get(contactName))).first();
+
+            // List of message ids between the current contact and the user
+            List<ObjectId> messagesIDs = conversation.getList("messagesIDs", ObjectId.class);
+
+            // Adding the new message ID to the list of IDs
+            messagesIDs.add(id);
+
+            // Updates the conversation message IDs and last message time
+            updateConversationDB(messagesIDs, conversation.getObjectId("_id"));
+
+            // Updating the user entity
+            Contact contact = user.getContact(contactName);
+
+            // Updating the last message time to the current time
+            contact.updateLastMessageTime();
+
+            // Adding the new message to the end of the list
+            contact.getMessages().add(messageFactory.create(messageContent, user.getName(), LocalDateTime.now()));
+        }
+
+    }
+
+    /**
+     * A helper function to update the conversation entry of the database between the user and contact
+     *
+     * @param messageIDs The list of message ids with the updated message
+     * @param conversationId the conversation entry in the database to be updated
+     */
+    private void updateConversationDB(List<ObjectId> messageIDs, ObjectId conversationId) {
+
+        Bson filter = Filters.eq("_id", conversationId);
+
+        // Creates instructions to update the contact to chat id field
+        Bson updates = Updates.combine(
+                Updates.set("messagesIDs", messageIDs),
+                Updates.set("lastMessageTime", LocalDateTime.now())
+        );
+
+        // Instructs the driver to insert a new document if none match the query
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            // Updates the first document with the id, so it will only update one
+            conversationRecords.updateOne(filter, updates, options);
+
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+        }
+    }
+
+    /**
+     * Adds a new message entry into the message collection
+     *
+     * @param content the string content of the message
+     * @return the ID of the new entry
+     */
+    private ObjectId addMessage(String content) {
+        Document messageDoc = new Document()
+                .append("content", content)
+                .append("sender", user.getName())
+                .append("messageTime", LocalDateTime.now());
+
+        return messageRecords.insertOne(messageDoc).getInsertedId().asObjectId().getValue();
+
+    }
+
 
     /**
      * This method should be called when the user would like to log in
@@ -302,13 +397,14 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
                 ArrayList<Message> messages = new ArrayList<>();
 
                 // List of message ids between the current contact and the user
-                List<Integer> messagesIDs = convoDoc.getList("messagesIDs", Integer.class);
+                List<ObjectId> messagesIDs = convoDoc.getList("messagesIDs", ObjectId.class);
 
                 // Iterates over all message Ids finding the message and converting it to the message entity
-                for (Integer messageID : messagesIDs) {
+                for (ObjectId messageID : messagesIDs) {
                     Document messageDoc = messageRecords.find(eq("_id", messageID)).first();
                     messages.add(messageFactory.create(messageDoc.getString("content"),
-                            messageDoc.getString("sender")));
+                            messageDoc.getString("sender"), messageDoc.getDate("messageTime").toInstant().
+                                    atZone(ZoneId.systemDefault()).toLocalDateTime()));
                 }
 
                 LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().

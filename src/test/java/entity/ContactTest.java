@@ -15,7 +15,7 @@ class ContactTest {
     @BeforeEach
     void init() {
         List<Message> messages = new ArrayList<>();
-        Message hiMessage = new Message("Hello", "Sender");
+        Message hiMessage = new Message("Hello", "Sender", LocalDateTime.now());
         messages.add(hiMessage);
 
         contact = new Contact("Contact", "EN", LocalDateTime.now(), messages);
