@@ -10,6 +10,7 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 
 import use_case.password_generator.PasswordGeneratorUserDataAccessInterface;
 import use_case.text_to_speech.TextToSpeechDataAccessInterface;
+import use_case.suggested_reply_generator.ReplySuggesterUserDataAccessInterface;
 
 import okhttp3.*;
 import java.io.*;
@@ -19,7 +20,8 @@ import java.util.List;
 /**
  * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
  */
-public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface {
+public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface, ReplySuggesterUserDataAccessInterface {
+
     private final OpenAiService service;
 
     /**
@@ -103,6 +105,31 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
 
         } catch (JavaLayerException e) {
             e.printStackTrace();
+        }
+    }
+    /**
+     * Generates a suggested reply based on the provided prompt and last message of the other user using the GPT model.
+     *
+     * @param prompt The prompt for generating the suggested reply.
+     * @return The generated suggested reply as a string.
+     */
+    @Override
+    public String generateSuggestedReply(String prompt) {
+        List<ChatMessage> messages = new ArrayList<>();
+        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        messages.add(userMessage);
+
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+                .builder()
+                .model("gpt-4")
+                .messages(messages)
+                .build();
+
+        try {
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            return responseMessage.getContent();
+        } catch (Exception e) {
+            return "Error: Failed to suggest a reply.";
         }
     }
 }
