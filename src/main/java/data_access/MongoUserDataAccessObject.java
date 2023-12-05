@@ -111,10 +111,15 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
      * 3. Contact is already a contact to the user
      * 4. Unexpected error occurred
      *
-     * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
+     * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED", "CANNOT ADD SELF"}
      */
     @Override
     public String addContact(String contactName) {
+
+        // If the contact is them self
+        if (contactName.equals(user.getName())) {
+            return "CANNOT ADD SELF";
+        }
 
         // Fetch the contact and user
         Document contact = userRecords.find(eq("name", contactName)).first();
