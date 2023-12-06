@@ -1,10 +1,10 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
-import features.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewController;
-import features.logged_in.LoggedInState;
-import features.logged_in.LoggedInViewModel;
-import features.contact_mutation.interface_adapters.MutatingContactsController;
+import services.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewController;
+import services.logged_in.LoggedInState;
+import services.logged_in.LoggedInViewModel;
+import services.contact_mutation.interface_adapters.MutatingContactsController;
 
 import javax.swing.*;
 import java.awt.*;

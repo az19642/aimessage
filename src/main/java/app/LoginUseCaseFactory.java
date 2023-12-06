@@ -3,15 +3,15 @@ package app;
 import entities.CommonUserFactory;
 import entities.UserFactory;
 import interface_adapter.ViewManagerModel;
-import features.logged_in.LoggedInViewModel;
-import features.auth.login.interface_adapters.LoginController;
-import features.auth.login.interface_adapters.LoginPresenter;
-import features.auth.login.interface_adapters.LoginViewModel;
-import features.auth.signup.interface_adapters.SignupViewModel;
-import features.auth.login.LoginInputBoundary;
-import features.auth.login.LoginInteractor;
-import features.auth.login.LoginOutputBoundary;
-import features.auth.login.LoginUserDataAccessInterface;
+import services.logged_in.LoggedInViewModel;
+import services.auth.login.interface_adapters.LoginController;
+import services.auth.login.interface_adapters.LoginPresenter;
+import services.auth.login.interface_adapters.LoginViewModel;
+import services.auth.signup.interface_adapters.SignupViewModel;
+import services.auth.login.LoginInputBoundary;
+import services.auth.login.LoginInteractor;
+import services.auth.login.LoginOutputBoundary;
+import services.auth.login.LoginUserDataAccessInterface;
 import views.LoginView;
 
 /**

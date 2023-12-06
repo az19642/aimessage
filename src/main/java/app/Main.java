@@ -4,11 +4,11 @@ import data_access.GPTDataAccessObject;
 import data_access.MongoUserDataAccessObject;
 import entities.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
-import features.view_data_sync.update_conversation.ConversationViewModel;
-import features.logged_in.LoggedInViewModel;
-import features.auth.login.interface_adapters.LoginViewModel;
-import features.auth.password_generation.interface_adapters.PasswordGeneratorViewModel;
-import features.auth.signup.interface_adapters.SignupViewModel;
+import services.view_data_sync.update_conversation.ConversationViewModel;
+import services.logged_in.LoggedInViewModel;
+import services.auth.login.interface_adapters.LoginViewModel;
+import services.auth.password_generation.interface_adapters.PasswordGeneratorViewModel;
+import services.auth.signup.interface_adapters.SignupViewModel;
 import views.*;
 
 import javax.swing.*;

@@ -1,8 +1,8 @@
 package views;
 
 import interface_adapter.conversation.ConversationState;
-import features.view_data_sync.update_conversation.ConversationViewModel;
-import features.messaging.send_message.interface_adapters.SendMessageController;
+import services.view_data_sync.update_conversation.ConversationViewModel;
+import services.messaging.send_message.interface_adapters.SendMessageController;
 
 import javax.swing.*;
 import java.awt.*;

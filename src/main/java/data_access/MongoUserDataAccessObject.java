@@ -13,11 +13,11 @@ import entities.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import features.view_data_sync.update_contacts.LoadContactsToViewDataAccessInterface;
-import features.auth.login.LoginUserDataAccessInterface;
-import features.contact_mutation.MutatingContactsUserDataAccessInterface;
-import features.messaging.send_message.SendMessageUserDataAccessInterface;
-import features.auth.signup.SignupUserDataAccessInterface;
+import services.view_data_sync.update_contacts.LoadContactsToViewDataAccessInterface;
+import services.auth.login.LoginUserDataAccessInterface;
+import services.contact_mutation.MutatingContactsUserDataAccessInterface;
+import services.messaging.send_message.SendMessageUserDataAccessInterface;
+import services.auth.signup.SignupUserDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
