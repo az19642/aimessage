@@ -23,11 +23,11 @@ public class TextToSpeechInteractor implements TextToSpeechInputBoundary {
     /**
      * Executes the text-to-speech operation with the given message.
      *
-     * @param message The text message to be converted into speech.
+     * @param textToSpeechInputData The text message to be converted into speech.
      */
     @Override
-    public void execute(String message) {
-        boolean messagePlayed = textToSpeechDataAccessObject.generateAudio(message);
+    public void execute(TextToSpeechInputData textToSpeechInputData) {
+        boolean messagePlayed = textToSpeechDataAccessObject.generateAudio(textToSpeechInputData.getMessage());
 
         TextToSpeechOutputData textToSpeechOutputData =
                 new TextToSpeechOutputData(messagePlayed, false);

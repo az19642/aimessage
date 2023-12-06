@@ -9,7 +9,8 @@ class TextToSpeechInteractorTest {
 
     @Test
     void successTest() {
-        TextToSpeechInputData inputData = new TextToSpeechInputData();
+        String message = "This is a test.";
+        TextToSpeechInputData inputData = new TextToSpeechInputData(message);
         TextToSpeechDataAccessInterface textToSpeechDataAccessInterface =
                 new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
@@ -27,6 +28,6 @@ class TextToSpeechInteractorTest {
 
         TextToSpeechInputBoundary interactor =
                 new TextToSpeechInteractor(textToSpeechDataAccessInterface, successPresenter);
-        interactor.execute("This is a test.");
+        interactor.execute(inputData);
     }
 }

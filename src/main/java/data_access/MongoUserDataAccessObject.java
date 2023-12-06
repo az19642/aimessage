@@ -436,4 +436,9 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
     public User getUser() {
         return this.user;
     }
+
+    @Override
+    public void deleteUser(String name) {
+        userRecords.deleteOne(Filters.eq("name", name));
+    }
 }
