@@ -376,55 +376,56 @@ public class MongoUserDataAccessObject implements SignupUserDataAccessInterface,
 
         if (dbUser == null || !dbUser.getString("password").equals(password)) {
             this.user = null;
-        }
-
-        // Fetch the contacts information, which includes the conversation
-        ArrayList<Contact> contacts = new ArrayList<>();
-
-        Object contactToChatIDdb = dbUser.get("contactToChatID");
-
-        if (contactToChatIDdb instanceof Document contactsDocument) {
-
-            // Convert the BSON Document back to a HashMap
-            HashMap<String, Object> contactToChatID = new HashMap<>(contactsDocument);
-
-            // Each iteration will configure one contact of the user contact list
-            for (String contact : contactToChatID.keySet()) {
-
-                Document contactDoc = userRecords.find(eq("name", contact)).first();
-                Document convoDoc = conversationRecords.find(eq("_id", contactToChatID.get(contact))).first();
-
-                ArrayList<Message> messages = new ArrayList<>();
-
-                // List of message ids between the current contact and the user
-                List<ObjectId> messagesIDs = convoDoc.getList("messagesIDs", ObjectId.class);
-
-                // Iterates over all message Ids finding the message and converting it to the message entity
-                for (ObjectId messageID : messagesIDs) {
-                    Document messageDoc = messageRecords.find(eq("_id", messageID)).first();
-                    messages.add(messageFactory.create(messageDoc.getString("content"),
-                            messageDoc.getString("sender"), messageDoc.getDate("messageTime").toInstant().
-                                    atZone(ZoneId.systemDefault()).toLocalDateTime()));
-                }
-
-                LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().
-                        atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-                // Combining all the efforts now to create a contact
-                contacts.add(contactFactory.create(contact, contactDoc.getString("preferredLanguage"),
-                        lastMessageTime, messages));
-
-            }
         } else {
-            System.out.println("The 'contacts' field does not contain a HashMap.");
-            this.user = null;
-        }
 
-        // Creates the user getting the string and date information
-        this.user = userFactory.create(name, password,
-                dbUser.getString("preferredLanguage"), dbUser.getDate("creationTime").toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime(), contacts);
+            // Fetch the contacts information, which includes the conversation
+            ArrayList<Contact> contacts = new ArrayList<>();
+
+            Object contactToChatIDdb = dbUser.get("contactToChatID");
+
+            if (contactToChatIDdb instanceof Document contactsDocument) {
+
+                // Convert the BSON Document back to a HashMap
+                HashMap<String, Object> contactToChatID = new HashMap<>(contactsDocument);
+
+                // Each iteration will configure one contact of the user contact list
+                for (String contact : contactToChatID.keySet()) {
+
+                    Document contactDoc = userRecords.find(eq("name", contact)).first();
+                    Document convoDoc = conversationRecords.find(eq("_id", contactToChatID.get(contact))).first();
+
+                    ArrayList<Message> messages = new ArrayList<>();
+
+                    // List of message ids between the current contact and the user
+                    List<ObjectId> messagesIDs = convoDoc.getList("messagesIDs", ObjectId.class);
+
+                    // Iterates over all message Ids finding the message and converting it to the message entity
+                    for (ObjectId messageID : messagesIDs) {
+                        Document messageDoc = messageRecords.find(eq("_id", messageID)).first();
+                        messages.add(messageFactory.create(messageDoc.getString("content"),
+                                messageDoc.getString("sender"), messageDoc.getDate("messageTime").toInstant().
+                                        atZone(ZoneId.systemDefault()).toLocalDateTime()));
+                    }
+
+                    LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().
+                            atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+                    // Combining all the efforts now to create a contact
+                    contacts.add(contactFactory.create(contact, contactDoc.getString("preferredLanguage"),
+                            lastMessageTime, messages));
+
+                }
+            } else {
+                System.out.println("The 'contacts' field does not contain a HashMap.");
+                this.user = null;
+            }
+
+            // Creates the user getting the string and date information
+            this.user = userFactory.create(name, password,
+                    dbUser.getString("preferredLanguage"), dbUser.getDate("creationTime").toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime(), contacts);
+        }
     }
 
     /**
