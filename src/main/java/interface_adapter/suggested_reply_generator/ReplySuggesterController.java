@@ -1,6 +1,7 @@
 package interface_adapter.suggested_reply_generator;
 
 import use_case.suggested_reply_generator.ReplySuggesterInputBoundary;
+import use_case.suggested_reply_generator.ReplySuggesterInputData;
 
 /**
  * The controller class responsible for executing the Suggested Reply Generator use case.
@@ -18,11 +19,12 @@ public class ReplySuggesterController {
     }
 
     /**
-     * Executes the Suggested Reply Generator use case to generate a suggsted reply based on the given prompt.
+     * Executes the Suggested Reply Generator use case to generate a suggested reply based on the given prompt.
      *
      * @param prompt The prompt or request for generating the suggested reply.
      */
     public void execute(String prompt) {
-        replySuggesterUseCaseInteractor.execute(prompt);
+        ReplySuggesterInputData replySuggesterInputData = new ReplySuggesterInputData(prompt);
+        replySuggesterUseCaseInteractor.execute(replySuggesterInputData);
     }
 }
