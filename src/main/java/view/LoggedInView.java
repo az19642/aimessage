@@ -8,8 +8,8 @@ import interface_adapter.mutating_contacts.MutatingContactsController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
@@ -18,10 +18,9 @@ import java.util.Map;
  * Represents the view for the logged-in screen.
  * Displays user information and provides a logout button.
  */
-public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
+public class LoggedInView extends JPanel implements PropertyChangeListener {
     public final String viewName = "logged in";
     private final JButton addButton;
-    private final JButton removeButton;
     private final JTextField contactInputField = new JTextField(15);
     private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -29,8 +28,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final LoadContactsToViewController loadContactsToViewController;
     private final JList<Map.Entry<String, String>> contactToLastMessage;
     private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
-    private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
-
 
     /**
      * Creates a new LoggedInView.
@@ -51,12 +48,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         JPanel buttons = new JPanel();
         addButton = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
-        removeButton = new JButton(LoggedInViewModel.DELETE_BUTTON_LABEL);
-        addButton.addActionListener(this);
-        removeButton.addActionListener(this);
+        addButton.addActionListener(evt -> {
+            mutatingContactsController.execute(contactInputField.getText(), true);
+            loadContactsToViewController.execute();
+        });
         buttons.add(contactInputField);
         buttons.add(addButton);
-        buttons.add(removeButton);;
+        ;
 
         JLabel titleLabel = new JLabel(LoggedInViewModel.TITLE_LABEL);
         titleLabel.setFont(helveticaFontFifteen);
@@ -65,6 +63,64 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         contactToLastMessage = new JList<>();
         contactToLastMessage.setCellRenderer(new ContactToLastMessageCellRenderer());
+        contactToLastMessage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    viewManagerModel.setActiveView("messaging view"); // TODO implement messaging view
+                    viewManagerModel.firePropertyChanged();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
+                if (selectedEntry != null) {
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem sendMessage = new JMenuItem("Send message");
+                    JMenuItem deleteContact = new JMenuItem("Delete contact");
+                    deleteContact.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        mutatingContactsController.execute(selectedContact, false);
+                        loadContactsToViewController.execute();
+                    });
+                    sendMessage.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        // TODO change MessageView state to reflect the selected contact
+                    });
+                    if (evt.isPopupTrigger()) {
+                        popupMenu.add(sendMessage);
+                        popupMenu.add(deleteContact);
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                }
+            }
+
+            // Both mouseReleased and mousePressed are needed to support both Windows and Mac
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
+                if (selectedEntry != null) {
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem sendMessage = new JMenuItem("Send message");
+                    JMenuItem deleteContact = new JMenuItem("Delete contact");
+                    deleteContact.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        mutatingContactsController.execute(selectedContact, false);
+                        loadContactsToViewController.execute();
+                    });
+                    sendMessage.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        // TODO change MessageView state to reflect the selected contact
+                    });
+                    if (evt.isPopupTrigger()) {
+                        popupMenu.add(sendMessage);
+                        popupMenu.add(deleteContact);
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                }
+            }
+        });
 
         this.setLayout(new BorderLayout());
 
@@ -82,9 +138,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         public Component getListCellRendererComponent(JList<? extends Map.Entry<String, String>> list,
                                                       Map.Entry<String, String> contact, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
-            setText("<html><div style='margin: 5px;'>" +
-                    "<p> <b>" + contact.getKey() + "</b> </p>" + contact.getValue() +
-                    "<p> Constant placeholder message</p></div></html>");
+            String cellText = String.format("<html><div style='margin: 5px;'><p> <b>%s</b> " +
+                    "</p><p>%s</p></div></html>", contact.getKey(), contact.getValue());
+            setText(cellText);
             customizeCellAppearance(list, isSelected);
             return this;
         }
@@ -99,21 +155,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
-        }
-    }
-
-    /**
-     * Reacts to a button click event.
-     *
-     * @param evt The ActionEvent representing the button click.
-     */
-    public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == addButton) {
-            mutatingContactsController.execute(contactInputField.getText(), true);
-            loadContactsToViewController.execute();
-        } else if (evt.getSource() == removeButton) {
-            mutatingContactsController.execute(contactInputField.getText(), false);
-            loadContactsToViewController.execute();
         }
     }
 
