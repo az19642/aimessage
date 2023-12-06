@@ -15,8 +15,6 @@ import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -44,7 +42,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
 
-        MongoUserDataAccessObject mongoUserDataAccessObject = new MongoUserDataAccessObject(
+        MongoUserDataAccessObject mongoDataAccessObject = new MongoUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -53,14 +51,14 @@ public class Main {
         gptDataAccessObject = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                mongoUserDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
+                mongoDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                loggedInViewModel, mongoUserDataAccessObject);
+                loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = LoadContactsToViewUseCaseFactory.create(loggedInViewModel, viewManagerModel, mongoUserDataAccessObject);
+        LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

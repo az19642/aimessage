@@ -9,6 +9,8 @@ public class LoggedInState {
     private String username = "";
     private Map<String, String> contactToLastMessage;
 
+    private String mutatingContactsStatus = "";
+
     public LoggedInState(LoggedInState copy) {
         username = copy.username;
     }
@@ -23,7 +25,7 @@ public class LoggedInState {
      * @return The username of the logged-in user.
      */
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     /**
@@ -35,11 +37,39 @@ public class LoggedInState {
         this.username = username;
     }
 
+    /**
+     * Gets the map of contacts to their last message.
+     *
+     * @return The map of contacts to their last message.
+     */
     public Map<String, String> getContactToLastMessage() {
-        return contactToLastMessage;
+        return this.contactToLastMessage;
     }
 
+    /**
+     * Sets the map of contacts to their last message.
+     *
+     * @param contactToLastMessage The new map of contacts to their last message.
+     */
     public void setContactToLastMessage(Map<String, String> contactToLastMessage) {
         this.contactToLastMessage = contactToLastMessage;
+    }
+
+    /**
+     * Gets the error message for a failed mutation of contacts.
+     *
+     * @return The error message for a failed mutation of contacts.
+     */
+    public String getMutatingContactsStatus() {
+        return this.mutatingContactsStatus;
+    }
+
+    /**
+     * Sets the error message for a failed mutation of contacts.
+     *
+     * @param mutatingContactsStatus The new error message for a failed mutation of contacts.
+     */
+    public void setMutatingContactsStatus(String mutatingContactsStatus) {
+        this.mutatingContactsStatus = mutatingContactsStatus;
     }
 }
