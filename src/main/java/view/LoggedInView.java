@@ -54,7 +54,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         });
         buttons.add(contactInputField);
         buttons.add(addButton);
-        ;
 
         JLabel titleLabel = new JLabel(LoggedInViewModel.TITLE_LABEL);
         titleLabel.setFont(helveticaFontFifteen);
@@ -67,7 +66,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
-                    viewManagerModel.setActiveView("messaging view"); // TODO implement messaging view
+                    viewManagerModel.setActiveView("conversation");
                     viewManagerModel.firePropertyChanged();
                 }
             }
@@ -86,7 +85,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     });
                     sendMessage.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        // TODO change MessageView state to reflect the selected contact
+                        viewManagerModel.setActiveView("conversation");
+                        viewManagerModel.firePropertyChanged();
                     });
                     if (evt.isPopupTrigger()) {
                         popupMenu.add(sendMessage);
@@ -111,7 +111,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     });
                     sendMessage.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        // TODO change MessageView state to reflect the selected contact
+                        viewManagerModel.setActiveView("conversation");
+                        viewManagerModel.firePropertyChanged();
                     });
                     if (evt.isPopupTrigger()) {
                         popupMenu.add(sendMessage);
@@ -177,16 +178,11 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         contactToLastMessage.setModel(listModel);
 
         String mutatingContactsStatus = state.getMutatingContactsStatus();
+
         // if the status is non-empty, then the user has tried to add/remove a contact
-        if (!mutatingContactsStatus.isEmpty()) {
-            if (state.getMutatingContactsStatus().equals("PASS")) {
-                JOptionPane.showMessageDialog(this, "Contact successfully added/removed");
-                contactInputField.setText("");
-                state.setMutatingContactsStatus("");
-            } else {
-                JOptionPane.showMessageDialog(this, state.getMutatingContactsStatus());
-                state.setMutatingContactsStatus("");
-            }
+        if (!mutatingContactsStatus.isEmpty() && !mutatingContactsStatus.equals("PASS")) {
+            JOptionPane.showMessageDialog(this, state.getMutatingContactsStatus());
+            state.setMutatingContactsStatus("");
         }
     }
 }

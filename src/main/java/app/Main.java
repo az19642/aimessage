@@ -4,14 +4,12 @@ import data_access.GPTDataAccessObject;
 import data_access.MongoUserDataAccessObject;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.conversation.ConversationViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.password_generator.PasswordGeneratorViewModel;
 import interface_adapter.signup.SignupViewModel;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +39,7 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
+        ConversationViewModel conversationViewModel = new ConversationViewModel();
 
         MongoUserDataAccessObject mongoDataAccessObject = new MongoUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
@@ -58,8 +57,12 @@ public class Main {
                 loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, mongoDataAccessObject);
+        LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel,
+                mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
+
+        ConversationView conversationView = ConversationViewFactory.create(conversationViewModel, mongoDataAccessObject);
+        views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);
         viewManagerModel.firePropertyChanged();
