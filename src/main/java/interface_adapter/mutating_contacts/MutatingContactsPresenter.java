@@ -1,6 +1,8 @@
 package interface_adapter.mutating_contacts;
 
 
+import interface_adapter.logged_in.LoggedInState;
+import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.mutating_contacts.MutatingContactsOutputBoundary;
 
 /**
@@ -10,14 +12,23 @@ import use_case.mutating_contacts.MutatingContactsOutputBoundary;
 
 public class MutatingContactsPresenter implements MutatingContactsOutputBoundary {
 
+    private final LoggedInViewModel loggedInViewModel;
+
+    public MutatingContactsPresenter(LoggedInViewModel loggedInViewModel) {
+        this.loggedInViewModel = loggedInViewModel;
+    }
+
     /**
      * Prepares the view for a successful mutating of a contact by providing the necessary data.
-     *
+     * <p>
      * Should just call the main view to refresh the contacts
      */
     @Override
     public void prepareSuccessView() {
-
+        LoggedInState state = loggedInViewModel.getState();
+        state.setMutatingContactsStatus("PASS");
+        loggedInViewModel.setState(state);
+        loggedInViewModel.firePropertyChanged();
     }
 
     /**
@@ -28,6 +39,9 @@ public class MutatingContactsPresenter implements MutatingContactsOutputBoundary
      */
     @Override
     public void prepareFailView(String error) {
-
+        LoggedInState state = loggedInViewModel.getState();
+        state.setMutatingContactsStatus(error);
+        loggedInViewModel.setState(state);
+        loggedInViewModel.firePropertyChanged();
     }
 }
