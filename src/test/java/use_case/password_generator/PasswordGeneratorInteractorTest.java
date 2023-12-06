@@ -9,7 +9,8 @@ class PasswordGeneratorInteractorTest {
 
     @Test
     void successTest() {
-        PasswordGeneratorInputData inputData = new PasswordGeneratorInputData();
+        String prompt = "Generate a secure password.";
+        PasswordGeneratorInputData inputData = new PasswordGeneratorInputData(prompt);
         PasswordGeneratorUserDataAccessInterface passwordGeneratorUserDataAccessInterface =
                 new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
@@ -27,6 +28,6 @@ class PasswordGeneratorInteractorTest {
 
         PasswordGeneratorInputBoundary interactor =
                 new PasswordGeneratorInteractor(passwordGeneratorUserDataAccessInterface, successPresenter);
-        interactor.execute("Generate a secure password.");
+        interactor.execute(inputData);
     }
 }

@@ -9,4 +9,5 @@ public interface SignupUserDataAccessInterface {
     boolean userExists(String identifier);
 
     void save(User user);
+    void deleteUser(String message);
 }

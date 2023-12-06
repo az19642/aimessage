@@ -1,6 +1,7 @@
 package interface_adapter.text_to_speech;
 
 import use_case.text_to_speech.TextToSpeechInputBoundary;
+import use_case.text_to_speech.TextToSpeechInputData;
 
 /**
  * Controller class for text-to-speech functionality.
@@ -8,7 +9,7 @@ import use_case.text_to_speech.TextToSpeechInputBoundary;
  * and the text-to-speech use case.
  */
 public class TextToSpeechController {
-    private final TextToSpeechInputBoundary textoSpeechUseCaseInteractor;
+    private final TextToSpeechInputBoundary textToSpeechUseCaseInteractor;
 
     /**
      * Constructs a new TextToSpeechController.
@@ -16,7 +17,7 @@ public class TextToSpeechController {
      * @param textoSpeechUseCaseInteractor The text-to-speech use case interactor to be used.
      */
     public TextToSpeechController(TextToSpeechInputBoundary textoSpeechUseCaseInteractor) {
-        this.textoSpeechUseCaseInteractor = textoSpeechUseCaseInteractor;
+        this.textToSpeechUseCaseInteractor = textoSpeechUseCaseInteractor;
     }
 
     /**
@@ -25,6 +26,7 @@ public class TextToSpeechController {
      * @param message The text message to be converted to speech.
      */
     public void execute(String message) {
-        textoSpeechUseCaseInteractor.execute(message);
+        TextToSpeechInputData textToSpeechInputData = new TextToSpeechInputData(message);
+        textToSpeechUseCaseInteractor.execute(textToSpeechInputData);
     }
 }

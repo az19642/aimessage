@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReplySuggesterInteractorTest {
     @Test
     void successTest() {
-        ReplySuggesterInputData inputData = new ReplySuggesterInputData();
+        String prompt = "Suggest a reply under 200 characters to: Who do you think is the best chess player of all time?";
+        ReplySuggesterInputData inputData = new ReplySuggesterInputData(prompt);
         ReplySuggesterUserDataAccessInterface replySuggesterUserDataAccessInterface = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
         ReplySuggesterOutputBoundary successPresenter = new ReplySuggesterOutputBoundary() {
@@ -24,6 +25,6 @@ class ReplySuggesterInteractorTest {
         };
 
         ReplySuggesterInputBoundary interactor = new ReplySuggesterInteractor(replySuggesterUserDataAccessInterface, successPresenter);
-        interactor.execute("Suggest a reply under 200 characters to: Who do you think is the best chess player of all time?");
+        interactor.execute(inputData);
     }
 }
