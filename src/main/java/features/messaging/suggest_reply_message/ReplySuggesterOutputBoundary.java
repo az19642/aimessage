@@ -1,0 +1,11 @@
+package features.messaging.suggest_reply_message;
+
+/**
+ * The output boundary interface for the Suggested Reply Generator use case.
+ * Defines methods for preparing views in response to successful or failed suggested reply generation.
+ */
+public interface ReplySuggesterOutputBoundary {
+    void prepareSuccessView(ReplySuggesterOutputData response);
+
+    void prepareFailView(String error);
+}

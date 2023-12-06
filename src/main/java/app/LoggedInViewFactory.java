@@ -2,20 +2,20 @@ package app;
 
 import data_access.MongoUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.load_contacts_to_view.LoadContactsToViewController;
-import interface_adapter.load_contacts_to_view.LoadContactsToViewPresenter;
-import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.mutating_contacts.MutatingContactsController;
-import interface_adapter.mutating_contacts.MutatingContactsPresenter;
-import use_case.load_contacts_to_view.LoadContactsToViewDataAccessInterface;
-import use_case.load_contacts_to_view.LoadContactsToViewInputBoundary;
-import use_case.load_contacts_to_view.LoadContactsToViewInteractor;
-import use_case.load_contacts_to_view.LoadContactsToViewOutputBoundary;
-import use_case.mutating_contacts.MutatingContactsInputBoundary;
-import use_case.mutating_contacts.MutatingContactsInteractor;
-import use_case.mutating_contacts.MutatingContactsOutputBoundary;
-import use_case.mutating_contacts.MutatingContactsUserDataAccessInterface;
-import view.LoggedInView;
+import features.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewController;
+import features.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewPresenter;
+import features.logged_in.LoggedInViewModel;
+import features.contact_mutation.interface_adapters.MutatingContactsController;
+import features.contact_mutation.interface_adapters.MutatingContactsPresenter;
+import features.view_data_sync.update_contacts.LoadContactsToViewDataAccessInterface;
+import features.view_data_sync.update_contacts.LoadContactsToViewInputBoundary;
+import features.view_data_sync.update_contacts.LoadContactsToViewInteractor;
+import features.view_data_sync.update_contacts.LoadContactsToViewOutputBoundary;
+import features.contact_mutation.MutatingContactsInputBoundary;
+import features.contact_mutation.MutatingContactsInteractor;
+import features.contact_mutation.MutatingContactsOutputBoundary;
+import features.contact_mutation.MutatingContactsUserDataAccessInterface;
+import views.LoggedInView;
 
 /**
  * Factory responsible for creating the LoggedInView.
