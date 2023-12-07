@@ -13,10 +13,11 @@ import entities.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import services.contacts_view_sync.LoadContactsToViewDataAccessInterface;
-import services.conversation.view_sync.ConversationSyncDataAccessInterface;
+import services.contact.add_contact.AddContactDataAccessInterface;
+import services.contact.remove_contact.RemoveContactDataAccessInterface;
+import services.contact.sync_view.LoadContactsToViewDataAccessInterface;
+import services.conversation.sync_view.ConversationSyncDataAccessInterface;
 import services.login.LoginUserDataAccessInterface;
-import services.contact_mutation.MutatingContactsUserDataAccessInterface;
 import services.send_message.MessageSenderUserDataAccessInterface;
 import services.signup.SignupUserDataAccessInterface;
 
@@ -37,8 +38,9 @@ import static com.mongodb.client.model.Filters.eq;
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
  */
 
-public class MongoDataAccessObject implements SignupUserDataAccessInterface,
-        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, MessageSenderUserDataAccessInterface, LoadContactsToViewDataAccessInterface, ConversationSyncDataAccessInterface {
+public class MongoDataAccessObject implements SignupUserDataAccessInterface, RemoveContactDataAccessInterface,
+        LoginUserDataAccessInterface, AddContactDataAccessInterface, MessageSenderUserDataAccessInterface,
+        LoadContactsToViewDataAccessInterface, ConversationSyncDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -178,7 +180,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface,
      * A helper function to update the contacts field of a given user in the database
      *
      * @param contactToChatID The map mapping the contact name to the corresponding conversation ID
-     * @param user The user in the database entry to be updated
+     * @param user            The user in the database entry to be updated
      */
     private void updateContactsDB(HashMap<String, Object> contactToChatID, Document user) {
 
@@ -275,7 +277,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface,
      * Also updates the entities
      * Precondition: The given contact name is a valid contact for the user.
      *
-     * @param contactName the contacts name
+     * @param contactName    the contacts name
      * @param messageContent the content of the message to be sent
      */
     public void sendMessage(String contactName, String messageContent) {
@@ -319,7 +321,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface,
     /**
      * A helper function to update the conversation entry of the database between the user and contact
      *
-     * @param messageIDs The list of message ids with the updated message
+     * @param messageIDs     The list of message ids with the updated message
      * @param conversationId the conversation entry in the database to be updated
      */
     private void updateConversationDB(List<ObjectId> messageIDs, ObjectId conversationId) {
@@ -431,6 +433,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface,
     /**
      * getter for user attribute
      * setUser should have been called once before this was called
+     *
      * @return the user attribute
      */
     @Override

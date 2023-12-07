@@ -57,8 +57,9 @@ public class Main {
                 loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel,
-                mongoDataAccessObject, conversationViewModel);
+        LoggedInView loggedInView = LoggedInViewFactory.create(viewManagerModel, loggedInViewModel,
+                conversationViewModel,
+                mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         ConversationView conversationView = ConversationViewFactory.create(conversationViewModel,

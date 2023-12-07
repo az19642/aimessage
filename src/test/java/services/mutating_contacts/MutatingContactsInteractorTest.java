@@ -2,16 +2,16 @@ package services.mutating_contacts;
 
 import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
-import services.contact_mutation.MutatingContactsInputData;
-import services.contact_mutation.MutatingContactsInteractor;
-import services.contact_mutation.MutatingContactsOutputBoundary;
+import services.contact.add_contact.AddContactInputData;
+import services.contact.add_contact.AddContactInteractor;
+import services.contact.add_contact.AddContactOutputBoundary;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class MutatingContactsInteractorTest {
     @Test
     void execute() {
-        MutatingContactsInputData inputData = new MutatingContactsInputData("test", true);
+        AddContactInputData inputData = new AddContactInputData("test", true);
         MongoDataAccessObject mutatingContactsUserDataAccessInterface = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
@@ -20,7 +20,7 @@ public class MutatingContactsInteractorTest {
 
         mutatingContactsUserDataAccessInterface.setUser("test", "test");
 
-        MutatingContactsOutputBoundary mutatingContactsPresenter = new MutatingContactsOutputBoundary() {
+        AddContactOutputBoundary mutatingContactsPresenter = new AddContactOutputBoundary() {
             @Override
             public void prepareSuccessView() {
 
@@ -34,8 +34,8 @@ public class MutatingContactsInteractorTest {
             }
         };
 
-        MutatingContactsInteractor interactor =
-                new MutatingContactsInteractor(mutatingContactsUserDataAccessInterface, mutatingContactsPresenter);
+        AddContactInteractor interactor =
+                new AddContactInteractor(mutatingContactsUserDataAccessInterface, mutatingContactsPresenter);
         interactor.execute(inputData);
 
     }

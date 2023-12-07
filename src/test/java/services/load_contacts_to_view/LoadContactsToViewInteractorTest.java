@@ -1,10 +1,10 @@
 package services.load_contacts_to_view;
 
 import entities.*;
-import services.contacts_view_sync.LoadContactsToViewDataAccessInterface;
-import services.contacts_view_sync.LoadContactsToViewInteractor;
-import services.contacts_view_sync.LoadContactsToViewOutputBoundary;
-import services.contacts_view_sync.LoadContactsToViewOutputData;
+import services.contact.sync_view.LoadContactsToViewDataAccessInterface;
+import services.contact.sync_view.LoadContactsToViewInteractor;
+import services.contact.sync_view.LoadContactsToViewOutputBoundary;
+import services.contact.sync_view.LoadContactsToViewOutputData;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

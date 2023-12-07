@@ -1,8 +1,9 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
-import services.contact_mutation.interface_adapters.MutatingContactsController;
-import services.contacts_view_sync.interface_adapters.LoadContactsToViewController;
+import services.contact.add_contact.interface_adapters.AddContactController;
+import services.contact.remove_contact.interface_adapters.RemoveContactController;
+import services.contact.sync_view.interface_adapters.LoadContactsToViewController;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.logged_in.LoggedInState;
@@ -26,7 +27,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JTextField contactInputField = new JTextField(15);
     private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final MutatingContactsController mutatingContactsController;
+    private final AddContactController addContactController;
+    private final RemoveContactController removeContactController;
     private final LoadContactsToViewController loadContactsToViewController;
     private final JList<Map.Entry<String, String>> contactToLastMessage;
     private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
@@ -35,26 +37,29 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     /**
      * Creates a new LoggedInView.
      *
-     * @param loggedInViewModel            The view model for the logged-in view.
-     * @param viewManagerModel             The view manager model.
-     * @param loadContactsToViewController The controller for loading contacts to the view.
-     * @param mutatingContactsController   The controller for adding/removing contacts.
+     * @param loggedInViewModel            The ViewModel to be updated by the view.
+     * @param viewManagerModel             The ViewManagerModel to be updated by the view.
+     * @param loadContactsToViewController The controller for the LoadContactsToView use case.
+     * @param addContactController         The controller for the AddContact use case.
+     * @param removeContactController      The controller for the RemoveContact use case.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                         LoadContactsToViewController loadContactsToViewController,
-                        MutatingContactsController mutatingContactsController,
+                        AddContactController addContactsController,
+                        RemoveContactController removeContactsController,
                         ConversationViewModel conversationViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.conversationViewModel = conversationViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.loadContactsToViewController = loadContactsToViewController;
-        this.mutatingContactsController = mutatingContactsController;
+        this.addContactController = addContactsController;
+        this.removeContactController = removeContactsController;
 
         JPanel buttons = new JPanel();
         addButton = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
         addButton.addActionListener(evt -> {
-            mutatingContactsController.execute(contactInputField.getText(), true);
+            addContactController.execute(contactInputField.getText());
             loadContactsToViewController.execute();
         });
         buttons.add(contactInputField);
@@ -101,7 +106,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     JMenuItem deleteContact = new JMenuItem("Delete contact");
                     deleteContact.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        mutatingContactsController.execute(selectedContact, false);
+                        removeContactController.execute(selectedContact);
                         loadContactsToViewController.execute();
                     });
                     sendMessage.addActionListener(evtPrime -> {
