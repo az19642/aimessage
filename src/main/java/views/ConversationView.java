@@ -233,11 +233,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 //        }
     }
 
-    public JButton getSendButton() {
-        return sendButton;
-    }
-
-    public JButton getSyncButton() {
-        return syncButton;
+    public JButton getBackButton() {
+        return backButton;
     }
 }
