@@ -275,4 +275,16 @@ public class SignupView extends JPanel implements PropertyChangeListener {
             JOptionPane.showMessageDialog(this, state.getUsernameError());
         }
     }
+
+    public JButton getGeneratePasswordButton() {
+        return generatePassword;
+    }
+
+    public JButton getSignUpButton() {
+        return signUp;
+    }
+
+    public JButton getGoToLoginButton() {
+        return goToLogin;
+    }
 }

@@ -1,7 +1,7 @@
 package services.text_to_speech;
 
 import data_access.GPTDataAccessObject;
-import services.messaging.text_to_speech.*;
+import services.text_to_speech.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,7 +3,7 @@ package services.login;
 import entities.CommonUserFactory;
 import entities.User;
 import entities.UserFactory;
-import services.auth.login.*;
+import services.login.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

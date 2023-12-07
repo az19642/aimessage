@@ -1,7 +1,7 @@
 package services.password_generator;
 
 import data_access.GPTDataAccessObject;
-import services.auth.password_generation.*;
+import services.password_generation.*;
 import services.password_generation.*;
 import org.junit.jupiter.api.Test;
 
