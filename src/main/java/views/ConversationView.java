@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
-import services.logged_in.LoggedInState;
 import services.send_message.interface_adapters.MessageSenderController;
 import services.signup.SignupState;
 import services.signup.interface_adapters.SignupViewModel;
@@ -73,6 +72,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
                     String selectedMessage = conversationHistory.getSelectedValue().getValue().get(1);
+                    System.out.println(selectedMessage);
                     ConversationState conversationState = conversationViewModel.getState();
                     conversationState.setMessage(selectedMessage);
                     conversationViewModel.setState(conversationState);
@@ -105,7 +105,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                         messageTranslatorController.execute(selectedMessage, preferredLanguage);
 
                         MessageTranslatorState messageTranslatorState = messageTranslatorViewModel.getState();
-                        JOptionPane.showMessageDialog(ConversationView.this, messageTranslatorState.getTranslatedMessage());
+                        JOptionPane.showMessageDialog(ConversationView.this,
+                                messageTranslatorState.getTranslatedMessage());
                     });
                     speakMessage.addActionListener(evtPrime -> {
                         textToSpeechController.execute(selectedMessage);
@@ -157,6 +158,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         backButton = new JButton("Go back");
         backButton.addActionListener(evt -> {
             if (evt.getSource() == backButton) {
+                conversationViewModel.setState(new ConversationState());
                 viewManagerModel.setActiveView("logged in");
                 viewManagerModel.firePropertyChanged();
             }
@@ -186,7 +188,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                 List<String>>> list, Map.Entry<LocalDateTime, List<String>> entry, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
             String cellText = String.format("<html><div style='margin: 5px;'><p> <b>%s</b> " +
-                    "</p><p>%s %s</p></div></html>",  entry.getValue().get(0), entry.getValue().get(1), entry.getKey());
+                            "</p><p>%s %s</p></div></html>", entry.getValue().get(0), entry.getValue().get(1),
+                    entry.getKey().toString());
             setText(cellText);
             customizeCellAppearance(list, isSelected);
             return this;
