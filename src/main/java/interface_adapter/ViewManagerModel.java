@@ -33,7 +33,7 @@ public class ViewManagerModel {
      * Notifies listeners that the active view property has changed.
      */
     public void firePropertyChanged() {
-        support.firePropertyChange("view", null, this.activeViewName);
+        support.firePropertyChange("views", null, this.activeViewName);
     }
 
     /**
