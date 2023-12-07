@@ -23,6 +23,8 @@ import java.util.Map;
  */
 public class LoggedInView extends JPanel implements PropertyChangeListener {
     public final String viewName = "logged in";
+
+    private static LoggedInView instance;
     private final JButton addButton;
     private final JButton syncButton;
     private final JTextField contactInputField = new JTextField(15);
@@ -44,12 +46,12 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
      * @param addContactController      The controller for the AddContact use case.
      * @param removeContactController   The controller for the RemoveContact use case.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel,
-                        ViewManagerModel viewManagerModel,
-                        SyncContactViewController syncContactViewController,
-                        AddContactController addContactController,
-                        RemoveContactController removeContactController,
-                        ConversationViewModel conversationViewModel) {
+    private LoggedInView(LoggedInViewModel loggedInViewModel,
+                         ViewManagerModel viewManagerModel,
+                         SyncContactViewController syncContactViewController,
+                         AddContactController addContactController,
+                         RemoveContactController removeContactController,
+                         ConversationViewModel conversationViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.conversationViewModel = conversationViewModel;
@@ -194,5 +196,22 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             JOptionPane.showMessageDialog(this, state.getMutatingContactsStatus());
             state.setMutatingContactsStatus("");
         }
+    }
+
+    public static LoggedInView getInstance(LoggedInViewModel loggedInViewModel,
+                                           ViewManagerModel viewManagerModel,
+                                           SyncContactViewController syncContactViewController,
+                                           AddContactController addContactController,
+                                           RemoveContactController removeContactController,
+                                           ConversationViewModel conversationViewModel) {
+        if (instance == null) {
+            instance = new LoggedInView(loggedInViewModel,
+                    viewManagerModel,
+                    syncContactViewController,
+                    addContactController,
+                    removeContactController,
+                    conversationViewModel);
+        }
+        return instance;
     }
 }

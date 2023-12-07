@@ -44,7 +44,7 @@ public class LoggedInViewFactory {
         AddContactController addContactController = createAddContactController(loggedInViewModel,
                 addContactMongoDataAccessObject);
 
-        return new LoggedInView(loggedInViewModel, viewManagerModel, syncContactViewController,
+        return LoggedInView.getInstance(loggedInViewModel, viewManagerModel, syncContactViewController,
                 addContactController, removeContactController, conversationViewModel);
 
     }
