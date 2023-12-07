@@ -232,4 +232,12 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 //            conversationHistory.append(String.format("%s %s %s\n", sender, message, timestamp));
 //        }
     }
+
+    public JButton getSendButton() {
+        return sendButton;
+    }
+
+    public JButton getSyncButton() {
+        return syncButton;
+    }
 }
