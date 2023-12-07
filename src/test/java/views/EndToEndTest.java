@@ -80,6 +80,7 @@ class EndToEndTest {
 
         SignupState currentState = signupViewModel.getState();
 
+        mongoDataAccessObject.deleteUser("newTest");
         // Set the test username
         currentState.setUsername(("newTest"));
 
@@ -110,13 +111,13 @@ class EndToEndTest {
         assertEquals("logged in", viewManagerModel.getActiveView());
 
         LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername("person");
+        loggedInState.setUsername("c");
 
         loggedInView.getAddButton().doClick();
         loggedInView.getSyncButton().doClick();
 
         conversationView.getSyncButton().doClick();
-
+        conversationView.getSendButton().doClick();
 
         mongoDataAccessObject.deleteUser("newTest");
     }
