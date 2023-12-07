@@ -15,7 +15,7 @@ public class AddContactController {
     }
 
     /**
-     * Executes the contact action with the given contactName and whether to add or delete the contact.
+     * Adds the contact with the given contactName.
      * Converts the input parameters into a MutatingContactsInputData object and assigns the execution to the use case.
      *
      * @param contactName The username provided to mutate the contact.

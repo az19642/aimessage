@@ -2,7 +2,7 @@ package views;
 
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_view.interface_adapters.ConversationSyncController;
+import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
 import services.send_message.interface_adapters.MessageSenderController;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package services.conversation.sync_view.interface_adapters;
+package services.conversation.sync_conversation_view.interface_adapters;
 
 import interface_adapter.ViewModel;
 

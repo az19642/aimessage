@@ -1,7 +1,7 @@
 package services.contact.remove_contact;
 
 /**
- * Implements the mutating contacts use case.
+ * Interactor for the remove contact use case.
  */
 public class RemoveContactInteractor implements RemoveContactInputBoundary {
 
@@ -15,14 +15,13 @@ public class RemoveContactInteractor implements RemoveContactInputBoundary {
     }
 
     /**
-     * Executes the mutating contacts use case with the provided login input data.
+     * Executes the remove contact use case with the provided remove contact input data.
      *
-     * @param removeContactInputData The input data for the mutating contacts use case.
+     * @param removeContactInputData The input data for the remove contact use case.
      */
-
     @Override
     public void execute(RemoveContactInputData removeContactInputData) {
-        this.removeContactDataAccessInterface.deleteContact(removeContactInputData.getContactName());
+        this.removeContactDataAccessInterface.removeContact(removeContactInputData.getContactName());
         mutatingContactsPresenter.prepareSuccessView();
 
     }

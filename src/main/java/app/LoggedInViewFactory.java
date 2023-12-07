@@ -13,12 +13,12 @@ import services.contact.remove_contact.RemoveContactInteractor;
 import services.contact.remove_contact.RemoveContactOutputBoundary;
 import services.contact.remove_contact.interface_adapters.RemoveContactController;
 import services.contact.remove_contact.interface_adapters.RemoveContactPresenter;
-import services.contact.sync_view.LoadContactsToViewDataAccessInterface;
-import services.contact.sync_view.LoadContactsToViewInputBoundary;
-import services.contact.sync_view.LoadContactsToViewInteractor;
-import services.contact.sync_view.LoadContactsToViewOutputBoundary;
-import services.contact.sync_view.interface_adapters.LoadContactsToViewController;
-import services.contact.sync_view.interface_adapters.LoadContactsToViewPresenter;
+import services.contact.sync_contact_view.SyncContactViewDataAccessInterface;
+import services.contact.sync_contact_view.SyncContactViewInputBoundary;
+import services.contact.sync_contact_view.SyncContactViewInteractor;
+import services.contact.sync_contact_view.SyncContactViewOutputBoundary;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewPresenter;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.logged_in.LoggedInViewModel;
 import views.LoggedInView;
@@ -31,11 +31,11 @@ public class LoggedInViewFactory {
     public static LoggedInView create(ViewManagerModel viewManagerModel,
                                       LoggedInViewModel loggedInViewModel,
                                       ConversationViewModel conversationViewModel,
-                                      LoadContactsToViewDataAccessInterface loadContactsToViewMongoDataAccessObject,
+                                      SyncContactViewDataAccessInterface loadContactsToViewMongoDataAccessObject,
                                       AddContactDataAccessInterface addContactMongoDataAccessObject,
                                       RemoveContactDataAccessInterface removeContactMongoDataAccessObject) {
 
-        LoadContactsToViewController loadContactsToViewController =
+        SyncContactViewController syncContactViewController =
                 createLoadContactsToViewController(loggedInViewModel, loadContactsToViewMongoDataAccessObject);
 
         RemoveContactController removeContactController = createRemoveContactController(loggedInViewModel,
@@ -44,7 +44,7 @@ public class LoggedInViewFactory {
         AddContactController addContactController = createAddContactController(loggedInViewModel,
                 addContactMongoDataAccessObject);
 
-        return new LoggedInView(loggedInViewModel, viewManagerModel, loadContactsToViewController,
+        return new LoggedInView(loggedInViewModel, viewManagerModel, syncContactViewController,
                 addContactController, removeContactController, conversationViewModel);
 
     }
@@ -56,15 +56,15 @@ public class LoggedInViewFactory {
      * @param mongoDataAccessObject the data access object to be used by the controller.
      * @return the controller for the LoadContactsToView use case.
      */
-    private static LoadContactsToViewController createLoadContactsToViewController(LoggedInViewModel loggedInViewModel, LoadContactsToViewDataAccessInterface mongoDataAccessObject) {
+    private static SyncContactViewController createLoadContactsToViewController(LoggedInViewModel loggedInViewModel, SyncContactViewDataAccessInterface mongoDataAccessObject) {
 
 
-        LoadContactsToViewOutputBoundary loadContactsToViewPresenter =
-                new LoadContactsToViewPresenter(loggedInViewModel);
-        LoadContactsToViewInputBoundary loadContactsToViewInteractor =
-                new LoadContactsToViewInteractor(loadContactsToViewPresenter, mongoDataAccessObject);
+        SyncContactViewOutputBoundary loadContactsToViewPresenter =
+                new SyncContactViewPresenter(loggedInViewModel);
+        SyncContactViewInputBoundary loadContactsToViewInteractor =
+                new SyncContactViewInteractor(loadContactsToViewPresenter, mongoDataAccessObject);
 
-        return new LoadContactsToViewController(loadContactsToViewInteractor);
+        return new SyncContactViewController(loadContactsToViewInteractor);
     }
 
     /**

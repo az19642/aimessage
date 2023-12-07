@@ -8,9 +8,9 @@ public class RemoveContactInputData {
     }
 
     /**
-     * Gets the contact name to add or delete.
+     * Gets the contact name for remove contact.
      *
-     * @return The contact name.
+     * @return The contact name for remove contact.
      */
     String getContactName() {
         return contactName;

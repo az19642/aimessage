@@ -1,14 +1,14 @@
-package services.contact.sync_view.interface_adapters;
+package services.contact.sync_contact_view.interface_adapters;
 
-import services.contact.sync_view.LoadContactsToViewOutputBoundary;
-import services.contact.sync_view.LoadContactsToViewOutputData;
+import services.contact.sync_contact_view.SyncContactViewOutputBoundary;
+import services.contact.sync_contact_view.SyncContactViewOutputData;
 import services.logged_in.LoggedInState;
 import services.logged_in.LoggedInViewModel;
 
 /**
  * Presenter responsible for handling the output of the use case and updating the corresponding ViewModel.
  */
-public class LoadContactsToViewPresenter implements LoadContactsToViewOutputBoundary {
+public class SyncContactViewPresenter implements SyncContactViewOutputBoundary {
 
     private final LoggedInViewModel loggedInViewModel;
 
@@ -17,19 +17,19 @@ public class LoadContactsToViewPresenter implements LoadContactsToViewOutputBoun
      *
      * @param loggedInViewModel the ViewModel to be updated.
      */
-    public LoadContactsToViewPresenter(LoggedInViewModel loggedInViewModel) {
+    public SyncContactViewPresenter(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
     }
 
     /**
      * Updates the ViewModel with the data from the use case.
      *
-     * @param loadContactsToViewOutputData the output data from the use case.
+     * @param syncContactViewOutputData the output data from the use case.
      */
     @Override
-    public void prepareSuccessView(LoadContactsToViewOutputData loadContactsToViewOutputData) {
+    public void prepareSuccessView(SyncContactViewOutputData syncContactViewOutputData) {
         LoggedInState currentState = loggedInViewModel.getState();
-        currentState.setContactToLastMessage(loadContactsToViewOutputData.getContactToLastMessage());
+        currentState.setContactToLastMessage(syncContactViewOutputData.getContactToLastMessage());
         loggedInViewModel.setState(currentState);
         loggedInViewModel.firePropertyChanged();
     }
@@ -40,6 +40,6 @@ public class LoadContactsToViewPresenter implements LoadContactsToViewOutputBoun
      */
     @Override
     public void prepareFailView() {
-        // will never be called
+        // will not be called
     }
 }

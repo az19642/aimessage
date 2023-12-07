@@ -15,8 +15,8 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import services.contact.add_contact.AddContactDataAccessInterface;
 import services.contact.remove_contact.RemoveContactDataAccessInterface;
-import services.contact.sync_view.LoadContactsToViewDataAccessInterface;
-import services.conversation.sync_view.ConversationSyncDataAccessInterface;
+import services.contact.sync_contact_view.SyncContactViewDataAccessInterface;
+import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
 import services.login.LoginUserDataAccessInterface;
 import services.send_message.MessageSenderUserDataAccessInterface;
 import services.signup.SignupUserDataAccessInterface;
@@ -40,7 +40,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDataAccessObject implements SignupUserDataAccessInterface, RemoveContactDataAccessInterface,
         LoginUserDataAccessInterface, AddContactDataAccessInterface, MessageSenderUserDataAccessInterface,
-        LoadContactsToViewDataAccessInterface, ConversationSyncDataAccessInterface {
+        SyncContactViewDataAccessInterface, ConversationSyncDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -212,7 +212,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
      * @param contactName the contacts name
      */
     @Override
-    public void deleteContact(String contactName) {
+    public void removeContact(String contactName) {
 
         Contact contactEntity = user.getContact(contactName);
 

@@ -13,7 +13,7 @@ public interface RemoveContactDataAccessInterface {
      *
      * @param contactName the contacts name
      */
-    void deleteContact(String contactName);
+    void removeContact(String contactName);
 
     /**
      * getter for user attribute

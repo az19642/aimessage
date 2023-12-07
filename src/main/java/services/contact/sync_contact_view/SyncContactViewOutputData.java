@@ -1,15 +1,15 @@
-package services.contact.sync_view;
+package services.contact.sync_contact_view;
 
 import java.util.Map;
 
 /**
  * The output data of the use case.
  */
-public class LoadContactsToViewOutputData {
+public class SyncContactViewOutputData {
 
     private final Map<String, String> contactToLastMessage;
 
-    public LoadContactsToViewOutputData(Map<String, String> contactToLastMessage) {
+    public SyncContactViewOutputData(Map<String, String> contactToLastMessage) {
         this.contactToLastMessage = contactToLastMessage;
     }
 

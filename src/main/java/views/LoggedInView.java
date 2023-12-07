@@ -3,7 +3,7 @@ package views;
 import interface_adapter.ViewManagerModel;
 import services.contact.add_contact.interface_adapters.AddContactController;
 import services.contact.remove_contact.interface_adapters.RemoveContactController;
-import services.contact.sync_view.interface_adapters.LoadContactsToViewController;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.logged_in.LoggedInState;
@@ -29,7 +29,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final ViewManagerModel viewManagerModel;
     private final AddContactController addContactController;
     private final RemoveContactController removeContactController;
-    private final LoadContactsToViewController loadContactsToViewController;
+    private final SyncContactViewController syncContactViewController;
     private final JList<Map.Entry<String, String>> contactToLastMessage;
     private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
     private final ConversationViewModel conversationViewModel;
@@ -39,12 +39,13 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
      *
      * @param loggedInViewModel            The ViewModel to be updated by the view.
      * @param viewManagerModel             The ViewManagerModel to be updated by the view.
-     * @param loadContactsToViewController The controller for the LoadContactsToView use case.
+     * @param syncContactViewController The controller for the LoadContactsToView use case.
      * @param addContactController         The controller for the AddContact use case.
      * @param removeContactController      The controller for the RemoveContact use case.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                        LoadContactsToViewController loadContactsToViewController,
+    public LoggedInView(LoggedInViewModel loggedInViewModel,
+                        ViewManagerModel viewManagerModel,
+                        SyncContactViewController syncContactViewController,
                         AddContactController addContactController,
                         RemoveContactController removeContactController,
                         ConversationViewModel conversationViewModel) {
@@ -52,7 +53,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.loggedInViewModel = loggedInViewModel;
         this.conversationViewModel = conversationViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
-        this.loadContactsToViewController = loadContactsToViewController;
+        this.syncContactViewController = syncContactViewController;
         this.addContactController = addContactController;
         this.removeContactController = removeContactController;
 
@@ -60,7 +61,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         addButton = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
         addButton.addActionListener(evt -> {
             this.addContactController.execute(contactInputField.getText());
-            loadContactsToViewController.execute();
+            syncContactViewController.execute();
         });
         buttons.add(contactInputField);
         buttons.add(addButton);
@@ -107,7 +108,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     deleteContact.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
                         LoggedInView.this.removeContactController.execute(selectedContact);
-                        loadContactsToViewController.execute();
+                        syncContactViewController.execute();
                     });
                     sendMessage.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
@@ -137,8 +138,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.add(buttons, BorderLayout.SOUTH);
     }
 
-    private static class ContactToLastMessageCellRenderer extends JLabel implements ListCellRenderer<Map.Entry<String
-            , String>> {
+    private static class ContactToLastMessageCellRenderer extends JLabel
+            implements ListCellRenderer<Map.Entry<String, String>> {
         @Override
         public Component getListCellRendererComponent(JList<? extends Map.Entry<String, String>> list,
                                                       Map.Entry<String, String> contact, int index,
@@ -173,7 +174,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // if the contactToLastMessage map is null (not the same as empty), then the user has just logged in
         if (state.getContactToLastMessage() == null) {
-            loadContactsToViewController.execute();
+            syncContactViewController.execute();
         }
         DefaultListModel<Map.Entry<String, String>> listModel = new DefaultListModel<>();
         for (Map.Entry<String, String> contact : state.getContactToLastMessage().entrySet()) {

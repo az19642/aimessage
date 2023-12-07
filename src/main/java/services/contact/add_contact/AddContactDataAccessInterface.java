@@ -5,23 +5,17 @@ import entities.User;
 public interface AddContactDataAccessInterface {
 
     /**
-     * Adds a contact to the user, and will also update the contact such that the user will be a contact for them.
-     * Precondition: The given username is a valid contact.
-     * <p>
-     * There are four cases for the state after this function returns
-     * 1. Contact successfully added
-     * 2. Contact does not exist in database
-     * 3. Contact is already a contact to the user
-     * 4. Unexpected error occurred
+     * Adds a contact to the user's contact list.
      *
-     * @return A string in {"PASS", "USER DNE", "ALREADY A CONTACT", "FAILED"}
+     * @param contactName The name of the contact to add.
+     * @return A message indicating whether the contact was added successfully.
      */
     String addContact(String contactName);
 
     /**
-     * getter for user attribute
-     * setUser should have been called once before this was called
-     * @return the user attribute
+     * Gets the current user.
+     *
+     * @return The current user.
      */
     User getUser();
 

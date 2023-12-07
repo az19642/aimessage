@@ -1,10 +1,10 @@
 package services.load_contacts_to_view;
 
 import entities.*;
-import services.contact.sync_view.LoadContactsToViewDataAccessInterface;
-import services.contact.sync_view.LoadContactsToViewInteractor;
-import services.contact.sync_view.LoadContactsToViewOutputBoundary;
-import services.contact.sync_view.LoadContactsToViewOutputData;
+import services.contact.sync_contact_view.SyncContactViewDataAccessInterface;
+import services.contact.sync_contact_view.SyncContactViewInteractor;
+import services.contact.sync_contact_view.SyncContactViewOutputBoundary;
+import services.contact.sync_contact_view.SyncContactViewOutputData;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Test class for the LoadContactsToViewInteractor class.
  */
-public class LoadContactsToViewInteractorTest {
+public class SyncContactViewInteractorTest {
 
     /**
      * Tests the execute method of the LoadContactsToViewInteractor class.
@@ -41,15 +41,15 @@ public class LoadContactsToViewInteractorTest {
                 LocalDateTime.now(),
                 List.of(contact)
         );
-        LoadContactsToViewDataAccessInterface mockDataAccessObject = new LoadContactsToViewDataAccessInterface() {
+        SyncContactViewDataAccessInterface mockDataAccessObject = new SyncContactViewDataAccessInterface() {
             @Override
             public User getUser() {
                 return user;
             }
         };
-        LoadContactsToViewOutputBoundary loadContactsToViewPresenter = new LoadContactsToViewOutputBoundary() {
+        SyncContactViewOutputBoundary loadContactsToViewPresenter = new SyncContactViewOutputBoundary() {
             @Override
-            public void prepareSuccessView(LoadContactsToViewOutputData loadContactsToViewOutputData) {
+            public void prepareSuccessView(SyncContactViewOutputData loadContactsToViewOutputData) {
                 assert loadContactsToViewOutputData.getContactToLastMessage().get("Contact1").equals("Hello, this is " +
                         "User!");
                 assert loadContactsToViewOutputData.getContactToLastMessage().size() == 1;
@@ -60,9 +60,9 @@ public class LoadContactsToViewInteractorTest {
                 // should not occur
             }
         };
-        LoadContactsToViewInteractor loadContactsToViewInteractor =
-                new LoadContactsToViewInteractor(loadContactsToViewPresenter, mockDataAccessObject);
-        loadContactsToViewInteractor.execute();
+        SyncContactViewInteractor syncContactViewInteractor =
+                new SyncContactViewInteractor(loadContactsToViewPresenter, mockDataAccessObject);
+        syncContactViewInteractor.execute();
 
     }
 

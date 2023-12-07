@@ -1,9 +1,9 @@
-package services.conversation.sync_view.interface_adapters;
+package services.conversation.sync_conversation_view.interface_adapters;
 
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_view.ConversationSyncOutputBoundary;
-import services.conversation.sync_view.ConversationSyncOutputData;
+import services.conversation.sync_conversation_view.ConversationSyncOutputBoundary;
+import services.conversation.sync_conversation_view.ConversationSyncOutputData;
 
 public class ConversationSyncPresenter implements ConversationSyncOutputBoundary {
     private final ConversationViewModel conversationViewModel;

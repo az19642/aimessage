@@ -1,4 +1,4 @@
-package services.conversation.sync_view;
+package services.conversation.sync_conversation_view;
 
 public class ConversationSyncInputData {
     private final String contactName;

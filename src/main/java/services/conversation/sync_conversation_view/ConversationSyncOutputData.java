@@ -1,4 +1,4 @@
-package services.conversation.sync_view;
+package services.conversation.sync_conversation_view;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,10 +1,10 @@
 package app;
 
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_view.ConversationSyncDataAccessInterface;
-import services.conversation.sync_view.ConversationSyncInteractor;
-import services.conversation.sync_view.interface_adapters.ConversationSyncController;
-import services.conversation.sync_view.interface_adapters.ConversationSyncPresenter;
+import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
+import services.conversation.sync_conversation_view.ConversationSyncInteractor;
+import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
+import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncPresenter;
 import services.send_message.MessageSenderInputBoundary;
 import services.send_message.MessageSenderInteractor;
 import services.send_message.MessageSenderOutputBoundary;
