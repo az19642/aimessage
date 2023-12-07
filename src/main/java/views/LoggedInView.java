@@ -24,6 +24,7 @@ import java.util.Map;
 public class LoggedInView extends JPanel implements PropertyChangeListener {
     public final String viewName = "logged in";
     private final JButton addButton;
+    private final JButton syncButton;
     private final JTextField contactInputField = new JTextField(15);
     private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -63,8 +64,14 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             this.addContactController.execute(contactInputField.getText());
             syncContactViewController.execute();
         });
+
+        syncButton = new JButton(LoggedInViewModel.SYNC_BUTTON_LABEL);
+        syncButton.addActionListener(evt -> syncContactViewController.execute());
+
+
         buttons.add(contactInputField);
         buttons.add(addButton);
+        buttons.add(syncButton);
 
         JLabel titleLabel = new JLabel(LoggedInViewModel.TITLE_LABEL);
         titleLabel.setFont(helveticaFontFifteen);

@@ -11,6 +11,7 @@ import java.beans.PropertyChangeSupport;
 public class LoggedInViewModel extends ViewModel {
     public static final String TITLE_LABEL = "Contacts";
     public static final String ADD_BUTTON_LABEL = "Add Contact";
+    public static final String SYNC_BUTTON_LABEL = "Sync to database";
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private LoggedInState state = new LoggedInState();
     private String loggedInUser;

@@ -12,6 +12,7 @@ import java.beans.PropertyChangeSupport;
 public class ConversationViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private ConversationState state = new ConversationState();
+    public static final String SYNC_BUTTON_LABEL = "Sync to database";
 
     public ConversationViewModel() {
         super("conversation");

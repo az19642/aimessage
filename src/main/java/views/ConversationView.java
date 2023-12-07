@@ -18,6 +18,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final JTextArea conversationHistory;
     private final JTextField messageInput;
     private final JButton sendButton;
+
+    private final JButton syncButton;
     private final ConversationViewModel conversationViewModel;
 
     private final MessageSenderController messageSenderController;
@@ -46,12 +48,22 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
             }
         });
 
+        syncButton = new JButton(ConversationViewModel.SYNC_BUTTON_LABEL);
+
+        syncButton.addActionListener(evt -> {
+            if (evt.getSource() == syncButton) {
+                ConversationState conversationState = conversationViewModel.getState();
+                conversationSyncController.execute(conversationState.getContactName());
+            }
+        });
+
         this.setLayout(new BorderLayout());
         this.add(new JScrollPane(conversationHistory), BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(messageInput, BorderLayout.CENTER);
         bottomPanel.add(sendButton, BorderLayout.EAST);
+        bottomPanel.add(syncButton, BorderLayout.WEST);
 
         this.add(bottomPanel, BorderLayout.SOUTH);
 
