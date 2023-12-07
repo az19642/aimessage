@@ -279,7 +279,6 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface,
      * @param messageContent the content of the message to be sent
      */
     public void sendMessage(String contactName, String messageContent) {
-
         Document userDB = userRecords.find(eq("name", user.getName())).first();
 
         Object contactToChatID = userDB.get("contactToChatID");

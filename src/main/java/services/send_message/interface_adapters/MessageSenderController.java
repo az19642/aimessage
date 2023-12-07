@@ -21,7 +21,7 @@ public class MessageSenderController {
      * @param content The content of the message to send.
      */
     public void execute(String contactName, String content) {
-        MessageSenderInputData messageSenderInputData = new MessageSenderInputData( contactName, content);
+        MessageSenderInputData messageSenderInputData = new MessageSenderInputData(contactName, content);
 
         messageSenderInputBoundary.execute(messageSenderInputData);
     }

@@ -5,7 +5,7 @@ public class MessageSenderInputData {
     final private String content;
     final private String contactName;
 
-    public MessageSenderInputData(String content, String contactName) {
+    public MessageSenderInputData(String contactName, String content) {
         this.content = content;
         this.contactName = contactName;
     }
