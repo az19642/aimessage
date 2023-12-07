@@ -1,5 +1,6 @@
 package views;
 
+import interface_adapter.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
@@ -19,6 +20,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final JTextField messageInput;
     private final JButton sendButton;
 
+    private final JButton backButton;
     private final JButton syncButton;
     private final ConversationViewModel conversationViewModel;
 
@@ -27,7 +29,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 
     public ConversationView(ConversationViewModel conversationViewModel,
                             MessageSenderController messageSenderController,
-                            ConversationSyncController conversationSyncController) {
+                            ConversationSyncController conversationSyncController,
+                            ViewManagerModel viewManagerModel) {
         this.conversationViewModel = conversationViewModel;
         this.messageSenderController = messageSenderController;
         this.conversationSyncController = conversationSyncController;
@@ -57,14 +60,26 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
             }
         });
 
+        backButton = new JButton("Go back");
+        backButton.addActionListener(evt -> {
+            if (evt.getSource() == backButton) {
+                viewManagerModel.setActiveView("logged in");
+                viewManagerModel.firePropertyChanged();
+            }
+        });
+
         this.setLayout(new BorderLayout());
         this.add(new JScrollPane(conversationHistory), BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(messageInput, BorderLayout.CENTER);
         bottomPanel.add(sendButton, BorderLayout.EAST);
-        bottomPanel.add(syncButton, BorderLayout.WEST);
 
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(syncButton, BorderLayout.EAST);
+        topPanel.add(backButton, BorderLayout.WEST);
+
+        this.add(topPanel, BorderLayout.NORTH);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         conversationViewModel.addPropertyChangeListener(this);

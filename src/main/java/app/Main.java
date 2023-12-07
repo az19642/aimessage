@@ -62,7 +62,7 @@ public class Main {
                 mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
-        ConversationView conversationView = ConversationViewFactory.create(conversationViewModel,
+        ConversationView conversationView = ConversationViewFactory.create(viewManagerModel, conversationViewModel,
                 mongoDataAccessObject, mongoDataAccessObject);
         views.add(conversationView, conversationView.viewName);
 
