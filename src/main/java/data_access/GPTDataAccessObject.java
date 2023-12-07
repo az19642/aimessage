@@ -8,12 +8,12 @@ import com.theokanning.openai.audio.CreateSpeechRequest;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
-import services.auth.password_generation.PasswordGeneratorUserDataAccessInterface;
-import services.messaging.text_to_speech.TextToSpeechDataAccessInterface;
-import services.messaging.suggest_reply.ReplySuggesterUserDataAccessInterface;
+import services.password_generation.PasswordGeneratorUserDataAccessInterface;
+import services.text_to_speech.TextToSpeechDataAccessInterface;
+import services.suggest_reply.ReplySuggesterUserDataAccessInterface;
 
 import okhttp3.*;
-import services.messaging.translate_message.TranslatorDataAccessInterface;
+import services.translate_message.TranslatorDataAccessInterface;
 
 import java.io.*;
 import java.util.ArrayList;

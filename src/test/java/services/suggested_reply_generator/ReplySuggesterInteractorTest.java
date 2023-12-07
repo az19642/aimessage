@@ -4,6 +4,7 @@ import data_access.GPTDataAccessObject;
 import services.messaging.suggest_reply.*;
 import services.reply_suggestor.*;
 import org.junit.jupiter.api.Test;
+import services.suggest_reply.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

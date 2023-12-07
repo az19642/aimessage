@@ -1,8 +1,10 @@
 package views;
 
-import interface_adapter.conversation.ConversationState;
-import services.view_database_sync.update_conversation.ConversationViewModel;
-import services.messaging.send_message.interface_adapters.MessageSenderController;
+import services.contact_mutation.MutatingContactsInputBoundary;
+import services.conversation.interface_adapters.ConversationState;
+import services.conversation.interface_adapters.ConversationViewModel;
+import services.conversation.view_sync.interface_adapters.ConversationSyncController;
+import services.send_message.interface_adapters.MessageSenderController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +18,16 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final JTextArea conversationHistory;
     private final JTextField messageInput;
     private final JButton sendButton;
-    private final ConversationViewModel syncConversationViewModel;
+    private final ConversationViewModel conversationViewModel;
 
     private final MessageSenderController messageSenderController;
+    private final ConversationSyncController conversationSyncController;
 
-    public ConversationView(ConversationViewModel syncConversationViewModel, MessageSenderController messageSenderController) {
-        this.syncConversationViewModel = syncConversationViewModel;
+    public ConversationView(ConversationViewModel conversationViewModel,
+                            MessageSenderController messageSenderController, ConversationSyncController conversationSyncController) {
+        this.conversationViewModel = conversationViewModel;
         this.messageSenderController = messageSenderController;
+        this.conversationSyncController = conversationSyncController;
 
         conversationHistory = new JTextArea();
         conversationHistory.setEditable(false);
@@ -32,9 +37,11 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 
         sendButton.addPropertyChangeListener(evt -> {
             if (evt.getSource() == sendButton) {
+                ConversationState conversationState = conversationViewModel.getState();
                 String message = messageInput.getText();
-                messageSenderController.execute(syncConversationViewModel.getState().getContactName(), message);
-                syncConversationViewModel.firePropertyChanged();
+                messageSenderController.execute(conversationState.getContactName(), message);
+                conversationSyncController.execute(conversationState.getContactName());
+                conversationViewModel.firePropertyChanged();
                 messageInput.setText("");
             }
         });
@@ -48,12 +55,12 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 
         this.add(bottomPanel, BorderLayout.SOUTH);
 
-        syncConversationViewModel.addPropertyChangeListener(this);
+        conversationViewModel.addPropertyChangeListener(this);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        ConversationState state = syncConversationViewModel.getState();
+        ConversationState state = conversationViewModel.getState();
         conversationHistory.setText("");
         for (Map.Entry<LocalDateTime, String> entry : state.getTimestampToMessage().entrySet()) {
             String timestamp = entry.getKey().toString();

@@ -4,6 +4,7 @@ import data_access.GPTDataAccessObject;
 import services.message_translation.*;
 import services.messaging.translate_message.*;
 import org.junit.jupiter.api.Test;
+import services.translate_message.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

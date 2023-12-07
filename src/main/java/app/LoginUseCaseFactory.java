@@ -4,14 +4,14 @@ import entities.CommonUserFactory;
 import entities.UserFactory;
 import interface_adapter.ViewManagerModel;
 import services.logged_in.LoggedInViewModel;
-import services.auth.login.interface_adapters.LoginController;
-import services.auth.login.interface_adapters.LoginPresenter;
-import services.auth.login.interface_adapters.LoginViewModel;
-import services.auth.signup.interface_adapters.SignupViewModel;
-import services.auth.login.LoginInputBoundary;
-import services.auth.login.LoginInteractor;
-import services.auth.login.LoginOutputBoundary;
-import services.auth.login.LoginUserDataAccessInterface;
+import services.login.interface_adapters.LoginController;
+import services.login.interface_adapters.LoginPresenter;
+import services.login.interface_adapters.LoginViewModel;
+import services.signup.interface_adapters.SignupViewModel;
+import services.login.LoginInputBoundary;
+import services.login.LoginInteractor;
+import services.login.LoginOutputBoundary;
+import services.login.LoginUserDataAccessInterface;
 import views.LoginView;
 
 /**

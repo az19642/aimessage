@@ -2,9 +2,6 @@ package services.send_message;
 
 import data_access.MongoSenderUserDataAccessObject;
 import entities.CommonUserFactory;
-import services.messaging.send_message.MessageSenderInputData;
-import services.messaging.send_message.MessageSenderInteractor;
-import services.messaging.send_message.MessageSenderOutputBoundary;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;

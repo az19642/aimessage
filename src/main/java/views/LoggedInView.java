@@ -2,11 +2,11 @@ package views;
 
 import interface_adapter.ViewManagerModel;
 import services.contact_mutation.interface_adapters.MutatingContactsController;
+import services.contacts_view_sync.interface_adapters.LoadContactsToViewController;
+import services.conversation.interface_adapters.ConversationState;
+import services.conversation.interface_adapters.ConversationViewModel;
 import services.logged_in.LoggedInState;
 import services.logged_in.LoggedInViewModel;
-import services.view_database_sync.update_contacts.interface_adapters.LoadContactsToViewController;
-import services.view_database_sync.update_conversation.ConversationState;
-import services.view_database_sync.update_conversation.ConversationViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,6 +68,24 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         contactToLastMessage = new JList<>();
         contactToLastMessage.setCellRenderer(new ContactToLastMessageCellRenderer());
         contactToLastMessage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    viewManagerModel.setActiveView("conversation");
+                    viewManagerModel.firePropertyChanged();
+                }
+            }
+
+            // Both mouseReleased and mousePressed are needed to support both Windows and Mac
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                rightClick(evt);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                rightClick(evt);
+            }
 
             private void rightClick(MouseEvent evt) {
                 Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
@@ -94,23 +112,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                         popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
                     }
                 }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                if (evt.getClickCount() == 2) {
-                    viewManagerModel.setActiveView("conversation");
-                    viewManagerModel.firePropertyChanged();
-                }
-            }
-            // Both mouseReleased and mousePressed are needed to support both Windows and Mac
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                rightClick(evt);
-            }
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                rightClick(evt);
             }
         });
 

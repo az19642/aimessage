@@ -1,13 +1,13 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
-import services.auth.login.interface_adapters.LoginViewModel;
-import services.auth.password_generation.interface_adapters.PasswordGeneratorController;
-import services.auth.password_generation.interface_adapters.PasswordGeneratorState;
-import services.auth.password_generation.interface_adapters.PasswordGeneratorViewModel;
-import services.auth.signup.interface_adapters.SignupController;
-import services.auth.signup.SignupState;
-import services.auth.signup.interface_adapters.SignupViewModel;
+import services.login.interface_adapters.LoginViewModel;
+import services.password_generation.interface_adapters.PasswordGeneratorController;
+import services.password_generation.interface_adapters.PasswordGeneratorState;
+import services.password_generation.interface_adapters.PasswordGeneratorViewModel;
+import services.signup.interface_adapters.SignupController;
+import services.signup.SignupState;
+import services.signup.interface_adapters.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;

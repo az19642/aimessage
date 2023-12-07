@@ -1,10 +1,10 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
-import services.auth.login.interface_adapters.LoginController;
-import services.auth.login.LoginState;
-import services.auth.login.interface_adapters.LoginViewModel;
-import services.auth.signup.interface_adapters.SignupViewModel;
+import services.login.interface_adapters.LoginController;
+import services.login.LoginState;
+import services.login.interface_adapters.LoginViewModel;
+import services.signup.interface_adapters.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
