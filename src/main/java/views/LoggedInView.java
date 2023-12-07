@@ -37,11 +37,11 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     /**
      * Creates a new LoggedInView.
      *
-     * @param loggedInViewModel            The ViewModel to be updated by the view.
-     * @param viewManagerModel             The ViewManagerModel to be updated by the view.
+     * @param loggedInViewModel         The ViewModel to be updated by the view.
+     * @param viewManagerModel          The ViewManagerModel to be updated by the view.
      * @param syncContactViewController The controller for the LoadContactsToView use case.
-     * @param addContactController         The controller for the AddContact use case.
-     * @param removeContactController      The controller for the RemoveContact use case.
+     * @param addContactController      The controller for the AddContact use case.
+     * @param removeContactController   The controller for the RemoveContact use case.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel,
                         ViewManagerModel viewManagerModel,
@@ -77,7 +77,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
-                    Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
                     String selectedContact = contactToLastMessage.getSelectedValue().getKey();
                     viewManagerModel.setActiveView("conversation");
                     viewManagerModel.firePropertyChanged();
@@ -184,7 +183,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         String mutatingContactsStatus = state.getMutatingContactsStatus();
 
-        // if the status is non-empty, then the user has tried to add/remove a contact
+        // if the status is not empty and not PASS, then there was an error
         if (!mutatingContactsStatus.isEmpty() && !mutatingContactsStatus.equals("PASS")) {
             JOptionPane.showMessageDialog(this, state.getMutatingContactsStatus());
             state.setMutatingContactsStatus("");

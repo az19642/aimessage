@@ -42,7 +42,6 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                 String message = messageInput.getText();
                 messageSenderController.execute(conversationState.getContactName(), message);
                 conversationSyncController.execute(conversationState.getContactName());
-                conversationViewModel.firePropertyChanged();
                 messageInput.setText("");
             }
         });
@@ -62,12 +61,17 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         ConversationState state = conversationViewModel.getState();
+
+        if (state.getTimestampToMessage() == null) {
+            conversationSyncController.execute(state.getContactName());
+        }
         conversationHistory.setText("");
+
         for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
             String timestamp = entry.getKey().toString();
             String sender = entry.getValue().get(0);
             String message = entry.getValue().get(1);
-            conversationHistory.append(message + sender + " " + timestamp + "\n");
+            conversationHistory.append(String.format("%s %s %s\n", sender, message, timestamp));
         }
     }
 }
