@@ -220,8 +220,11 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
     public JButton getLogInButton() {
         return logIn;
-    public static LoginView getInstance(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
-                                        ViewManagerModel viewManagerModel) {
+    }
+
+    public static LoginView getInstance (LoginViewModel loginViewModel, SignupViewModel
+            signupViewModel, LoginController loginController,
+                                         ViewManagerModel viewManagerModel){
         if (instance == null) {
             instance = new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
         }
