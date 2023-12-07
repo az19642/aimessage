@@ -45,21 +45,21 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                         LoadContactsToViewController loadContactsToViewController,
-                        AddContactController addContactsController,
-                        RemoveContactController removeContactsController,
+                        AddContactController addContactController,
+                        RemoveContactController removeContactController,
                         ConversationViewModel conversationViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.conversationViewModel = conversationViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.loadContactsToViewController = loadContactsToViewController;
-        this.addContactController = addContactsController;
-        this.removeContactController = removeContactsController;
+        this.addContactController = addContactController;
+        this.removeContactController = removeContactController;
 
         JPanel buttons = new JPanel();
         addButton = new JButton(LoggedInViewModel.ADD_BUTTON_LABEL);
         addButton.addActionListener(evt -> {
-            addContactController.execute(contactInputField.getText());
+            this.addContactController.execute(contactInputField.getText());
             loadContactsToViewController.execute();
         });
         buttons.add(contactInputField);
@@ -106,7 +106,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     JMenuItem deleteContact = new JMenuItem("Delete contact");
                     deleteContact.addActionListener(evtPrime -> {
                         String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        removeContactController.execute(selectedContact);
+                        LoggedInView.this.removeContactController.execute(selectedContact);
                         loadContactsToViewController.execute();
                     });
                     sendMessage.addActionListener(evtPrime -> {
