@@ -43,7 +43,7 @@ public class ConversationViewFactory {
                                           MessageTranslatorViewModel messageTranslatorViewModel,
                                           SignupViewModel signupViewModel) {
 
-        return new ConversationView(conversationViewModel,
+        return ConversationView.getInstance(conversationViewModel,
                 createSendMessageController(mongoDataAccessObject),
                 createConversationSyncController(conversationSyncDataAccessInterface,
                         conversationViewModel),

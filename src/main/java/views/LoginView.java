@@ -1,6 +1,11 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
+import services.contact.add_contact.interface_adapters.AddContactController;
+import services.contact.remove_contact.interface_adapters.RemoveContactController;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
+import services.conversation.interface_adapters.ConversationViewModel;
+import services.logged_in.LoggedInViewModel;
 import services.login.interface_adapters.LoginController;
 import services.login.LoginState;
 import services.login.interface_adapters.LoginViewModel;
@@ -20,6 +25,8 @@ import java.beans.PropertyChangeListener;
 public class LoginView extends JPanel implements PropertyChangeListener {
 
     public final String viewName = "log in";
+
+    private static LoginView instance;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JButton logIn;
@@ -36,10 +43,10 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     /**
      * Constructs a new instance of the LoginView.
      *
-     * @param loginViewModel     The ViewModel responsible for managing login-related data.
-     * @param signupViewModel    The ViewModel for signup-related functionality.
-     * @param loginController    The controller handling login actions.
-     * @param viewManagerModel   The model managing the active view in the application.
+     * @param loginViewModel   The ViewModel responsible for managing login-related data.
+     * @param signupViewModel  The ViewModel for signup-related functionality.
+     * @param loginController  The controller handling login actions.
+     * @param viewManagerModel The model managing the active view in the application.
      */
     public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
                      ViewManagerModel viewManagerModel) {
@@ -213,5 +220,11 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
     public JButton getLogInButton() {
         return logIn;
+    public static LoginView getInstance(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
+                                        ViewManagerModel viewManagerModel) {
+        if (instance == null) {
+            instance = new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
+        }
+        return instance;
     }
 }

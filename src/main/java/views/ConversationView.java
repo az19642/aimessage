@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
-import services.logged_in.LoggedInState;
 import services.send_message.interface_adapters.MessageSenderController;
 import services.signup.SignupState;
 import services.signup.interface_adapters.SignupViewModel;
@@ -23,10 +22,12 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
 public class ConversationView extends JPanel implements PropertyChangeListener {
+    private static ConversationView instance;
     public final String viewName = "conversation";
     private final JList<Map.Entry<LocalDateTime, List<String>>> conversationHistory;
     private final JTextField messageInput;
@@ -45,16 +46,16 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final ReplySuggesterController replySuggesterController;
     private final MessageTranslatorController messageTranslatorController;
 
-    public ConversationView(ConversationViewModel conversationViewModel,
-                            MessageSenderController messageSenderController,
-                            ConversationSyncController conversationSyncController,
-                            TextToSpeechController textToSpeechController,
-                            ReplySuggesterController replySuggesterController,
-                            MessageTranslatorController messageTranslatorController,
-                            ReplySuggesterViewModel replySuggesterViewModel,
-                            MessageTranslatorViewModel messageTranslatorViewModel,
-                            SignupViewModel signupViewModel,
-                            ViewManagerModel viewManagerModel) {
+    private ConversationView(ConversationViewModel conversationViewModel,
+                             MessageSenderController messageSenderController,
+                             ConversationSyncController conversationSyncController,
+                             TextToSpeechController textToSpeechController,
+                             ReplySuggesterController replySuggesterController,
+                             MessageTranslatorController messageTranslatorController,
+                             ReplySuggesterViewModel replySuggesterViewModel,
+                             MessageTranslatorViewModel messageTranslatorViewModel,
+                             SignupViewModel signupViewModel,
+                             ViewManagerModel viewManagerModel) {
         this.conversationViewModel = conversationViewModel;
         this.messageSenderController = messageSenderController;
         this.conversationSyncController = conversationSyncController;
@@ -73,6 +74,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
                     String selectedMessage = conversationHistory.getSelectedValue().getValue().get(1);
+                    System.out.println(selectedMessage);
                     ConversationState conversationState = conversationViewModel.getState();
                     conversationState.setMessage(selectedMessage);
                     conversationViewModel.setState(conversationState);
@@ -105,7 +107,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                         messageTranslatorController.execute(selectedMessage, preferredLanguage);
 
                         MessageTranslatorState messageTranslatorState = messageTranslatorViewModel.getState();
-                        JOptionPane.showMessageDialog(ConversationView.this, messageTranslatorState.getTranslatedMessage());
+                        JOptionPane.showMessageDialog(ConversationView.this,
+                                messageTranslatorState.getTranslatedMessage());
                     });
                     speakMessage.addActionListener(evtPrime -> {
                         textToSpeechController.execute(selectedMessage);
@@ -157,6 +160,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         backButton = new JButton("Go back");
         backButton.addActionListener(evt -> {
             if (evt.getSource() == backButton) {
+                conversationViewModel.setState(new ConversationState());
                 viewManagerModel.setActiveView("logged in");
                 viewManagerModel.firePropertyChanged();
             }
@@ -185,8 +189,20 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         public Component getListCellRendererComponent(JList<? extends Map.Entry<LocalDateTime,
                 List<String>>> list, Map.Entry<LocalDateTime, List<String>> entry, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
-            String cellText = String.format("<html><div style='margin: 5px;'><p> <b>%s</b> " +
-                    "</p><p>%s %s</p></div></html>",  entry.getValue().get(0), entry.getValue().get(1), entry.getKey());
+            String ldtString = entry.getKey().toLocalTime().toString();
+            String[] arr = ldtString.split(":");
+            Integer hour = Integer.parseInt(arr[0]) + 5;
+            String amOrPm = "am";
+
+            if (hour > 12) {
+                amOrPm = "pm";
+                hour %= 12;
+            }
+
+            String timeFinal = hour.toString() + ":" + arr[1] + " " + amOrPm;
+
+            String cellText = String.format("<html><div style='margin: 5px;'><p><b>%s - %s</b></p>" +
+                    "<p>%s</p></div></html>", entry.getValue().get(0), timeFinal, entry.getValue().get(1));
             setText(cellText);
             customizeCellAppearance(list, isSelected);
             return this;
@@ -233,7 +249,33 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 //        }
     }
 
+
     public JButton getBackButton() {
         return backButton;
+    }
+}
+    public static ConversationView getInstance(ConversationViewModel conversationViewModel,
+                                               MessageSenderController messageSenderController,
+                                               ConversationSyncController conversationSyncController,
+                                               TextToSpeechController textToSpeechController,
+                                               ReplySuggesterController replySuggesterController,
+                                               MessageTranslatorController messageTranslatorController,
+                                               ReplySuggesterViewModel replySuggesterViewModel,
+                                               MessageTranslatorViewModel messageTranslatorViewModel,
+                                               SignupViewModel signupViewModel,
+                                               ViewManagerModel viewManagerModel) {
+        if (instance == null) {
+            instance = new ConversationView(conversationViewModel,
+                    messageSenderController,
+                    conversationSyncController,
+                    textToSpeechController,
+                    replySuggesterController,
+                    messageTranslatorController,
+                    replySuggesterViewModel,
+                    messageTranslatorViewModel,
+                    signupViewModel,
+                    viewManagerModel);
+        }
+        return instance;
     }
 }
