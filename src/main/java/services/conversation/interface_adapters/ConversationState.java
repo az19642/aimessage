@@ -9,7 +9,8 @@ import java.util.List;
  * as well as the contact name associated with the conversation.
  */
 public class ConversationState {
-    private List<MessageMetaData> timestampToMessage;
+
+    private Map<LocalDateTime, List<String>> timestampToMessage;
     private String contactName = "";
 
     public ConversationState(ConversationState copy) {

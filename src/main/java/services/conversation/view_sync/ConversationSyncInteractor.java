@@ -7,21 +7,30 @@ import entities.User;
 import java.util.List;
 
 public class ConversationSyncInteractor implements ConversationSyncInputBoundary {
-    final ConversationSyncDataAccessInterface dataAccessObject;
-    final ConversationSyncOutputBoundary presenter;
+    final ConversationSyncDataAccessInterface conversationSyncDataAccessObject;
+    final ConversationSyncOutputBoundary conversationSyncPresenter;
 
-    public ConversationSyncInteractor(ConversationSyncDataAccessInterface dataAccessObject,
-                                      ConversationSyncOutputBoundary presenter) {
-        this.dataAccessObject = dataAccessObject;
-        this.presenter = presenter;
+    public ConversationSyncInteractor(ConversationSyncDataAccessInterface conversationSyncDataAccessObject,
+                                      ConversationSyncOutputBoundary conversationSyncPresenter) {
+        this.conversationSyncDataAccessObject = conversationSyncDataAccessObject;
+        this.conversationSyncPresenter = conversationSyncPresenter;
     }
 
     @Override
-    public void execute(ConversationSyncInputData inputData) {
-        User user = dataAccessObject.getUser();
-        Contact contact = user.getContact(inputData.getContactName());
+    public void execute(ConversationSyncInputData conversationSyncInputData) {
+        User currentUser = conversationSyncDataAccessObject.getUser();
+        Contact contact = currentUser.getContact(conversationSyncInputData.getContactName());
         List<Message> messages = contact.getMessages();
-        ConversationSyncOutputData outputData = new ConversationSyncOutputData(messages);
-        presenter.prepareSuccessView(outputData);
+
+        Map<LocalDateTime, List<String>> timestampToMessage = new TreeMap<>();
+
+        for (Message message: messages) {
+            ArrayList<String> messageData = new ArrayList<>();
+            messageData.add(message.getSender()); messageData.add(message.getContent());
+            timestampToMessage.put(message.getMessageTime(), messageData);
+        }
+
+        ConversationSyncOutputData outputData = new ConversationSyncOutputData(timestampToMessage);
+        conversationSyncPresenter.prepareSuccessView(outputData);
     }
 }

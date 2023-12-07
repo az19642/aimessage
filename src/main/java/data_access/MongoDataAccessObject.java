@@ -14,6 +14,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import services.contacts_view_sync.LoadContactsToViewDataAccessInterface;
+import services.conversation.view_sync.ConversationSyncDataAccessInterface;
 import services.login.LoginUserDataAccessInterface;
 import services.contact_mutation.MutatingContactsUserDataAccessInterface;
 import services.send_message.MessageSenderUserDataAccessInterface;
@@ -36,8 +37,8 @@ import static com.mongodb.client.model.Filters.eq;
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
  */
 
-public class MongoSenderUserDataAccessObject implements SignupUserDataAccessInterface,
-        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, MessageSenderUserDataAccessInterface, LoadContactsToViewDataAccessInterface {
+public class MongoDataAccessObject implements SignupUserDataAccessInterface,
+        LoginUserDataAccessInterface, MutatingContactsUserDataAccessInterface, MessageSenderUserDataAccessInterface, LoadContactsToViewDataAccessInterface, ConversationSyncDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -46,7 +47,7 @@ public class MongoSenderUserDataAccessObject implements SignupUserDataAccessInte
     private final MessageFactory messageFactory;
     private User user;
 
-    public MongoSenderUserDataAccessObject(String adminPassword, UserFactory userFactory) {
+    public MongoDataAccessObject(String adminPassword, UserFactory userFactory) {
         String uri = String.format(
                 "mongodb+srv://langAdmin:%s@languality.a8dkfut.mongodb.net/?retryWrites=true&w=majority",
                 adminPassword

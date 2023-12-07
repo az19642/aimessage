@@ -13,9 +13,11 @@ public class ConversationSyncPresenter implements ConversationSyncOutputBoundary
     }
 
     @Override
-    public void prepareSuccessView(ConversationSyncOutputData outputData) {
+    public void prepareSuccessView(ConversationSyncOutputData conversationSyncOutputData) {
         ConversationState state = conversationViewModel.getState();
-        state.getTimestampToMessage();
+        state.setTimestampToMessage(conversationSyncOutputData.getTimestampToMessage());
+        conversationViewModel.setState(state);
+        conversationViewModel.firePropertyChanged();
     }
 
     @Override

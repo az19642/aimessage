@@ -1,6 +1,6 @@
 package app;
 
-import data_access.MongoSenderUserDataAccessObject;
+import data_access.MongoDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import services.contact_mutation.MutatingContactsInputBoundary;
 import services.contact_mutation.MutatingContactsInteractor;
@@ -24,7 +24,7 @@ import views.LoggedInView;
 public class LoggedInViewFactory {
 
     public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                                      MongoSenderUserDataAccessObject mongoDataAccessObject,
+                                      MongoDataAccessObject mongoDataAccessObject,
                                       ConversationViewModel conversationViewModel) {
 
         LoadContactsToViewController loadContactsToViewController =

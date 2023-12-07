@@ -1,6 +1,6 @@
 package services.send_message;
 
-import data_access.MongoSenderUserDataAccessObject;
+import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ public class SendMessageInteractorTest {
     @Test
     void execute() {
         MessageSenderInputData inputData = new MessageSenderInputData("This is a test", "test2");
-        MongoSenderUserDataAccessObject sendMessageDataAccessInterface = new MongoSenderUserDataAccessObject(
+        MongoDataAccessObject sendMessageDataAccessInterface = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );

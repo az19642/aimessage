@@ -4,14 +4,14 @@ import services.conversation.view_sync.ConversationSyncInputBoundary;
 import services.conversation.view_sync.ConversationSyncInputData;
 
 public class ConversationSyncController {
-    final ConversationSyncInputBoundary interactor;
+    final ConversationSyncInputBoundary conversationSyncInteractor;
 
-    public ConversationSyncController(ConversationSyncInputBoundary interactor) {
-        this.interactor = interactor;
+    public ConversationSyncController(ConversationSyncInputBoundary conversationSyncInteractor) {
+        this.conversationSyncInteractor = conversationSyncInteractor;
     }
 
     public void execute(String contactName) {
-        ConversationSyncInputData inputData = new ConversationSyncInputData(contactName);
-        interactor.execute(inputData);
+        ConversationSyncInputData conversationSyncInputData = new ConversationSyncInputData(contactName);
+        conversationSyncInteractor.execute(conversationSyncInputData);
     }
 }

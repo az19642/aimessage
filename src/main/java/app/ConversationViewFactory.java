@@ -14,10 +14,13 @@ import views.ConversationView;
 
 public class ConversationViewFactory {
     public static ConversationView create(ConversationViewModel conversationViewModel,
-                                          MessageSenderUserDataAccessInterface mongoDataAccessObject) {
+                                          MessageSenderUserDataAccessInterface mongoDataAccessObject,
+                                          ConversationSyncDataAccessInterface conversationSyncDataAccessInterface) {
 
-        return new ConversationView(conversationViewModel, createSendMessageController(mongoDataAccessObject),
-                createConversationSyncController());
+        return new ConversationView(conversationViewModel,
+                createSendMessageController(mongoDataAccessObject),
+                createConversationSyncController(conversationSyncDataAccessInterface,
+                        conversationViewModel));
     }
 
     public static MessageSenderController createSendMessageController(MessageSenderUserDataAccessInterface mongoDataAccessObject) {

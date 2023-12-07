@@ -1,6 +1,5 @@
 package views;
 
-import services.contact_mutation.MutatingContactsInputBoundary;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
 import services.conversation.view_sync.interface_adapters.ConversationSyncController;
@@ -11,6 +10,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class ConversationView extends JPanel implements PropertyChangeListener {
@@ -24,7 +24,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final ConversationSyncController conversationSyncController;
 
     public ConversationView(ConversationViewModel conversationViewModel,
-                            MessageSenderController messageSenderController, ConversationSyncController conversationSyncController) {
+                            MessageSenderController messageSenderController,
+                            ConversationSyncController conversationSyncController) {
         this.conversationViewModel = conversationViewModel;
         this.messageSenderController = messageSenderController;
         this.conversationSyncController = conversationSyncController;
@@ -35,7 +36,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         messageInput = new JTextField();
         sendButton = new JButton("Send");
 
-        sendButton.addPropertyChangeListener(evt -> {
+        sendButton.addActionListener(evt -> {
             if (evt.getSource() == sendButton) {
                 ConversationState conversationState = conversationViewModel.getState();
                 String message = messageInput.getText();
@@ -62,10 +63,11 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         ConversationState state = conversationViewModel.getState();
         conversationHistory.setText("");
-        for (Map.Entry<LocalDateTime, String> entry : state.getTimestampToMessage().entrySet()) {
+        for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
             String timestamp = entry.getKey().toString();
-            String message = entry.getValue();
-            conversationHistory.append(message + " " + timestamp + "\n");
+            String sender = entry.getValue().get(0);
+            String message = entry.getValue().get(1);
+            conversationHistory.append(message + sender + " " + timestamp + "\n");
         }
     }
 }

@@ -1,6 +1,6 @@
 package services.signup;
 
-import data_access.MongoSenderUserDataAccessObject;
+import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
 import entities.User;
 import entities.UserFactory;
@@ -23,7 +23,7 @@ class SignupInteractorTest {
     @Test
     void successTest() {
         SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPwd", "English");
-        MongoSenderUserDataAccessObject userRepository = new MongoSenderUserDataAccessObject(
+        MongoDataAccessObject userRepository = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -53,7 +53,7 @@ class SignupInteractorTest {
     @Test
     void failurePasswordDontMatchTest() {
         SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPassword", "English");
-        SignupUserDataAccessInterface userRepository = new MongoSenderUserDataAccessObject(
+        SignupUserDataAccessInterface userRepository = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -82,7 +82,7 @@ class SignupInteractorTest {
     @Test
     void failureUserExistsTest() {
         SignupInputData inputData = new SignupInputData("testUser2", "testPwd", "testPwd", "English");
-        SignupUserDataAccessInterface userRepository = new MongoSenderUserDataAccessObject(
+        SignupUserDataAccessInterface userRepository = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );

@@ -1,7 +1,7 @@
 package app;
 
 import data_access.GPTDataAccessObject;
-import data_access.MongoSenderUserDataAccessObject;
+import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationViewModel;
@@ -41,7 +41,7 @@ public class Main {
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
         ConversationViewModel conversationViewModel = new ConversationViewModel();
 
-        MongoSenderUserDataAccessObject mongoDataAccessObject = new MongoSenderUserDataAccessObject(
+        MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -61,7 +61,8 @@ public class Main {
                 mongoDataAccessObject, conversationViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        ConversationView conversationView = ConversationViewFactory.create(conversationViewModel, mongoDataAccessObject);
+        ConversationView conversationView = ConversationViewFactory.create(conversationViewModel,
+                mongoDataAccessObject, mongoDataAccessObject);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);
