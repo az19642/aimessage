@@ -116,8 +116,7 @@ class EndToEndTest {
         loggedInView.getAddButton().doClick();
         loggedInView.getSyncButton().doClick();
 
-        conversationView.getSyncButton().doClick();
-        conversationView.getSendButton().doClick();
+        conversationView.getBackButton().doClick();
 
         mongoDataAccessObject.deleteUser("newTest");
     }
