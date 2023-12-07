@@ -71,8 +71,14 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
+                    Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
+                    String selectedContact = contactToLastMessage.getSelectedValue().getKey();
                     viewManagerModel.setActiveView("conversation");
                     viewManagerModel.firePropertyChanged();
+                    ConversationState conversationState = conversationViewModel.getState();
+                    conversationState.setContactName(selectedContact);
+                    conversationViewModel.setState(conversationState);
+                    conversationViewModel.firePropertyChanged();
                 }
             }
 
@@ -104,6 +110,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                         viewManagerModel.firePropertyChanged();
                         ConversationState conversationState = conversationViewModel.getState();
                         conversationState.setContactName(selectedContact);
+                        conversationViewModel.setState(conversationState);
                         conversationViewModel.firePropertyChanged();
                     });
                     if (evt.isPopupTrigger()) {
