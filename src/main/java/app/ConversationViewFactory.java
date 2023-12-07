@@ -1,6 +1,7 @@
 package app;
 
 import services.conversation.interface_adapters.ConversationViewModel;
+import services.conversation.view_sync.ConversationSyncDataAccessInterface;
 import services.conversation.view_sync.ConversationSyncInteractor;
 import services.conversation.view_sync.interface_adapters.ConversationSyncController;
 import services.conversation.view_sync.interface_adapters.ConversationSyncPresenter;
@@ -30,10 +31,14 @@ public class ConversationViewFactory {
         return new MessageSenderController(sendMessageInteractor);
     }
 
-    public static ConversationSyncController createConversationSyncController() {
-        ConversationSyncInteractor conversationSyncInteractor = new ConversationSyncInteractor();
-        ConversationSyncPresenter conversationSyncPresenter = new ConversationSyncPresenter();
-        return new ConversationSyncController();
+    public static ConversationSyncController createConversationSyncController(
+            ConversationSyncDataAccessInterface mongoDataAccessObject, ConversationViewModel conversationViewModel) {
+
+        ConversationSyncPresenter conversationSyncPresenter = new ConversationSyncPresenter(conversationViewModel);
+        ConversationSyncInteractor conversationSyncInteractor = new ConversationSyncInteractor(mongoDataAccessObject,
+                conversationSyncPresenter);
+
+        return new ConversationSyncController(conversationSyncInteractor);
     }
 
 }

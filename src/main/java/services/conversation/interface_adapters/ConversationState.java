@@ -1,6 +1,7 @@
 package services.conversation.interface_adapters;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -25,8 +26,12 @@ public class ConversationState {
      *
      * @return A map where the keys are timestamps and the values are the messages.
      */
-    public List<MessageMetaData> getTimestampToMessage() {
+    public Map<LocalDateTime, List<String>> getTimestampToMessage() {
         return this.timestampToMessage;
+    }
+
+    public void setTimestampToMessage(Map<LocalDateTime, List<String>> timestampToMessage) {
+        this.timestampToMessage = timestampToMessage;
     }
 
     /**
@@ -47,18 +52,5 @@ public class ConversationState {
         this.contactName = contactName;
     }
 
-
-
-    class MessageMetaData {
-        private final String sender;
-        private final String content;
-        private final LocalDateTime messageTime;
-
-        public MessageMetaData(String sender, String content, LocalDateTime messageTime) {
-            this.sender = sender;
-            this.content = content;
-            this.messageTime = messageTime;
-        }
-    }
 
 }
