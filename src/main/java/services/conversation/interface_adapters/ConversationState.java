@@ -13,9 +13,12 @@ public class ConversationState {
 
     private Map<LocalDateTime, List<String>> timestampToMessage;
     private String contactName = "";
+    private String message = "";
 
     public ConversationState(ConversationState copy) {
         timestampToMessage = copy.timestampToMessage;
+        contactName = copy.contactName;
+        message = copy.message;
     }
 
     public ConversationState() {
@@ -51,6 +54,10 @@ public class ConversationState {
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
+
+    public String getMessage() {return this.message;}
+
+    public void setMessage(String message) {this.message = message;}
 
 
 }
