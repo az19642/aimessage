@@ -253,7 +253,6 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     public JButton getBackButton() {
         return backButton;
     }
-}
     public static ConversationView getInstance(ConversationViewModel conversationViewModel,
                                                MessageSenderController messageSenderController,
                                                ConversationSyncController conversationSyncController,
