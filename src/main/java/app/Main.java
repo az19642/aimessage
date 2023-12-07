@@ -5,10 +5,15 @@ import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationViewModel;
+import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
 import services.logged_in.LoggedInViewModel;
 import services.login.interface_adapters.LoginViewModel;
 import services.password_generation.interface_adapters.PasswordGeneratorViewModel;
+import services.send_message.MessageSenderUserDataAccessInterface;
 import services.signup.interface_adapters.SignupViewModel;
+import services.suggest_reply.interface_adapters.ReplySuggesterViewModel;
+import services.text_to_speech.interface_adapters.TextToSpeechViewModel;
+import services.translate_message.interface_adapters.MessageTranslatorViewModel;
 import views.*;
 
 import javax.swing.*;
@@ -40,6 +45,9 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
         ConversationViewModel conversationViewModel = new ConversationViewModel();
+        TextToSpeechViewModel textToSpeechViewModel = new TextToSpeechViewModel();
+        ReplySuggesterViewModel replySuggesterViewModel = new ReplySuggesterViewModel();
+        MessageTranslatorViewModel messageTranslatorViewModel = new MessageTranslatorViewModel();
 
         MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
@@ -63,7 +71,8 @@ public class Main {
         views.add(loggedInView, loggedInView.viewName);
 
         ConversationView conversationView = ConversationViewFactory.create(viewManagerModel, conversationViewModel,
-                mongoDataAccessObject, mongoDataAccessObject);
+                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, textToSpeechViewModel,
+                replySuggesterViewModel, messageTranslatorViewModel, signupViewModel);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);
