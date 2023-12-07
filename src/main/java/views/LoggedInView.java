@@ -195,4 +195,12 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             state.setMutatingContactsStatus("");
         }
     }
+
+    public JButton getAddButton() {
+        return addButton;
+    }
+    public JButton getSyncButton() {
+        return syncButton;
+    }
+
 }
