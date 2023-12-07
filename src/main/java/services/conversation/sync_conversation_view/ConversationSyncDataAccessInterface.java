@@ -4,4 +4,6 @@ import entities.User;
 
 public interface ConversationSyncDataAccessInterface {
     User getUser();
+
+    void syncUser();
 }

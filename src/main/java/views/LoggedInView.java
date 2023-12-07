@@ -68,7 +68,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         syncButton = new JButton(LoggedInViewModel.SYNC_BUTTON_LABEL);
         syncButton.addActionListener(evt -> syncContactViewController.execute());
 
-
         buttons.add(contactInputField);
         buttons.add(addButton);
         buttons.add(syncButton);

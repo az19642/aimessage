@@ -28,6 +28,7 @@ public class SyncContactViewInteractor implements SyncContactViewInputBoundary {
     @Override
     public void execute() {
         Map<String, String> contactToMessage = new HashMap<>();
+        syncContactViewDataAccessObject.syncUser();
         User currentUser = syncContactViewDataAccessObject.getUser();
         String lastMessage = "";
         for (Contact contact : currentUser.getContacts()) {

@@ -22,15 +22,17 @@ public class ConversationSyncInteractor implements ConversationSyncInputBoundary
 
     @Override
     public void execute(ConversationSyncInputData conversationSyncInputData) {
+        conversationSyncDataAccessObject.syncUser();
         User currentUser = conversationSyncDataAccessObject.getUser();
         Contact contact = currentUser.getContact(conversationSyncInputData.getContactName());
         List<Message> messages = contact.getMessages();
 
         Map<LocalDateTime, List<String>> timestampToMessage = new TreeMap<>();
 
-        for (Message message: messages) {
+        for (Message message : messages) {
             ArrayList<String> messageData = new ArrayList<>();
-            messageData.add(message.getSender()); messageData.add(message.getContent());
+            messageData.add(message.getSender());
+            messageData.add(message.getContent());
             timestampToMessage.put(message.getMessageTime(), messageData);
         }
 

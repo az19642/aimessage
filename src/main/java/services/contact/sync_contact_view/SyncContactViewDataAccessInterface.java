@@ -4,4 +4,6 @@ import entities.User;
 
 public interface SyncContactViewDataAccessInterface {
     User getUser();
+
+    void syncUser();
 }

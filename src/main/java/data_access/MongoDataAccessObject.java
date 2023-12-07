@@ -441,6 +441,10 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
         return this.user;
     }
 
+    public void syncUser() {
+        setUser(this.user.getName(), this.user.getPassword());
+    }
+
     @Override
     public void deleteUser(String name) {
         userRecords.deleteOne(Filters.eq("name", name));
