@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class MutatingContactsInteractorTest {
     @Test
     void execute() {
-        AddContactInputData inputData = new AddContactInputData("test", true);
+        AddContactInputData inputData = new AddContactInputData("test");
         MongoDataAccessObject mutatingContactsUserDataAccessInterface = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()

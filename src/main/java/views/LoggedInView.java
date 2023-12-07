@@ -198,6 +198,13 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         }
     }
 
+    public JButton getAddButton() {
+        return addButton;
+    }
+    public JButton getSyncButton() {
+        return syncButton;
+    }
+
     public static LoggedInView getInstance(LoggedInViewModel loggedInViewModel,
                                            ViewManagerModel viewManagerModel,
                                            SyncContactViewController syncContactViewController,
@@ -214,4 +221,5 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         }
         return instance;
     }
+
 }

@@ -10,12 +10,13 @@ public class SendMessageInteractorTest {
 
     @Test
     void execute() {
-        MessageSenderInputData inputData = new MessageSenderInputData("This is a test", "test2");
+        MessageSenderInputData inputData = new MessageSenderInputData("testa", "this is a test");
         MongoDataAccessObject sendMessageDataAccessInterface = new MongoDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
         sendMessageDataAccessInterface.setUser("test", "test");
+        sendMessageDataAccessInterface.addContact("testa");
 
         MessageSenderOutputBoundary sendMessapePresenter = new MessageSenderOutputBoundary() {
             @Override

@@ -214,6 +214,12 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         usernameInputField.setText(state.getUsername());
     }
 
+    public JButton getCancelButton() {
+        return cancel;
+    }
+
+    public JButton getLogInButton() {
+        return logIn;
     public static LoginView getInstance(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
                                         ViewManagerModel viewManagerModel) {
         if (instance == null) {

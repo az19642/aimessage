@@ -46,6 +46,10 @@ public class SyncContactViewInteractorTest {
             public User getUser() {
                 return user;
             }
+
+            @Override
+            public void syncUser() {
+            }
         };
         SyncContactViewOutputBoundary loadContactsToViewPresenter = new SyncContactViewOutputBoundary() {
             @Override
