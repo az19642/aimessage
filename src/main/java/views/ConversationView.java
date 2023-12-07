@@ -1,8 +1,8 @@
 package views;
 
 import interface_adapter.conversation.ConversationState;
-import services.view_data_sync.update_conversation.ConversationViewModel;
-import services.messaging.send_message.interface_adapters.SendMessageController;
+import services.view_database_sync.update_conversation.ConversationViewModel;
+import services.messaging.send_message.interface_adapters.MessageSenderController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +18,11 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final JButton sendButton;
     private final ConversationViewModel syncConversationViewModel;
 
-    private final SendMessageController sendMessageController;
+    private final MessageSenderController messageSenderController;
 
-    public ConversationView(ConversationViewModel syncConversationViewModel, SendMessageController sendMessageController) {
+    public ConversationView(ConversationViewModel syncConversationViewModel, MessageSenderController messageSenderController) {
         this.syncConversationViewModel = syncConversationViewModel;
-        this.sendMessageController = sendMessageController;
+        this.messageSenderController = messageSenderController;
 
         conversationHistory = new JTextArea();
         conversationHistory.setEditable(false);
@@ -33,7 +33,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         sendButton.addPropertyChangeListener(evt -> {
             if (evt.getSource() == sendButton) {
                 String message = messageInput.getText();
-                sendMessageController.execute(syncConversationViewModel.getState().getContactName(), message);
+                messageSenderController.execute(syncConversationViewModel.getState().getContactName(), message);
                 syncConversationViewModel.firePropertyChanged();
                 messageInput.setText("");
             }

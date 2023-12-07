@@ -1,7 +1,7 @@
 package services.suggested_reply_generator;
 
 import data_access.GPTDataAccessObject;
-import services.messaging.suggest_reply_message.*;
+import services.messaging.suggest_reply.*;
 import services.reply_suggestor.*;
 import org.junit.jupiter.api.Test;
 

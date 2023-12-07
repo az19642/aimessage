@@ -10,7 +10,7 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 
 import services.auth.password_generation.PasswordGeneratorUserDataAccessInterface;
 import services.messaging.text_to_speech.TextToSpeechDataAccessInterface;
-import services.messaging.suggest_reply_message.ReplySuggesterUserDataAccessInterface;
+import services.messaging.suggest_reply.ReplySuggesterUserDataAccessInterface;
 
 import okhttp3.*;
 import services.messaging.translate_message.TranslatorDataAccessInterface;

@@ -1,10 +1,10 @@
 package app;
 
 import data_access.GPTDataAccessObject;
-import data_access.MongoUserDataAccessObject;
+import data_access.MongoSenderUserDataAccessObject;
 import entities.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
-import services.view_data_sync.update_conversation.ConversationViewModel;
+import services.view_database_sync.update_conversation.ConversationViewModel;
 import services.logged_in.LoggedInViewModel;
 import services.auth.login.interface_adapters.LoginViewModel;
 import services.auth.password_generation.interface_adapters.PasswordGeneratorViewModel;
@@ -39,9 +39,9 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
-        ConversationViewModel syncConversationViewModel = new ConversationViewModel();
+        ConversationViewModel conversationViewModel = new ConversationViewModel();
 
-        MongoUserDataAccessObject mongoDataAccessObject = new MongoUserDataAccessObject(
+        MongoSenderUserDataAccessObject mongoDataAccessObject = new MongoSenderUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
@@ -58,10 +58,10 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel,
-                mongoDataAccessObject);
+                mongoDataAccessObject, conversationViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        ConversationView conversationView = ConversationViewFactory.create(syncConversationViewModel, mongoDataAccessObject);
+        ConversationView conversationView = ConversationViewFactory.create(conversationViewModel, mongoDataAccessObject);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

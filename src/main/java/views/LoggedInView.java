@@ -1,10 +1,12 @@
 package views;
 
 import interface_adapter.ViewManagerModel;
-import services.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewController;
+import services.contact_mutation.interface_adapters.MutatingContactsController;
 import services.logged_in.LoggedInState;
 import services.logged_in.LoggedInViewModel;
-import services.contact_mutation.interface_adapters.MutatingContactsController;
+import services.view_database_sync.update_contacts.interface_adapters.LoadContactsToViewController;
+import services.view_database_sync.update_conversation.ConversationState;
+import services.view_database_sync.update_conversation.ConversationViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +30,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final LoadContactsToViewController loadContactsToViewController;
     private final JList<Map.Entry<String, String>> contactToLastMessage;
     private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
+    private final ConversationViewModel conversationViewModel;
 
     /**
      * Creates a new LoggedInView.
@@ -39,9 +42,11 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                         LoadContactsToViewController loadContactsToViewController,
-                        MutatingContactsController mutatingContactsController) {
+                        MutatingContactsController mutatingContactsController,
+                        ConversationViewModel conversationViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
+        this.conversationViewModel = conversationViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.loadContactsToViewController = loadContactsToViewController;
         this.mutatingContactsController = mutatingContactsController;
@@ -63,6 +68,34 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         contactToLastMessage = new JList<>();
         contactToLastMessage.setCellRenderer(new ContactToLastMessageCellRenderer());
         contactToLastMessage.addMouseListener(new MouseAdapter() {
+
+            private void rightClick(MouseEvent evt) {
+                Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
+                if (selectedEntry != null) {
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    JMenuItem sendMessage = new JMenuItem("Send message");
+                    JMenuItem deleteContact = new JMenuItem("Delete contact");
+                    deleteContact.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        mutatingContactsController.execute(selectedContact, false);
+                        loadContactsToViewController.execute();
+                    });
+                    sendMessage.addActionListener(evtPrime -> {
+                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
+                        viewManagerModel.setActiveView("conversation");
+                        viewManagerModel.firePropertyChanged();
+                        ConversationState conversationState = conversationViewModel.getState();
+                        conversationState.setContactName(selectedContact);
+                        conversationViewModel.firePropertyChanged();
+                    });
+                    if (evt.isPopupTrigger()) {
+                        popupMenu.add(sendMessage);
+                        popupMenu.add(deleteContact);
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                }
+            }
+
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
@@ -70,56 +103,14 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                     viewManagerModel.firePropertyChanged();
                 }
             }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
-                if (selectedEntry != null) {
-                    JPopupMenu popupMenu = new JPopupMenu();
-                    JMenuItem sendMessage = new JMenuItem("Send message");
-                    JMenuItem deleteContact = new JMenuItem("Delete contact");
-                    deleteContact.addActionListener(evtPrime -> {
-                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        mutatingContactsController.execute(selectedContact, false);
-                        loadContactsToViewController.execute();
-                    });
-                    sendMessage.addActionListener(evtPrime -> {
-                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        viewManagerModel.setActiveView("conversation");
-                        viewManagerModel.firePropertyChanged();
-                    });
-                    if (evt.isPopupTrigger()) {
-                        popupMenu.add(sendMessage);
-                        popupMenu.add(deleteContact);
-                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }
-                }
-            }
-
             // Both mouseReleased and mousePressed are needed to support both Windows and Mac
             @Override
+            public void mouseReleased(MouseEvent evt) {
+                rightClick(evt);
+            }
+            @Override
             public void mousePressed(MouseEvent evt) {
-                Map.Entry<String, String> selectedEntry = contactToLastMessage.getSelectedValue();
-                if (selectedEntry != null) {
-                    JPopupMenu popupMenu = new JPopupMenu();
-                    JMenuItem sendMessage = new JMenuItem("Send message");
-                    JMenuItem deleteContact = new JMenuItem("Delete contact");
-                    deleteContact.addActionListener(evtPrime -> {
-                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        mutatingContactsController.execute(selectedContact, false);
-                        loadContactsToViewController.execute();
-                    });
-                    sendMessage.addActionListener(evtPrime -> {
-                        String selectedContact = contactToLastMessage.getSelectedValue().getKey();
-                        viewManagerModel.setActiveView("conversation");
-                        viewManagerModel.firePropertyChanged();
-                    });
-                    if (evt.isPopupTrigger()) {
-                        popupMenu.add(sendMessage);
-                        popupMenu.add(deleteContact);
-                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }
-                }
+                rightClick(evt);
             }
         });
 

@@ -1,10 +1,10 @@
 package services.send_message;
 
-import data_access.MongoUserDataAccessObject;
+import data_access.MongoSenderUserDataAccessObject;
 import entities.CommonUserFactory;
-import services.messaging.send_message.SendMessageInputData;
-import services.messaging.send_message.SendMessageInteractor;
-import services.messaging.send_message.SendMessageOutputBoundary;
+import services.messaging.send_message.MessageSenderInputData;
+import services.messaging.send_message.MessageSenderInteractor;
+import services.messaging.send_message.MessageSenderOutputBoundary;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -13,22 +13,22 @@ public class SendMessageInteractorTest {
 
     @Test
     void execute() {
-        SendMessageInputData inputData = new SendMessageInputData("This is a test", "test2");
-        MongoUserDataAccessObject sendMessageDataAccessInterface = new MongoUserDataAccessObject(
+        MessageSenderInputData inputData = new MessageSenderInputData("This is a test", "test2");
+        MongoSenderUserDataAccessObject sendMessageDataAccessInterface = new MongoSenderUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );
         sendMessageDataAccessInterface.setUser("test", "test");
 
-        SendMessageOutputBoundary sendMessapePresenter = new SendMessageOutputBoundary() {
+        MessageSenderOutputBoundary sendMessapePresenter = new MessageSenderOutputBoundary() {
             @Override
             public void prepareSuccessView() {
 
             }
         };
 
-        SendMessageInteractor interactor =
-                new SendMessageInteractor(sendMessageDataAccessInterface, sendMessapePresenter);
+        MessageSenderInteractor interactor =
+                new MessageSenderInteractor(sendMessageDataAccessInterface, sendMessapePresenter);
         interactor.execute(inputData);
 
     }

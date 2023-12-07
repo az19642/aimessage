@@ -1,6 +1,6 @@
 package services.mutating_contacts;
 
-import data_access.MongoUserDataAccessObject;
+import data_access.MongoSenderUserDataAccessObject;
 import entities.CommonUserFactory;
 import services.contact_mutation.MutatingContactsInputData;
 import services.contact_mutation.MutatingContactsInteractor;
@@ -12,7 +12,7 @@ public class MutatingContactsInteractorTest {
     @Test
     void execute() {
         MutatingContactsInputData inputData = new MutatingContactsInputData("test", true);
-        MongoUserDataAccessObject mutatingContactsUserDataAccessInterface = new MongoUserDataAccessObject(
+        MongoSenderUserDataAccessObject mutatingContactsUserDataAccessInterface = new MongoSenderUserDataAccessObject(
                 System.getenv("MONGO_PASSWORD"),
                 new CommonUserFactory()
         );

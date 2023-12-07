@@ -1,20 +1,21 @@
 package app;
 
-import data_access.MongoUserDataAccessObject;
+import data_access.MongoSenderUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
-import services.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewController;
-import services.view_data_sync.update_contacts.interface_adapters.LoadContactsToViewPresenter;
-import services.logged_in.LoggedInViewModel;
-import services.contact_mutation.interface_adapters.MutatingContactsController;
-import services.contact_mutation.interface_adapters.MutatingContactsPresenter;
-import services.view_data_sync.update_contacts.LoadContactsToViewDataAccessInterface;
-import services.view_data_sync.update_contacts.LoadContactsToViewInputBoundary;
-import services.view_data_sync.update_contacts.LoadContactsToViewInteractor;
-import services.view_data_sync.update_contacts.LoadContactsToViewOutputBoundary;
 import services.contact_mutation.MutatingContactsInputBoundary;
 import services.contact_mutation.MutatingContactsInteractor;
 import services.contact_mutation.MutatingContactsOutputBoundary;
 import services.contact_mutation.MutatingContactsUserDataAccessInterface;
+import services.contact_mutation.interface_adapters.MutatingContactsController;
+import services.contact_mutation.interface_adapters.MutatingContactsPresenter;
+import services.logged_in.LoggedInViewModel;
+import services.view_database_sync.update_contacts.LoadContactsToViewDataAccessInterface;
+import services.view_database_sync.update_contacts.LoadContactsToViewInputBoundary;
+import services.view_database_sync.update_contacts.LoadContactsToViewInteractor;
+import services.view_database_sync.update_contacts.LoadContactsToViewOutputBoundary;
+import services.view_database_sync.update_contacts.interface_adapters.LoadContactsToViewController;
+import services.view_database_sync.update_contacts.interface_adapters.LoadContactsToViewPresenter;
+import services.view_database_sync.update_conversation.ConversationViewModel;
 import views.LoggedInView;
 
 /**
@@ -23,13 +24,15 @@ import views.LoggedInView;
 public class LoggedInViewFactory {
 
     public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                                      MongoUserDataAccessObject mongoDataAccessObject) {
+                                      MongoSenderUserDataAccessObject mongoDataAccessObject,
+                                      ConversationViewModel conversationViewModel) {
 
         LoadContactsToViewController loadContactsToViewController =
                 createLoadContactsToViewController(loggedInViewModel, mongoDataAccessObject);
-        MutatingContactsController mutatingContactsController = createMutatingContactsController(loggedInViewModel, mongoDataAccessObject);
+        MutatingContactsController mutatingContactsController = createMutatingContactsController(loggedInViewModel,
+                mongoDataAccessObject);
         return new LoggedInView(loggedInViewModel, viewManagerModel, loadContactsToViewController,
-                mutatingContactsController);
+                mutatingContactsController, conversationViewModel);
 
     }
 
@@ -57,7 +60,8 @@ public class LoggedInViewFactory {
      * @param mongoDataAccessObject the data access object to be used by the controller.
      * @return the controller for the MutatingContacts use case.
      */
-    private static MutatingContactsController createMutatingContactsController(LoggedInViewModel loggedInViewModel, MutatingContactsUserDataAccessInterface mongoDataAccessObject) {
+    private static MutatingContactsController createMutatingContactsController(LoggedInViewModel loggedInViewModel,
+                                                                               MutatingContactsUserDataAccessInterface mongoDataAccessObject) {
 
 
         MutatingContactsOutputBoundary mutatingContactsPresenter =
