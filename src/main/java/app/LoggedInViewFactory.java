@@ -1,35 +1,51 @@
 package app;
 
-import data_access.MongoUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.load_contacts_to_view.LoadContactsToViewController;
-import interface_adapter.load_contacts_to_view.LoadContactsToViewPresenter;
-import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.mutating_contacts.MutatingContactsController;
-import interface_adapter.mutating_contacts.MutatingContactsPresenter;
-import use_case.load_contacts_to_view.LoadContactsToViewDataAccessInterface;
-import use_case.load_contacts_to_view.LoadContactsToViewInputBoundary;
-import use_case.load_contacts_to_view.LoadContactsToViewInteractor;
-import use_case.load_contacts_to_view.LoadContactsToViewOutputBoundary;
-import use_case.mutating_contacts.MutatingContactsInputBoundary;
-import use_case.mutating_contacts.MutatingContactsInteractor;
-import use_case.mutating_contacts.MutatingContactsOutputBoundary;
-import use_case.mutating_contacts.MutatingContactsUserDataAccessInterface;
-import view.LoggedInView;
+import services.contact.add_contact.AddContactDataAccessInterface;
+import services.contact.add_contact.AddContactInputBoundary;
+import services.contact.add_contact.AddContactInteractor;
+import services.contact.add_contact.AddContactOutputBoundary;
+import services.contact.add_contact.interface_adapters.AddContactController;
+import services.contact.add_contact.interface_adapters.AddContactPresenter;
+import services.contact.remove_contact.RemoveContactDataAccessInterface;
+import services.contact.remove_contact.RemoveContactInputBoundary;
+import services.contact.remove_contact.RemoveContactInteractor;
+import services.contact.remove_contact.RemoveContactOutputBoundary;
+import services.contact.remove_contact.interface_adapters.RemoveContactController;
+import services.contact.remove_contact.interface_adapters.RemoveContactPresenter;
+import services.contact.sync_contact_view.SyncContactViewDataAccessInterface;
+import services.contact.sync_contact_view.SyncContactViewInputBoundary;
+import services.contact.sync_contact_view.SyncContactViewInteractor;
+import services.contact.sync_contact_view.SyncContactViewOutputBoundary;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
+import services.contact.sync_contact_view.interface_adapters.SyncContactViewPresenter;
+import services.conversation.interface_adapters.ConversationViewModel;
+import services.logged_in.LoggedInViewModel;
+import views.LoggedInView;
 
 /**
  * Factory responsible for creating the LoggedInView.
  */
 public class LoggedInViewFactory {
 
-    public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                                      MongoUserDataAccessObject mongoDataAccessObject) {
+    public static LoggedInView create(ViewManagerModel viewManagerModel,
+                                      LoggedInViewModel loggedInViewModel,
+                                      ConversationViewModel conversationViewModel,
+                                      SyncContactViewDataAccessInterface loadContactsToViewMongoDataAccessObject,
+                                      AddContactDataAccessInterface addContactMongoDataAccessObject,
+                                      RemoveContactDataAccessInterface removeContactMongoDataAccessObject) {
 
-        LoadContactsToViewController loadContactsToViewController =
-                createLoadContactsToViewController(loggedInViewModel, mongoDataAccessObject);
-        MutatingContactsController mutatingContactsController = createMutatingContactsController(loggedInViewModel, mongoDataAccessObject);
-        return new LoggedInView(loggedInViewModel, viewManagerModel, loadContactsToViewController,
-                mutatingContactsController);
+        SyncContactViewController syncContactViewController =
+                createLoadContactsToViewController(loggedInViewModel, loadContactsToViewMongoDataAccessObject);
+
+        RemoveContactController removeContactController = createRemoveContactController(loggedInViewModel,
+                removeContactMongoDataAccessObject);
+
+        AddContactController addContactController = createAddContactController(loggedInViewModel,
+                addContactMongoDataAccessObject);
+
+        return LoggedInView.getInstance(loggedInViewModel, viewManagerModel, syncContactViewController,
+                addContactController, removeContactController, conversationViewModel);
 
     }
 
@@ -40,15 +56,15 @@ public class LoggedInViewFactory {
      * @param mongoDataAccessObject the data access object to be used by the controller.
      * @return the controller for the LoadContactsToView use case.
      */
-    private static LoadContactsToViewController createLoadContactsToViewController(LoggedInViewModel loggedInViewModel, LoadContactsToViewDataAccessInterface mongoDataAccessObject) {
+    private static SyncContactViewController createLoadContactsToViewController(LoggedInViewModel loggedInViewModel, SyncContactViewDataAccessInterface mongoDataAccessObject) {
 
 
-        LoadContactsToViewOutputBoundary loadContactsToViewPresenter =
-                new LoadContactsToViewPresenter(loggedInViewModel);
-        LoadContactsToViewInputBoundary loadContactsToViewInteractor =
-                new LoadContactsToViewInteractor(loadContactsToViewPresenter, mongoDataAccessObject);
+        SyncContactViewOutputBoundary loadContactsToViewPresenter =
+                new SyncContactViewPresenter(loggedInViewModel);
+        SyncContactViewInputBoundary loadContactsToViewInteractor =
+                new SyncContactViewInteractor(loadContactsToViewPresenter, mongoDataAccessObject);
 
-        return new LoadContactsToViewController(loadContactsToViewInteractor);
+        return new SyncContactViewController(loadContactsToViewInteractor);
     }
 
     /**
@@ -57,14 +73,27 @@ public class LoggedInViewFactory {
      * @param mongoDataAccessObject the data access object to be used by the controller.
      * @return the controller for the MutatingContacts use case.
      */
-    private static MutatingContactsController createMutatingContactsController(LoggedInViewModel loggedInViewModel, MutatingContactsUserDataAccessInterface mongoDataAccessObject) {
+    private static AddContactController createAddContactController(LoggedInViewModel loggedInViewModel,
+                                                                   AddContactDataAccessInterface mongoDataAccessObject) {
 
 
-        MutatingContactsOutputBoundary mutatingContactsPresenter =
-                new MutatingContactsPresenter(loggedInViewModel);
-        MutatingContactsInputBoundary mutatingContactsInteractor =
-                new MutatingContactsInteractor(mongoDataAccessObject, mutatingContactsPresenter);
+        AddContactOutputBoundary addContactPresenter =
+                new AddContactPresenter(loggedInViewModel);
+        AddContactInputBoundary addContactInteractor =
+                new AddContactInteractor(mongoDataAccessObject, addContactPresenter);
 
-        return new MutatingContactsController(mutatingContactsInteractor);
+        return new AddContactController(addContactInteractor);
+    }
+
+    private static RemoveContactController createRemoveContactController(LoggedInViewModel loggedInViewModel,
+                                                                         RemoveContactDataAccessInterface mongoDataAccessObject) {
+
+
+        RemoveContactOutputBoundary removeContactPresenter =
+                new RemoveContactPresenter(loggedInViewModel);
+        RemoveContactInputBoundary removeContactInteractor =
+                new RemoveContactInteractor(mongoDataAccessObject, removeContactPresenter);
+
+        return new RemoveContactController(removeContactInteractor);
     }
 }

@@ -1,18 +1,18 @@
 package app;
 
-import entity.CommonUserFactory;
-import entity.UserFactory;
+import entities.CommonUserFactory;
+import entities.UserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.login.LoginController;
-import interface_adapter.login.LoginPresenter;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupViewModel;
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInteractor;
-import use_case.login.LoginOutputBoundary;
-import use_case.login.LoginUserDataAccessInterface;
-import view.LoginView;
+import services.logged_in.LoggedInViewModel;
+import services.login.interface_adapters.LoginController;
+import services.login.interface_adapters.LoginPresenter;
+import services.login.interface_adapters.LoginViewModel;
+import services.signup.interface_adapters.SignupViewModel;
+import services.login.LoginInputBoundary;
+import services.login.LoginInteractor;
+import services.login.LoginOutputBoundary;
+import services.login.LoginUserDataAccessInterface;
+import views.LoginView;
 
 /**
  * A factory class responsible for creating and initializing components related to the login use case.
