@@ -5,17 +5,14 @@ package services.translate_message;
  */
 public class TranslatorInputData {
     final private String message;
-    final private String targetLanguage;
 
     /**
      * Constructs a new TranslatorInputData with the specified message and target language.
      *
-     * @param message         The message to be translated.
-     * @param targetLanguage  The target language into which the message should be translated.
+     * @param message The message to be translated.
      */
-    public TranslatorInputData(String message, String targetLanguage) {
+    public TranslatorInputData(String message) {
         this.message = message;
-        this.targetLanguage = targetLanguage;
     }
 
     /**
@@ -25,14 +22,5 @@ public class TranslatorInputData {
      */
     public String getMessage() {
         return message;
-    }
-
-    /**
-     * Gets the target language into which the message should be translated.
-     *
-     * @return The target language for translation.
-     */
-    public String getTargetLanguage() {
-        return targetLanguage;
     }
 }

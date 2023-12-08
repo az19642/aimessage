@@ -71,8 +71,8 @@ public class Main {
         views.add(loggedInView, loggedInView.viewName);
 
         ConversationView conversationView = ConversationViewFactory.create(viewManagerModel, conversationViewModel,
-                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, textToSpeechViewModel,
-                replySuggesterViewModel, messageTranslatorViewModel, signupViewModel);
+                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, mongoDataAccessObject,
+                textToSpeechViewModel, replySuggesterViewModel, messageTranslatorViewModel, signupViewModel);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

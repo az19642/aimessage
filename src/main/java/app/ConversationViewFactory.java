@@ -26,6 +26,7 @@ import services.text_to_speech.interface_adapters.TextToSpeechPresenter;
 import services.text_to_speech.interface_adapters.TextToSpeechViewModel;
 import services.translate_message.TranslatorInputBoundary;
 import services.translate_message.TranslatorInteractor;
+import services.translate_message.TranslatorMongoDataAccessInterface;
 import services.translate_message.interface_adapters.MessageTranslatorController;
 import services.translate_message.interface_adapters.MessageTranslatorPresenter;
 import services.translate_message.interface_adapters.MessageTranslatorViewModel;
@@ -38,6 +39,7 @@ public class ConversationViewFactory {
                                           MessageSenderUserDataAccessInterface mongoDataAccessObject,
                                           ConversationSyncDataAccessInterface conversationSyncDataAccessInterface,
                                           GPTDataAccessObject gptDataAccessObject,
+                                          TranslatorMongoDataAccessInterface translatorMongoDataAccessInterface,
                                           TextToSpeechViewModel textToSpeechViewModel,
                                           ReplySuggesterViewModel replySuggesterViewModel,
                                           MessageTranslatorViewModel messageTranslatorViewModel,
@@ -49,7 +51,8 @@ public class ConversationViewFactory {
                         conversationViewModel),
                 createTextToSpeechController(gptDataAccessObject, textToSpeechViewModel, viewManagerModel),
                 createReplySuggesterController(gptDataAccessObject, replySuggesterViewModel, viewManagerModel),
-                createMessageTranslatorController(gptDataAccessObject, messageTranslatorViewModel, viewManagerModel),
+                createMessageTranslatorController(gptDataAccessObject,translatorMongoDataAccessInterface,
+                        messageTranslatorViewModel, viewManagerModel),
                 replySuggesterViewModel,
                 messageTranslatorViewModel,
                 signupViewModel,
@@ -96,11 +99,12 @@ public class ConversationViewFactory {
     }
 
     public static MessageTranslatorController createMessageTranslatorController(
-            GPTDataAccessObject gptDataAccessObject, MessageTranslatorViewModel messageTranslatorViewModel,
+            GPTDataAccessObject gptDataAccessObject, TranslatorMongoDataAccessInterface translatorMongoDataAccessInterface,
+            MessageTranslatorViewModel messageTranslatorViewModel,
             ViewManagerModel viewManagerModel) {
 
         MessageTranslatorPresenter messageTranslatorPresenter = new MessageTranslatorPresenter(viewManagerModel, messageTranslatorViewModel);
-        TranslatorInputBoundary messageTranslatorInteractor = new TranslatorInteractor(gptDataAccessObject,
+        TranslatorInputBoundary messageTranslatorInteractor = new TranslatorInteractor(gptDataAccessObject, translatorMongoDataAccessInterface,
                 messageTranslatorPresenter);
 
         return new MessageTranslatorController(messageTranslatorInteractor);

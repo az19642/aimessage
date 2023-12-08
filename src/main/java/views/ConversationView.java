@@ -104,7 +104,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                     translateMessage.addActionListener(evtPrime -> {
                         SignupState signupState = signupViewModel.getState();
                         String preferredLanguage = signupState.getPreferredLanguage();
-                        messageTranslatorController.execute(selectedMessage, preferredLanguage);
+                        messageTranslatorController.execute(selectedMessage);
 
                         MessageTranslatorState messageTranslatorState = messageTranslatorViewModel.getState();
                         JOptionPane.showMessageDialog(ConversationView.this,

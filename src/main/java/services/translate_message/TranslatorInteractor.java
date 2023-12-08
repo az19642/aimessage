@@ -5,6 +5,7 @@ package services.translate_message;
  */
 public class TranslatorInteractor implements TranslatorInputBoundary {
     final TranslatorDataAccessInterface translatorDataAccessObject;
+    final TranslatorMongoDataAccessInterface translatorMongoDataAccessInterface;
     final TranslatorOutputBoundary translatorPresenter;
 
     /**
@@ -14,8 +15,10 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
      * @param translatorPresenter        The presenter to handle the output of the translation operation.
      */
     public TranslatorInteractor(TranslatorDataAccessInterface translatorDataAccessObject,
+                                TranslatorMongoDataAccessInterface translatorMongoDataAccessInterface,
                                 TranslatorOutputBoundary translatorPresenter) {
         this.translatorDataAccessObject = translatorDataAccessObject;
+        this.translatorMongoDataAccessInterface = translatorMongoDataAccessInterface;
         this.translatorPresenter = translatorPresenter;
     }
 
@@ -27,7 +30,7 @@ public class TranslatorInteractor implements TranslatorInputBoundary {
     @Override
     public void execute(TranslatorInputData translatorInputData) {
         String translatedMessage = translatorDataAccessObject.translate(translatorInputData.getMessage(),
-                translatorInputData.getTargetLanguage());
+                translatorMongoDataAccessInterface.getUser().getPreferredLanguage());
 
         TranslatorOutputData translatorOutputData =
                 new TranslatorOutputData(translatedMessage, false);
