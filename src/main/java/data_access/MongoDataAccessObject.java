@@ -20,6 +20,7 @@ import services.conversation.sync_conversation_view.ConversationSyncDataAccessIn
 import services.login.LoginUserDataAccessInterface;
 import services.send_message.MessageSenderUserDataAccessInterface;
 import services.signup.SignupUserDataAccessInterface;
+import services.translate_message.TranslatorMongoDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -40,7 +41,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDataAccessObject implements SignupUserDataAccessInterface, RemoveContactDataAccessInterface,
         LoginUserDataAccessInterface, AddContactDataAccessInterface, MessageSenderUserDataAccessInterface,
-        SyncContactViewDataAccessInterface, ConversationSyncDataAccessInterface {
+        SyncContactViewDataAccessInterface, ConversationSyncDataAccessInterface, TranslatorMongoDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;

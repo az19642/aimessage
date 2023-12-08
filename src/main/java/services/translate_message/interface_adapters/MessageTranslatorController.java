@@ -22,10 +22,9 @@ public class MessageTranslatorController {
      * Executes a translation request by creating a TranslatorInputData object and invoking the translator use case interactor.
      *
      * @param textToTranslate The text to be translated.
-     * @param targetLanguage  The target language into which the text should be translated.
      */
-    public void execute(String textToTranslate, String targetLanguage) {
-        TranslatorInputData translatorInputData = new TranslatorInputData(textToTranslate, targetLanguage);
+    public void execute(String textToTranslate) {
+        TranslatorInputData translatorInputData = new TranslatorInputData(textToTranslate);
         translatorUseCaseInteractor.execute(translatorInputData);
     }
 }
