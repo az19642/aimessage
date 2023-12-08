@@ -2,8 +2,8 @@ package services.contact.remove_contact.interface_adapters;
 
 
 import services.contact.remove_contact.RemoveContactOutputBoundary;
-import services.logged_in.LoggedInState;
-import services.logged_in.LoggedInViewModel;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 
 /**
  * Presenter responsible for handling the output of the mutating contacts

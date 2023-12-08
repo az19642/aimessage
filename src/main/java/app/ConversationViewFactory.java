@@ -1,109 +1,148 @@
 package app;
 
-import data_access.GPTDataAccessObject;
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
-import services.conversation.sync_conversation_view.ConversationSyncInteractor;
-import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
-import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncPresenter;
-import services.send_message.MessageSenderInputBoundary;
-import services.send_message.MessageSenderInteractor;
-import services.send_message.MessageSenderOutputBoundary;
-import services.send_message.MessageSenderUserDataAccessInterface;
-import services.send_message.interface_adapters.MessageSenderController;
-import services.send_message.interface_adapters.MessageSenderPresenter;
+import services.conversation.send_message.SendMessageDataAccessInterface;
+import services.conversation.send_message.SendMessageInputBoundary;
+import services.conversation.send_message.SendMessageInteractor;
+import services.conversation.send_message.SendMessageOutputBoundary;
+import services.conversation.send_message.interface_adapters.SendMessageController;
+import services.conversation.send_message.interface_adapters.SendSendMessagePresenter;
+import services.conversation.sync_conversation_view.SyncConversationDataAccessInterface;
+import services.conversation.sync_conversation_view.SyncConversationInteractor;
+import services.conversation.sync_conversation_view.interface_adapters.SyncConversationController;
+import services.conversation.sync_conversation_view.interface_adapters.SyncConversationPresenter;
 import services.signup.interface_adapters.SignupViewModel;
-import services.suggest_reply.ReplySuggesterInputBoundary;
-import services.suggest_reply.ReplySuggesterInteractor;
-import services.suggest_reply.interface_adapters.ReplySuggesterController;
-import services.suggest_reply.interface_adapters.ReplySuggesterPresenter;
-import services.suggest_reply.interface_adapters.ReplySuggesterViewModel;
+import services.suggest_reply.SuggestReplyDataAccessInterface;
+import services.suggest_reply.SuggestReplyInputBoundary;
+import services.suggest_reply.SuggestReplyInteractor;
+import services.suggest_reply.interface_adapters.SuggestReplyController;
+import services.suggest_reply.interface_adapters.SuggestReplyViewModel;
+import services.suggest_reply.interface_adapters.SuggestSuggestReplyPresenter;
+import services.text_to_speech.TextToSpeechDataAccessInterface;
 import services.text_to_speech.TextToSpeechInputBoundary;
 import services.text_to_speech.TextToSpeechInteractor;
 import services.text_to_speech.interface_adapters.TextToSpeechController;
 import services.text_to_speech.interface_adapters.TextToSpeechPresenter;
 import services.text_to_speech.interface_adapters.TextToSpeechViewModel;
-import services.translate_message.TranslatorInputBoundary;
-import services.translate_message.TranslatorInteractor;
-import services.translate_message.interface_adapters.MessageTranslatorController;
-import services.translate_message.interface_adapters.MessageTranslatorPresenter;
-import services.translate_message.interface_adapters.MessageTranslatorViewModel;
+import services.translate_message.TranslateMessageDataAccessInterface;
+import services.translate_message.TranslateMessageInputBoundary;
+import services.translate_message.TranslateMessageInteractor;
+import services.translate_message.interface_adapters.TranslateMessageController;
+import services.translate_message.interface_adapters.TranslateMessagePresenter;
+import services.translate_message.interface_adapters.TranslateMessageViewModel;
 import views.ConversationView;
-import views.SignupView;
 
+/**
+ * Factory for creating the conversation view.
+ */
 public class ConversationViewFactory {
+
+    private ConversationViewFactory() {
+    }
+
+    /**
+     * Creates a new instance of the conversation view.
+     *
+     * @param viewManagerModel                    The view manager model.
+     * @param conversationViewModel               The conversation view model.
+     * @param sendMessageDataAccessInterface      The data access object for sending messages.
+     * @param syncConversationDataAccessInterface The data access object for syncing conversations.
+     * @param textToSpeechDataAccessInterface     The data access object for text to speech.
+     * @param suggestReplyDataAccessInterface     The data access object for suggesting replies.
+     * @param translateMessageDataAccessInterface The data access object for translating messages.
+     * @param textToSpeechViewModel               The text to speech view model.
+     * @param suggestReplyViewModel               The suggest reply view model.
+     * @param translateMessageViewModel           The translate message view model.
+     * @param signupViewModel                     The signup view model.
+     * @return The conversation view.
+     */
     public static ConversationView create(ViewManagerModel viewManagerModel,
                                           ConversationViewModel conversationViewModel,
-                                          MessageSenderUserDataAccessInterface mongoDataAccessObject,
-                                          ConversationSyncDataAccessInterface conversationSyncDataAccessInterface,
-                                          GPTDataAccessObject gptDataAccessObject,
+                                          SendMessageDataAccessInterface sendMessageDataAccessInterface,
+                                          SyncConversationDataAccessInterface syncConversationDataAccessInterface,
+                                          TextToSpeechDataAccessInterface textToSpeechDataAccessInterface,
+                                          SuggestReplyDataAccessInterface suggestReplyDataAccessInterface,
+                                          TranslateMessageDataAccessInterface translateMessageDataAccessInterface,
                                           TextToSpeechViewModel textToSpeechViewModel,
-                                          ReplySuggesterViewModel replySuggesterViewModel,
-                                          MessageTranslatorViewModel messageTranslatorViewModel,
+                                          SuggestReplyViewModel suggestReplyViewModel,
+                                          TranslateMessageViewModel translateMessageViewModel,
                                           SignupViewModel signupViewModel) {
+        SendMessageController sendMessageController = createSendMessageController(sendMessageDataAccessInterface);
 
-        return ConversationView.getInstance(conversationViewModel,
-                createSendMessageController(mongoDataAccessObject),
-                createConversationSyncController(conversationSyncDataAccessInterface,
-                        conversationViewModel),
-                createTextToSpeechController(gptDataAccessObject, textToSpeechViewModel, viewManagerModel),
-                createReplySuggesterController(gptDataAccessObject, replySuggesterViewModel, viewManagerModel),
-                createMessageTranslatorController(gptDataAccessObject, messageTranslatorViewModel, viewManagerModel),
-                replySuggesterViewModel,
-                messageTranslatorViewModel,
-                signupViewModel,
-                viewManagerModel);
+        SyncConversationController syncConversationController = createSyncConversationController(
+                syncConversationDataAccessInterface, conversationViewModel);
+
+        TextToSpeechController textToSpeechController = createTextToSpeechController(textToSpeechDataAccessInterface,
+                textToSpeechViewModel, viewManagerModel);
+
+        SuggestReplyController suggestReplyController = createSuggestReplyController(suggestReplyDataAccessInterface,
+                suggestReplyViewModel, viewManagerModel);
+
+        TranslateMessageController translateMessageController = createTranslateMessageController(
+                translateMessageDataAccessInterface, translateMessageViewModel, viewManagerModel);
+
+        return ConversationView.getInstance(conversationViewModel, sendMessageController, syncConversationController,
+                textToSpeechController, suggestReplyController, translateMessageController, suggestReplyViewModel,
+                translateMessageViewModel, signupViewModel, viewManagerModel);
     }
 
-    public static MessageSenderController createSendMessageController(MessageSenderUserDataAccessInterface mongoDataAccessObject) {
-        MessageSenderOutputBoundary sendMessagePresenter = new MessageSenderPresenter();
-        MessageSenderInputBoundary sendMessageInteractor = new MessageSenderInteractor(mongoDataAccessObject,
+    private static SendMessageController createSendMessageController(
+            SendMessageDataAccessInterface sendMessageDataAccessInterface) {
+        SendMessageOutputBoundary sendMessagePresenter = new SendSendMessagePresenter();
+
+        SendMessageInputBoundary sendMessageInteractor = new SendMessageInteractor(sendMessageDataAccessInterface,
                 sendMessagePresenter);
-        return new MessageSenderController(sendMessageInteractor);
+        return new SendMessageController(sendMessageInteractor);
     }
 
-    public static ConversationSyncController createConversationSyncController(
-            ConversationSyncDataAccessInterface mongoDataAccessObject, ConversationViewModel conversationViewModel) {
+    private static SyncConversationController createSyncConversationController(
+            SyncConversationDataAccessInterface syncConversationDataAccessInterface,
+            ConversationViewModel conversationViewModel) {
 
-        ConversationSyncPresenter conversationSyncPresenter = new ConversationSyncPresenter(conversationViewModel);
-        ConversationSyncInteractor conversationSyncInteractor = new ConversationSyncInteractor(mongoDataAccessObject,
-                conversationSyncPresenter);
+        SyncConversationPresenter syncConversationPresenter = new SyncConversationPresenter(conversationViewModel);
 
-        return new ConversationSyncController(conversationSyncInteractor);
+        SyncConversationInteractor conversationSyncInteractor = new SyncConversationInteractor(
+                syncConversationDataAccessInterface, syncConversationPresenter);
+
+        return new SyncConversationController(conversationSyncInteractor);
     }
 
-    public static TextToSpeechController createTextToSpeechController(
-            GPTDataAccessObject gptDataAccessObject, TextToSpeechViewModel textToSpeechViewModel,
-            ViewManagerModel viewManagerModel) {
+    private static TextToSpeechController createTextToSpeechController(
+            TextToSpeechDataAccessInterface textToSpeechDataAccessInterface,
+            TextToSpeechViewModel textToSpeechViewModel, ViewManagerModel viewManagerModel) {
 
-        TextToSpeechPresenter textToSpeechPresenter = new TextToSpeechPresenter(viewManagerModel, textToSpeechViewModel);
-        TextToSpeechInputBoundary textToSpeechInteractor = new TextToSpeechInteractor(gptDataAccessObject,
+        TextToSpeechPresenter textToSpeechPresenter = new TextToSpeechPresenter(viewManagerModel,
+                textToSpeechViewModel);
+
+        TextToSpeechInputBoundary textToSpeechInteractor = new TextToSpeechInteractor(textToSpeechDataAccessInterface,
                 textToSpeechPresenter);
 
         return new TextToSpeechController(textToSpeechInteractor);
     }
 
-    public static ReplySuggesterController createReplySuggesterController(
-            GPTDataAccessObject gptDataAccessObject, ReplySuggesterViewModel replySuggesterViewModel,
-            ViewManagerModel viewManagerModel) {
+    private static SuggestReplyController createSuggestReplyController(
+            SuggestReplyDataAccessInterface suggestReplyDataAccessInterface,
+            SuggestReplyViewModel suggestReplyViewModel, ViewManagerModel viewManagerModel) {
 
-        ReplySuggesterPresenter replySuggesterPresenter = new ReplySuggesterPresenter(replySuggesterViewModel, viewManagerModel);
-        ReplySuggesterInputBoundary replySuggesterInteractor = new ReplySuggesterInteractor(gptDataAccessObject,
-                replySuggesterPresenter);
+        SuggestSuggestReplyPresenter suggestReplyPresenter = new SuggestSuggestReplyPresenter(suggestReplyViewModel,
+                viewManagerModel);
+        SuggestReplyInputBoundary replySuggesterInteractor = new SuggestReplyInteractor(suggestReplyDataAccessInterface,
+                suggestReplyPresenter);
 
-        return new ReplySuggesterController(replySuggesterInteractor);
+        return new SuggestReplyController(replySuggesterInteractor);
     }
 
-    public static MessageTranslatorController createMessageTranslatorController(
-            GPTDataAccessObject gptDataAccessObject, MessageTranslatorViewModel messageTranslatorViewModel,
-            ViewManagerModel viewManagerModel) {
+    private static TranslateMessageController createTranslateMessageController(
+            TranslateMessageDataAccessInterface translateMessageDataAccessInterface,
+            TranslateMessageViewModel translateMessageViewModel, ViewManagerModel viewManagerModel) {
 
-        MessageTranslatorPresenter messageTranslatorPresenter = new MessageTranslatorPresenter(viewManagerModel, messageTranslatorViewModel);
-        TranslatorInputBoundary messageTranslatorInteractor = new TranslatorInteractor(gptDataAccessObject,
-                messageTranslatorPresenter);
+        TranslateMessagePresenter messageTranslatorPresenter = new TranslateMessagePresenter(viewManagerModel,
+                translateMessageViewModel);
+        TranslateMessageInputBoundary messageTranslatorInteractor = new TranslateMessageInteractor(
+                translateMessageDataAccessInterface, messageTranslatorPresenter);
 
-        return new MessageTranslatorController(messageTranslatorInteractor);
+        return new TranslateMessageController(messageTranslatorInteractor);
     }
 
 }

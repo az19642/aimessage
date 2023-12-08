@@ -19,7 +19,8 @@ public class TextToSpeechState {
     /**
      * Constructs a new TextToSpeechState with default values.
      */
-    public TextToSpeechState() {}
+    public TextToSpeechState() {
+    }
 
     /**
      * Gets the text-to-speech error message.
@@ -46,8 +47,6 @@ public class TextToSpeechState {
      */
     @Override
     public String toString() {
-        return "textToSpeechState{" +
-                "textToSpeechError='" + textToSpeechError + '\'' +
-                '}';
+        return "textToSpeechState{" + "textToSpeechError='" + textToSpeechError + '\'' + '}';
     }
 }

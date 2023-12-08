@@ -3,7 +3,6 @@ package services.login;
 import entities.CommonUserFactory;
 import entities.User;
 import entities.UserFactory;
-import services.login.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ class LoginInteractorTest {
         UserFactory userFactory = new CommonUserFactory();
 
         // Create a mock data access interface that returns a user with the given username and password.
-        LoginUserDataAccessInterface userDataAccessInterface = new LoginUserDataAccessInterface() {
+        LoginDataAccessInterface userDataAccessInterface = new LoginDataAccessInterface() {
             @Override
             public void setUser(String username, String password) {
 
@@ -32,13 +31,7 @@ class LoginInteractorTest {
 
             @Override
             public User getUser() {
-                return userFactory.create(
-                        "andy123",
-                        "password123",
-                        "English",
-                        LocalDateTime.now(),
-                        new ArrayList<>()
-                );
+                return userFactory.create("andy123", "password123", "English", LocalDateTime.now(), new ArrayList<>());
             }
         };
 
@@ -69,7 +62,7 @@ class LoginInteractorTest {
         UserFactory userFactory = new CommonUserFactory();
 
         // Create a mock data access interface that returns null when the username is queried.
-        LoginUserDataAccessInterface userDataAccessInterface = new LoginUserDataAccessInterface() {
+        LoginDataAccessInterface userDataAccessInterface = new LoginDataAccessInterface() {
             @Override
             public void setUser(String username, String password) {
 

@@ -1,6 +1,6 @@
 package services.text_to_speech.interface_adapters;
 
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.text_to_speech.TextToSpeechOutputBoundary;
 import services.text_to_speech.TextToSpeechOutputData;
 
@@ -15,11 +15,10 @@ public class TextToSpeechPresenter implements TextToSpeechOutputBoundary {
     /**
      * Constructs a new TextToSpeechPresenter.
      *
-     * @param viewManagerModel         The view manager model to interact with the application's views.
-     * @param textToSpeechViewModel    The view model for text-to-speech functionality.
+     * @param viewManagerModel      The view manager model to interact with the application's views.
+     * @param textToSpeechViewModel The view model for text-to-speech functionality.
      */
-    public TextToSpeechPresenter(ViewManagerModel viewManagerModel,
-                                 TextToSpeechViewModel textToSpeechViewModel) {
+    public TextToSpeechPresenter(ViewManagerModel viewManagerModel, TextToSpeechViewModel textToSpeechViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.textToSpeechViewModel = textToSpeechViewModel;
     }

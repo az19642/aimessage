@@ -1,7 +1,6 @@
 package services.contact.remove_contact.interface_adapters;
 
 
-import services.contact.add_contact.AddContactInputBoundary;
 import services.contact.remove_contact.RemoveContactInputBoundary;
 import services.contact.remove_contact.RemoveContactInputData;
 

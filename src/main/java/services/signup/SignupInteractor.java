@@ -10,13 +10,12 @@ import java.util.ArrayList;
  * Implements the signup use case by interacting with the data layer and presenting the result.
  */
 public class SignupInteractor implements SignupInputBoundary {
-    final SignupUserDataAccessInterface userDataAccessObject;
+    final SignupDataAccessInterface userDataAccessObject;
     final SignupOutputBoundary userPresenter;
     final UserFactory userFactory;
 
-    public SignupInteractor(SignupUserDataAccessInterface signupDataAccessInterface,
-                            SignupOutputBoundary signupOutputBoundary,
-                            UserFactory userFactory) {
+    public SignupInteractor(SignupDataAccessInterface signupDataAccessInterface,
+                            SignupOutputBoundary signupOutputBoundary, UserFactory userFactory) {
         this.userDataAccessObject = signupDataAccessInterface;
         this.userPresenter = signupOutputBoundary;
         this.userFactory = userFactory;

@@ -3,23 +3,22 @@ package app;
 import data_access.GPTDataAccessObject;
 import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
-import services.logged_in.LoggedInViewModel;
+import services.generate_password.interface_adapters.GeneratePasswordViewModel;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 import services.login.interface_adapters.LoginViewModel;
-import services.password_generation.interface_adapters.PasswordGeneratorViewModel;
-import services.send_message.MessageSenderUserDataAccessInterface;
 import services.signup.interface_adapters.SignupViewModel;
-import services.suggest_reply.interface_adapters.ReplySuggesterViewModel;
+import services.suggest_reply.interface_adapters.SuggestReplyViewModel;
 import services.text_to_speech.interface_adapters.TextToSpeechViewModel;
-import services.translate_message.interface_adapters.MessageTranslatorViewModel;
+import services.translate_message.interface_adapters.TranslateMessageViewModel;
 import views.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
+
     public static void main(String[] args) {
         // The main application window.
         JFrame application = new JFrame("AiMessage");
@@ -35,44 +34,41 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-        // The data for the views, such as username and password, are in the ViewModels.
-        // This information will be changed by a presenter object that is reporting the
-        // results from the use case. The ViewModels are observable, and will
-        // be observed by the Views.
+        // The data for the views are in the ViewModels.
+        // This information will be changed by a presenter object that is reporting the results from the use case.
+        // The ViewModels are observable, and will be observed by the Views.
 
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
-        PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
+        GeneratePasswordViewModel generatePasswordViewModel = new GeneratePasswordViewModel();
         ConversationViewModel conversationViewModel = new ConversationViewModel();
         TextToSpeechViewModel textToSpeechViewModel = new TextToSpeechViewModel();
-        ReplySuggesterViewModel replySuggesterViewModel = new ReplySuggesterViewModel();
-        MessageTranslatorViewModel messageTranslatorViewModel = new MessageTranslatorViewModel();
+        SuggestReplyViewModel suggestReplyViewModel = new SuggestReplyViewModel();
+        TranslateMessageViewModel translateMessageViewModel = new TranslateMessageViewModel();
 
-        MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(
-                System.getenv("MONGO_PASSWORD"),
-                new CommonUserFactory()
-        );
+        MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(System.getenv("MONGO_PASSWORD"),
+                new CommonUserFactory());
 
         GPTDataAccessObject gptDataAccessObject;
         gptDataAccessObject = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
-        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                mongoDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
+        SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                generatePasswordViewModel, mongoDataAccessObject, gptDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+        LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(viewManagerModel, loggedInViewModel,
-                conversationViewModel,
-                mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
+                conversationViewModel, mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         ConversationView conversationView = ConversationViewFactory.create(viewManagerModel, conversationViewModel,
-                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, textToSpeechViewModel,
-                replySuggesterViewModel, messageTranslatorViewModel, signupViewModel);
+                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, gptDataAccessObject,
+                gptDataAccessObject, textToSpeechViewModel, suggestReplyViewModel, translateMessageViewModel,
+                signupViewModel);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);

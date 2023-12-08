@@ -16,10 +16,10 @@ import org.bson.types.ObjectId;
 import services.contact.add_contact.AddContactDataAccessInterface;
 import services.contact.remove_contact.RemoveContactDataAccessInterface;
 import services.contact.sync_contact_view.SyncContactViewDataAccessInterface;
-import services.conversation.sync_conversation_view.ConversationSyncDataAccessInterface;
-import services.login.LoginUserDataAccessInterface;
-import services.send_message.MessageSenderUserDataAccessInterface;
-import services.signup.SignupUserDataAccessInterface;
+import services.conversation.send_message.SendMessageDataAccessInterface;
+import services.conversation.sync_conversation_view.SyncConversationDataAccessInterface;
+import services.login.LoginDataAccessInterface;
+import services.signup.SignupDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,9 +38,10 @@ import static com.mongodb.client.model.Filters.eq;
  * The Conversation collection has a field which is a list of message ids in order from oldest to newest message
  */
 
-public class MongoDataAccessObject implements SignupUserDataAccessInterface, RemoveContactDataAccessInterface,
-        LoginUserDataAccessInterface, AddContactDataAccessInterface, MessageSenderUserDataAccessInterface,
-        SyncContactViewDataAccessInterface, ConversationSyncDataAccessInterface {
+public class MongoDataAccessObject
+        implements SignupDataAccessInterface, RemoveContactDataAccessInterface, LoginDataAccessInterface,
+        AddContactDataAccessInterface, SendMessageDataAccessInterface, SyncContactViewDataAccessInterface,
+        SyncConversationDataAccessInterface {
     private final MongoCollection<Document> userRecords;
     private final MongoCollection<Document> conversationRecords;
     private final MongoCollection<Document> messageRecords;
@@ -52,8 +53,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
     public MongoDataAccessObject(String adminPassword, UserFactory userFactory) {
         String uri = String.format(
                 "mongodb+srv://langAdmin:%s@languality.a8dkfut.mongodb.net/?retryWrites=true&w=majority",
-                adminPassword
-        );
+                adminPassword);
 
         this.userFactory = userFactory;
         this.contactFactory = new ContactFactory();
@@ -83,12 +83,9 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
     @Override
     public void save(User user) {
 
-        Document userDocument = new Document()
-                .append("name", user.getName())
-                .append("password", user.getPassword())
-                .append("preferredLanguage", user.getPreferredLanguage())
-                .append("creationTime", LocalDateTime.now())
-                .append("contactToChatID", new HashMap<>());
+        Document userDocument = new Document().append("name", user.getName()).append("password",
+                user.getPassword()).append("preferredLanguage", user.getPreferredLanguage()).append("creationTime",
+                LocalDateTime.now()).append("contactToChatID", new HashMap<>());
 
         userRecords.insertOne(userDocument);
 
@@ -140,8 +137,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
         Object contactToChatIDOfContactdb = contact.get("contactToChatID");
         Object contactToChatIDOfUserdb = userDB.get("contactToChatID");
 
-        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument
-                && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
+        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
 
             // Convert the BSON Document back to a HashMap
             HashMap<String, Object> contactToChatIDOfContact = new HashMap<>(contactsOfContactDocument);
@@ -166,8 +162,9 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
             updateContactsDB(contactToChatIDOfUser, userDB);
 
             // Update to the in memory list of contacts
-            user.getContacts().add(contactFactory.create(contactName,
-                    contact.getString("preferredLanguage"), LocalDateTime.now(), new ArrayList<>()));
+            user.getContacts().add(
+                    contactFactory.create(contactName, contact.getString("preferredLanguage"), LocalDateTime.now(),
+                            new ArrayList<>()));
 
             return "PASS";
 
@@ -185,9 +182,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
     private void updateContactsDB(HashMap<String, Object> contactToChatID, Document user) {
 
         // Creates instructions to update the contact to chat id field
-        Bson updates = Updates.combine(
-                Updates.set("contactToChatID", contactToChatID)
-        );
+        Bson updates = Updates.combine(Updates.set("contactToChatID", contactToChatID));
 
         // Instructs the driver to insert a new document if none match the query
         UpdateOptions options = new UpdateOptions().upsert(true);
@@ -224,16 +219,15 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
         Object contactToChatIDOfContactdb = contact.get("contactToChatID");
         Object contactToChatIDOfUserdb = userDB.get("contactToChatID");
 
-        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument
-                && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
+        if (contactToChatIDOfContactdb instanceof Document contactsOfContactDocument && contactToChatIDOfUserdb instanceof Document contactsOfUserDocument) {
 
             // Convert the BSON Document back to a HashMap
             HashMap<String, Object> contactToChatIDOfContact = new HashMap<>(contactsOfContactDocument);
             HashMap<String, Object> contactToChatIDOfUser = new HashMap<>(contactsOfUserDocument);
 
             // Add conversation to database and fetch its ID
-            removeConversation(conversationRecords.find(eq("_id",
-                    contactToChatIDOfContact.get(user.getName()))).first());
+            removeConversation(
+                    conversationRecords.find(eq("_id", contactToChatIDOfContact.get(user.getName()))).first());
 
             contactToChatIDOfContact.remove(user.getName());
             contactToChatIDOfUser.remove(contactEntity.getName());
@@ -255,9 +249,8 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
      * @return The id associated with the newly added entry
      */
     private ObjectId addConversation() {
-        Document convoDoc = new Document()
-                .append("messagesIDs", new ArrayList<>())
-                .append("lastMessageTime", LocalDateTime.now());
+        Document convoDoc = new Document().append("messagesIDs", new ArrayList<>()).append("lastMessageTime",
+                LocalDateTime.now());
 
         return conversationRecords.insertOne(convoDoc).getInsertedId().asObjectId().getValue();
 
@@ -294,8 +287,7 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
             // This will also return the ID associated with it
             ObjectId id = addMessage(messageContent);
 
-            Document conversation = conversationRecords.find(eq("_id",
-                    mapContactToChatID.get(contactName))).first();
+            Document conversation = conversationRecords.find(eq("_id", mapContactToChatID.get(contactName))).first();
 
             // List of message ids between the current contact and the user
             List<ObjectId> messagesIDs = conversation.getList("messagesIDs", ObjectId.class);
@@ -329,10 +321,8 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
         Bson filter = Filters.eq("_id", conversationId);
 
         // Creates instructions to update the contact to chat id field
-        Bson updates = Updates.combine(
-                Updates.set("messagesIDs", messageIDs),
-                Updates.set("lastMessageTime", LocalDateTime.now())
-        );
+        Bson updates = Updates.combine(Updates.set("messagesIDs", messageIDs),
+                Updates.set("lastMessageTime", LocalDateTime.now()));
 
         // Instructs the driver to insert a new document if none match the query
         UpdateOptions options = new UpdateOptions().upsert(true);
@@ -353,10 +343,8 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
      * @return the ID of the new entry
      */
     private ObjectId addMessage(String content) {
-        Document messageDoc = new Document()
-                .append("content", content)
-                .append("sender", user.getName())
-                .append("messageTime", LocalDateTime.now());
+        Document messageDoc = new Document().append("content", content).append("sender", user.getName()).append(
+                "messageTime", LocalDateTime.now());
 
         return messageRecords.insertOne(messageDoc).getInsertedId().asObjectId().getValue();
 
@@ -404,17 +392,19 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
                     // Iterates over all message Ids finding the message and converting it to the message entity
                     for (ObjectId messageID : messagesIDs) {
                         Document messageDoc = messageRecords.find(eq("_id", messageID)).first();
-                        messages.add(messageFactory.create(messageDoc.getString("content"),
-                                messageDoc.getString("sender"), messageDoc.getDate("messageTime").toInstant().
-                                        atZone(ZoneId.systemDefault()).toLocalDateTime()));
+                        messages.add(
+                                messageFactory.create(messageDoc.getString("content"), messageDoc.getString("sender"),
+                                        messageDoc.getDate("messageTime").toInstant().atZone(
+                                                ZoneId.systemDefault()).toLocalDateTime()));
                     }
 
-                    LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().
-                            atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    LocalDateTime lastMessageTime = convoDoc.getDate("lastMessageTime").toInstant().atZone(
+                            ZoneId.systemDefault()).toLocalDateTime();
 
                     // Combining all the efforts now to create a contact
-                    contacts.add(contactFactory.create(contact, contactDoc.getString("preferredLanguage"),
-                            lastMessageTime, messages));
+                    contacts.add(
+                            contactFactory.create(contact, contactDoc.getString("preferredLanguage"), lastMessageTime,
+                                    messages));
 
                 }
             } else {
@@ -423,10 +413,9 @@ public class MongoDataAccessObject implements SignupUserDataAccessInterface, Rem
             }
 
             // Creates the user getting the string and date information
-            this.user = userFactory.create(name, password,
-                    dbUser.getString("preferredLanguage"), dbUser.getDate("creationTime").toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime(), contacts);
+            this.user = userFactory.create(name, password, dbUser.getString("preferredLanguage"),
+                    dbUser.getDate("creationTime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    contacts);
         }
     }
 

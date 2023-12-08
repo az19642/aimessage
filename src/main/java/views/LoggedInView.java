@@ -1,13 +1,13 @@
 package views;
 
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.contact.add_contact.interface_adapters.AddContactController;
 import services.contact.remove_contact.interface_adapters.RemoveContactController;
 import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.logged_in.LoggedInState;
-import services.logged_in.LoggedInViewModel;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,9 +22,8 @@ import java.util.Map;
  * Displays user information and provides a logout button.
  */
 public class LoggedInView extends JPanel implements PropertyChangeListener {
-    public final String viewName = "logged in";
-
     private static LoggedInView instance;
+    public final String viewName = "logged in";
     private final JButton addButton;
     private final JButton syncButton;
     private final JTextField contactInputField = new JTextField(15);
@@ -37,21 +36,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final Font helveticaFontFifteen = new Font("Helvetica", Font.BOLD, 15);
     private final ConversationViewModel conversationViewModel;
 
-    /**
-     * Creates a new LoggedInView.
-     *
-     * @param loggedInViewModel         The ViewModel to be updated by the view.
-     * @param viewManagerModel          The ViewManagerModel to be updated by the view.
-     * @param syncContactViewController The controller for the LoadContactsToView use case.
-     * @param addContactController      The controller for the AddContact use case.
-     * @param removeContactController   The controller for the RemoveContact use case.
-     */
-    private LoggedInView(LoggedInViewModel loggedInViewModel,
-                         ViewManagerModel viewManagerModel,
-                         SyncContactViewController syncContactViewController,
-                         AddContactController addContactController,
-                         RemoveContactController removeContactController,
-                         ConversationViewModel conversationViewModel) {
+    private LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
+                         SyncContactViewController syncContactViewController, AddContactController addContactController,
+                         RemoveContactController removeContactController, ConversationViewModel conversationViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
         this.conversationViewModel = conversationViewModel;
@@ -145,30 +132,26 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.add(buttons, BorderLayout.SOUTH);
     }
 
-    private static class ContactToLastMessageCellRenderer extends JLabel
-            implements ListCellRenderer<Map.Entry<String, String>> {
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Map.Entry<String, String>> list,
-                                                      Map.Entry<String, String> contact, int index,
-                                                      boolean isSelected, boolean cellHasFocus) {
-            String cellText = String.format("<html><div style='margin: 5px;'><p> <b>%s</b> " +
-                    "</p><p>%s</p></div></html>", contact.getKey(), contact.getValue());
-            setText(cellText);
-            customizeCellAppearance(list, isSelected);
-            return this;
+    /**
+     * Returns the singleton instance of the LoggedInView class.
+     *
+     * @param loggedInViewModel         The LoggedInViewModel to be used by the view.
+     * @param viewManagerModel          The ViewManagerModel to be used by the view.
+     * @param syncContactViewController The SyncContactViewController to be used by the view.
+     * @param addContactController      The AddContactController to be used by the view.
+     * @param removeContactController   The RemoveContactController to be used by the view.
+     * @return The singleton instance of the LoggedInView class.
+     */
+    public static LoggedInView getInstance(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
+                                           SyncContactViewController syncContactViewController,
+                                           AddContactController addContactController,
+                                           RemoveContactController removeContactController,
+                                           ConversationViewModel conversationViewModel) {
+        if (instance == null) {
+            instance = new LoggedInView(loggedInViewModel, viewManagerModel, syncContactViewController,
+                    addContactController, removeContactController, conversationViewModel);
         }
-
-        private void customizeCellAppearance(JList<?> list, boolean isSelected) {
-            setOpaque(true);
-            setFont(new Font("Arial", Font.PLAIN, 14));
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-        }
+        return instance;
     }
 
     /**
@@ -201,25 +184,36 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     public JButton getAddButton() {
         return addButton;
     }
+
     public JButton getSyncButton() {
         return syncButton;
     }
 
-    public static LoggedInView getInstance(LoggedInViewModel loggedInViewModel,
-                                           ViewManagerModel viewManagerModel,
-                                           SyncContactViewController syncContactViewController,
-                                           AddContactController addContactController,
-                                           RemoveContactController removeContactController,
-                                           ConversationViewModel conversationViewModel) {
-        if (instance == null) {
-            instance = new LoggedInView(loggedInViewModel,
-                    viewManagerModel,
-                    syncContactViewController,
-                    addContactController,
-                    removeContactController,
-                    conversationViewModel);
+    private static class ContactToLastMessageCellRenderer extends JLabel
+            implements ListCellRenderer<Map.Entry<String, String>> {
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Map.Entry<String, String>> list,
+                                                      Map.Entry<String, String> contact, int index, boolean isSelected,
+                                                      boolean cellHasFocus) {
+            String cellText = String.format(
+                    "<html><div style='margin: 5px;'><p> <b>%s</b> " + "</p><p>%s</p></div></html>", contact.getKey(),
+                    contact.getValue());
+            setText(cellText);
+            customizeCellAppearance(list, isSelected);
+            return this;
         }
-        return instance;
+
+        private void customizeCellAppearance(JList<?> list, boolean isSelected) {
+            setOpaque(true);
+            setFont(new Font("Arial", Font.PLAIN, 14));
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+        }
     }
 
 }

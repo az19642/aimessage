@@ -147,28 +147,36 @@ public class SignupState {
      *
      * @return The preferred language entered during signup.
      */
-    public String getPreferredLanguage() {return preferredLanguage;}
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
 
     /**
      * Sets the preferred language entered during signup.
      *
      * @param preferredLanguage The new preferred language to be set.
      */
-    public void setPreferredLanguage(String preferredLanguage) {this.preferredLanguage = preferredLanguage;}
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
 
     /**
      * Gets the error message related to the preferred language during signup.
      *
      * @return The error message related to the preferred language during signup.
      */
-    public String getPreferredLanguageError() {return preferredLanguageError;}
+    public String getPreferredLanguageError() {
+        return preferredLanguageError;
+    }
 
     /**
      * Sets the error message related to the preferred language during signup.
      *
      * @param preferredLanguageError The new error message to be set.
      */
-    public void setPreferredLanguageError(String preferredLanguageError) {this.preferredLanguageError = preferredLanguageError;}
+    public void setPreferredLanguageError(String preferredLanguageError) {
+        this.preferredLanguageError = preferredLanguageError;
+    }
 
     /**
      * Provides a string representation of the SignupState for debugging purposes.
@@ -177,10 +185,6 @@ public class SignupState {
      */
     @Override
     public String toString() {
-        return "SignupState{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", repeatPassword='" + repeatPassword + '\'' +
-                '}';
+        return "SignupState{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", repeatPassword='" + repeatPassword + '\'' + '}';
     }
 }

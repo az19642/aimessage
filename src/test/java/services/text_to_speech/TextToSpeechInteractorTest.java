@@ -1,10 +1,10 @@
 package services.text_to_speech;
 
 import data_access.GPTDataAccessObject;
-import services.text_to_speech.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class TextToSpeechInteractorTest {
 
@@ -12,8 +12,8 @@ class TextToSpeechInteractorTest {
     void successTest() {
         String message = "This is a test.";
         TextToSpeechInputData inputData = new TextToSpeechInputData(message);
-        TextToSpeechDataAccessInterface textToSpeechDataAccessInterface =
-                new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
+        TextToSpeechDataAccessInterface textToSpeechDataAccessInterface = new GPTDataAccessObject(
+                System.getenv("OPENAI_API_KEY"));
 
         TextToSpeechOutputBoundary successPresenter = new TextToSpeechOutputBoundary() {
             @Override
@@ -27,8 +27,8 @@ class TextToSpeechInteractorTest {
             }
         };
 
-        TextToSpeechInputBoundary interactor =
-                new TextToSpeechInteractor(textToSpeechDataAccessInterface, successPresenter);
+        TextToSpeechInputBoundary interactor = new TextToSpeechInteractor(textToSpeechDataAccessInterface,
+                successPresenter);
         interactor.execute(inputData);
     }
 }

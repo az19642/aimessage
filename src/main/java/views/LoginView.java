@@ -1,13 +1,8 @@
 package views;
 
-import interface_adapter.ViewManagerModel;
-import services.contact.add_contact.interface_adapters.AddContactController;
-import services.contact.remove_contact.interface_adapters.RemoveContactController;
-import services.contact.sync_contact_view.interface_adapters.SyncContactViewController;
-import services.conversation.interface_adapters.ConversationViewModel;
-import services.logged_in.LoggedInViewModel;
-import services.login.interface_adapters.LoginController;
+import interface_adapters.ViewManagerModel;
 import services.login.LoginState;
+import services.login.interface_adapters.LoginController;
 import services.login.interface_adapters.LoginViewModel;
 import services.signup.interface_adapters.SignupViewModel;
 
@@ -24,9 +19,8 @@ import java.beans.PropertyChangeListener;
  */
 public class LoginView extends JPanel implements PropertyChangeListener {
 
-    public final String viewName = "log in";
-
     private static LoginView instance;
+    public final String viewName = "log in";
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JButton logIn;
@@ -40,16 +34,8 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
     private final Font helveticaFontFourteen = new Font("Helvetica", Font.PLAIN, 14);
 
-    /**
-     * Constructs a new instance of the LoginView.
-     *
-     * @param loginViewModel   The ViewModel responsible for managing login-related data.
-     * @param signupViewModel  The ViewModel for signup-related functionality.
-     * @param loginController  The controller handling login actions.
-     * @param viewManagerModel The model managing the active view in the application.
-     */
-    public LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
-                     ViewManagerModel viewManagerModel) {
+    private LoginView(LoginViewModel loginViewModel, SignupViewModel signupViewModel, LoginController loginController,
+                      ViewManagerModel viewManagerModel) {
 
         this.loginController = loginController;
         this.loginViewModel = loginViewModel;
@@ -95,14 +81,30 @@ public class LoginView extends JPanel implements PropertyChangeListener {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 
+
+    /**
+     * Returns the singleton instance of LoginView.
+     * If the instance is null, it initializes it with the provided parameters.
+     *
+     * @param loginViewModel   The ViewModel associated with the Login functionality.
+     * @param signupViewModel  The ViewModel associated with the Signup functionality.
+     * @param loginController  The controller associated with Login functionality.
+     * @param viewManagerModel The Model associated with View Manager.
+     * @return the singleton instance of LoginView.
+     */
+    public static LoginView getInstance(LoginViewModel loginViewModel, SignupViewModel signupViewModel,
+                                        LoginController loginController, ViewManagerModel viewManagerModel) {
+        if (instance == null) {
+            instance = new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
+        }
+        return instance;
+    }
+
     private void addListeners() {
         logIn.addActionListener(evt -> {
             if (evt.getSource().equals(logIn)) {
                 LoginState currentState = loginViewModel.getState();
-                loginController.execute(
-                        currentState.getUsername(),
-                        currentState.getPassword()
-                );
+                loginController.execute(currentState.getUsername(), currentState.getPassword());
             }
         });
 
@@ -205,11 +207,6 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
     }
 
-    /**
-     * Sets the fields based on the provided LoginState.
-     *
-     * @param state The LoginState to set the fields from.
-     */
     private void setFields(LoginState state) {
         usernameInputField.setText(state.getUsername());
     }
@@ -220,14 +217,5 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
     public JButton getLogInButton() {
         return logIn;
-    }
-
-    public static LoginView getInstance (LoginViewModel loginViewModel, SignupViewModel
-            signupViewModel, LoginController loginController,
-                                         ViewManagerModel viewManagerModel){
-        if (instance == null) {
-            instance = new LoginView(loginViewModel, signupViewModel, loginController, viewManagerModel);
-        }
-        return instance;
     }
 }

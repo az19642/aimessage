@@ -13,8 +13,8 @@ public class SignupOutputData {
     /**
      * Constructs a new SignupOutputData with the specified username, creation time, and use case status.
      *
-     * @param username The username associated with the signup.
-     * @param creationTime The creation time of the signup.
+     * @param username      The username associated with the signup.
+     * @param creationTime  The creation time of the signup.
      * @param useCaseFailed Indicates whether the signup use case has failed.
      */
     public SignupOutputData(String username, String creationTime, boolean useCaseFailed) {

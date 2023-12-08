@@ -5,6 +5,7 @@ package services.text_to_speech;
  */
 public class TextToSpeechInputData {
     private final String message;
+
     /**
      * Constructs a new TextToSpeechInputData.
      */

@@ -7,7 +7,7 @@ public interface AddContactOutputBoundary {
 
     /**
      * Prepares the view for a successful mutating of a contact by providing the necessary data.
-     *
+     * <p>
      * Should just call teh main view to refresh the contacts
      */
     void prepareSuccessView();
