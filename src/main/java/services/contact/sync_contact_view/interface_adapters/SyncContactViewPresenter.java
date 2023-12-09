@@ -2,8 +2,8 @@ package services.contact.sync_contact_view.interface_adapters;
 
 import services.contact.sync_contact_view.SyncContactViewOutputBoundary;
 import services.contact.sync_contact_view.SyncContactViewOutputData;
-import services.logged_in.LoggedInState;
-import services.logged_in.LoggedInViewModel;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 
 /**
  * Presenter responsible for handling the output of the use case and updating the corresponding ViewModel.

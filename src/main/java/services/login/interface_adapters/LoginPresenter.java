@@ -1,11 +1,11 @@
 package services.login.interface_adapters;
 
-import services.logged_in.LoggedInViewModel;
+import interface_adapters.ViewManagerModel;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 import services.login.LoginOutputBoundary;
 import services.login.LoginOutputData;
 import services.login.LoginState;
-import interface_adapter.ViewManagerModel;
-import services.logged_in.LoggedInState;
 
 /**
  * Presenter responsible for handling the output of the login use case and updating the corresponding ViewModel.
@@ -16,8 +16,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
     private ViewManagerModel viewManagerModel;
 
-    public LoginPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+    public LoginPresenter(ViewManagerModel viewManagerModel, LoggedInViewModel loggedInViewModel,
                           LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;

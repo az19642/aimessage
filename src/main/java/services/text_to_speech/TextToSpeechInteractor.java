@@ -29,8 +29,7 @@ public class TextToSpeechInteractor implements TextToSpeechInputBoundary {
     public void execute(TextToSpeechInputData textToSpeechInputData) {
         boolean messagePlayed = textToSpeechDataAccessObject.generateAudio(textToSpeechInputData.getMessage());
 
-        TextToSpeechOutputData textToSpeechOutputData =
-                new TextToSpeechOutputData(messagePlayed, false);
+        TextToSpeechOutputData textToSpeechOutputData = new TextToSpeechOutputData(messagePlayed, false);
         // Notify the presenter to prepare the view based on the output data
         textToSpeechPresenter.prepareSuccessView(textToSpeechOutputData);
     }

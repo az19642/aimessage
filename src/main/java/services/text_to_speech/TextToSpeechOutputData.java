@@ -25,5 +25,7 @@ public class TextToSpeechOutputData {
      *
      * @return True if the audio was played successfully, false otherwise.
      */
-    public boolean getSpeechResult() { return audioPlayed; }
+    public boolean getSpeechResult() {
+        return audioPlayed;
+    }
 }

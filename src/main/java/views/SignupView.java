@@ -1,12 +1,12 @@
 package views;
 
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
+import services.generate_password.interface_adapters.GeneratePasswordController;
+import services.generate_password.interface_adapters.GeneratePasswordState;
+import services.generate_password.interface_adapters.GeneratePasswordViewModel;
 import services.login.interface_adapters.LoginViewModel;
-import services.password_generation.interface_adapters.PasswordGeneratorController;
-import services.password_generation.interface_adapters.PasswordGeneratorState;
-import services.password_generation.interface_adapters.PasswordGeneratorViewModel;
-import services.signup.interface_adapters.SignupController;
 import services.signup.SignupState;
+import services.signup.interface_adapters.SignupController;
 import services.signup.interface_adapters.SignupViewModel;
 
 import javax.swing.*;
@@ -16,20 +16,21 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
 /**
  * Represents the view for the signup screen.
- * Allows users to input their desired username, password, and repeat password,
- * and provides signup, login, and password generation buttons.
+ * Allows users to input their username and password, and provides signup and cancel buttons.
  */
 public class SignupView extends JPanel implements PropertyChangeListener {
+    private static SignupView instance;
     public final String viewName = "sign up";
     private final SignupViewModel signupViewModel;
-    private final PasswordGeneratorViewModel passwordGeneratorViewModel;
+    private final GeneratePasswordViewModel generatePasswordViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
     private final JComboBox<String> languageDropdown;
     private final SignupController signupController;
-    private final PasswordGeneratorController passwordGeneratorController;
+    private final GeneratePasswordController generatePasswordController;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
@@ -39,25 +40,16 @@ public class SignupView extends JPanel implements PropertyChangeListener {
     private final Font helveticaFontTwelve = new Font("Helvetica", Font.PLAIN, 12);
     private final Font helveticaFontFourteen = new Font("Helvetica", Font.PLAIN, 14);
 
-
-    /**
-     * Constructs a SignupView.
-     *
-     * @param signUpController            The SignupController for handling signup actions.
-     * @param signupViewModel             The SignupViewModel for managing the signup view's state.
-     * @param loginViewModel              The LoginViewModel for managing the login view's state.
-     * @param viewManagerModel            The ViewManagerModel for controlling the active view.
-     * @param passwordGeneratorController The PasswordGeneratorController for generating secure passwords.
-     */
-    public SignupView(SignupController signUpController, SignupViewModel signupViewModel, PasswordGeneratorViewModel passwordGeneratorViewModel,
-                      LoginViewModel loginViewModel, ViewManagerModel viewManagerModel, PasswordGeneratorController passwordGeneratorController) {
+    private SignupView(SignupController signUpController, SignupViewModel signupViewModel,
+                       GeneratePasswordViewModel generatePasswordViewModel, LoginViewModel loginViewModel,
+                       ViewManagerModel viewManagerModel, GeneratePasswordController generatePasswordController) {
 
         this.signupController = signUpController;
         this.signupViewModel = signupViewModel;
-        this.passwordGeneratorViewModel = passwordGeneratorViewModel;
+        this.generatePasswordViewModel = generatePasswordViewModel;
         this.loginViewModel = loginViewModel;
         this.viewManagerModel = viewManagerModel;
-        this.passwordGeneratorController = passwordGeneratorController;
+        this.generatePasswordController = generatePasswordController;
 
         signupViewModel.addPropertyChangeListener(this);
 
@@ -126,6 +118,30 @@ public class SignupView extends JPanel implements PropertyChangeListener {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 
+
+    /**
+     * Returns the singleton instance of the SignupView class.
+     * If the instance is null, it initializes it with the provided parameters.
+     *
+     * @param signupController           The SignupController to be used by the view.
+     * @param signupViewModel            The SignupViewModel to be used by the view.
+     * @param generatePasswordViewModel  The GeneratePasswordViewModel to be used by the view.
+     * @param loginViewModel             The LoginViewModel to be used by the view.
+     * @param viewManagerModel           The ViewManagerModel to be used by the view.
+     * @param generatePasswordController The GeneratePasswordController to be used by the view.
+     * @return The singleton instance of the SignupView class.
+     */
+    public static SignupView getInstance(SignupController signupController, SignupViewModel signupViewModel,
+                                         GeneratePasswordViewModel generatePasswordViewModel,
+                                         LoginViewModel loginViewModel, ViewManagerModel viewManagerModel,
+                                         GeneratePasswordController generatePasswordController) {
+        if (instance == null) {
+            instance = new SignupView(signupController, signupViewModel, generatePasswordViewModel, loginViewModel,
+                    viewManagerModel, generatePasswordController);
+        }
+        return instance;
+    }
+
     private void addListeners() {
         usernameInputField.addKeyListener(new KeyListener() {
             @Override
@@ -181,9 +197,9 @@ public class SignupView extends JPanel implements PropertyChangeListener {
 
         generatePassword.addActionListener(evt -> {
             if (evt.getSource().equals(generatePassword)) {
-                passwordGeneratorController.execute("Generate a secure password.");
-                PasswordGeneratorState passwordGeneratorState = passwordGeneratorViewModel.getState();
-                String generatedPassword = passwordGeneratorState.getGeneratedPassword();
+                generatePasswordController.execute("Generate a secure password.");
+                GeneratePasswordState generatePasswordState = generatePasswordViewModel.getState();
+                String generatedPassword = generatePasswordState.getGeneratedPassword();
 
                 // Update signup state
                 SignupState currentState = signupViewModel.getState();

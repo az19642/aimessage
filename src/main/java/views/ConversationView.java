@@ -1,19 +1,19 @@
 package views;
 
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.conversation.interface_adapters.ConversationState;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.conversation.sync_conversation_view.interface_adapters.ConversationSyncController;
-import services.send_message.interface_adapters.MessageSenderController;
+import services.conversation.send_message.interface_adapters.SendMessageController;
+import services.conversation.sync_conversation_view.interface_adapters.SyncConversationController;
 import services.signup.SignupState;
 import services.signup.interface_adapters.SignupViewModel;
-import services.suggest_reply.interface_adapters.ReplySuggesterController;
-import services.suggest_reply.interface_adapters.ReplySuggesterState;
-import services.suggest_reply.interface_adapters.ReplySuggesterViewModel;
+import services.suggest_reply.interface_adapters.SuggestReplyController;
+import services.suggest_reply.interface_adapters.SuggestReplyState;
+import services.suggest_reply.interface_adapters.SuggestReplyViewModel;
 import services.text_to_speech.interface_adapters.TextToSpeechController;
-import services.translate_message.interface_adapters.MessageTranslatorController;
-import services.translate_message.interface_adapters.MessageTranslatorState;
-import services.translate_message.interface_adapters.MessageTranslatorViewModel;
+import services.translate_message.interface_adapters.TranslateMessageController;
+import services.translate_message.interface_adapters.TranslateMessageState;
+import services.translate_message.interface_adapters.TranslateMessageViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,11 +22,11 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
 public class ConversationView extends JPanel implements PropertyChangeListener {
+
     private static ConversationView instance;
     public final String viewName = "conversation";
     private final JList<Map.Entry<LocalDateTime, List<String>>> conversationHistory;
@@ -36,35 +36,33 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
     private final JButton backButton;
     private final JButton syncButton;
     private final ConversationViewModel conversationViewModel;
-    private final ReplySuggesterViewModel replySuggesterViewModel;
-    private final MessageTranslatorViewModel messageTranslatorViewModel;
+    private final SuggestReplyViewModel suggestReplyViewModel;
+    private final TranslateMessageViewModel translateMessageViewModel;
     private final SignupViewModel signupViewModel;
 
-    private final MessageSenderController messageSenderController;
-    private final ConversationSyncController conversationSyncController;
+    private final SendMessageController sendMessageController;
+    private final SyncConversationController syncConversationController;
     private final TextToSpeechController textToSpeechController;
-    private final ReplySuggesterController replySuggesterController;
-    private final MessageTranslatorController messageTranslatorController;
+    private final SuggestReplyController suggestReplyController;
+    private final TranslateMessageController translateMessageController;
 
-    private ConversationView(ConversationViewModel conversationViewModel,
-                             MessageSenderController messageSenderController,
-                             ConversationSyncController conversationSyncController,
+    private ConversationView(ConversationViewModel conversationViewModel, SendMessageController sendMessageController,
+                             SyncConversationController syncConversationController,
                              TextToSpeechController textToSpeechController,
-                             ReplySuggesterController replySuggesterController,
-                             MessageTranslatorController messageTranslatorController,
-                             ReplySuggesterViewModel replySuggesterViewModel,
-                             MessageTranslatorViewModel messageTranslatorViewModel,
-                             SignupViewModel signupViewModel,
+                             SuggestReplyController suggestReplyController,
+                             TranslateMessageController translateMessageController,
+                             SuggestReplyViewModel suggestReplyViewModel,
+                             TranslateMessageViewModel translateMessageViewModel, SignupViewModel signupViewModel,
                              ViewManagerModel viewManagerModel) {
         this.conversationViewModel = conversationViewModel;
-        this.messageSenderController = messageSenderController;
-        this.conversationSyncController = conversationSyncController;
+        this.sendMessageController = sendMessageController;
+        this.syncConversationController = syncConversationController;
         this.textToSpeechController = textToSpeechController;
-        this.replySuggesterController = replySuggesterController;
-        this.messageTranslatorController = messageTranslatorController;
-        this.replySuggesterViewModel = replySuggesterViewModel;
+        this.suggestReplyController = suggestReplyController;
+        this.translateMessageController = translateMessageController;
+        this.suggestReplyViewModel = suggestReplyViewModel;
         this.signupViewModel = signupViewModel;
-        this.messageTranslatorViewModel = messageTranslatorViewModel;
+        this.translateMessageViewModel = translateMessageViewModel;
 
         conversationHistory = new JList<>();
         conversationHistory.setCellRenderer(new ConversationHistoryCellRenderer());
@@ -104,19 +102,19 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                     translateMessage.addActionListener(evtPrime -> {
                         SignupState signupState = signupViewModel.getState();
                         String preferredLanguage = signupState.getPreferredLanguage();
-                        messageTranslatorController.execute(selectedMessage, preferredLanguage);
+                        translateMessageController.execute(selectedMessage, preferredLanguage);
 
-                        MessageTranslatorState messageTranslatorState = messageTranslatorViewModel.getState();
+                        TranslateMessageState translateMessageState = translateMessageViewModel.getState();
                         JOptionPane.showMessageDialog(ConversationView.this,
-                                messageTranslatorState.getTranslatedMessage());
+                                translateMessageState.getTranslatedMessage());
                     });
                     speakMessage.addActionListener(evtPrime -> {
                         textToSpeechController.execute(selectedMessage);
                     });
                     suggestReply.addActionListener(evtPrime -> {
                         String prompt = "Pretend as if you are my friend messaging me. I'll start: " + selectedMessage;
-                        replySuggesterController.execute(prompt);
-                        ReplySuggesterState replyState = replySuggesterViewModel.getState();
+                        suggestReplyController.execute(prompt);
+                        SuggestReplyState replyState = suggestReplyViewModel.getState();
                         String suggestedReply = replyState.getGeneratedReply();
 
                         ConversationState conversationState = conversationViewModel.getState();
@@ -142,8 +140,8 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
             if (evt.getSource() == sendButton) {
                 ConversationState conversationState = conversationViewModel.getState();
                 String message = messageInput.getText();
-                messageSenderController.execute(conversationState.getContactName(), message);
-                conversationSyncController.execute(conversationState.getContactName());
+                sendMessageController.execute(conversationState.getContactName(), message);
+                syncConversationController.execute(conversationState.getContactName());
                 messageInput.setText("");
             }
         });
@@ -153,7 +151,7 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         syncButton.addActionListener(evt -> {
             if (evt.getSource() == syncButton) {
                 ConversationState conversationState = conversationViewModel.getState();
-                conversationSyncController.execute(conversationState.getContactName());
+                syncConversationController.execute(conversationState.getContactName());
             }
         });
 
@@ -183,11 +181,82 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
         conversationViewModel.addPropertyChangeListener(this);
     }
 
+
+    /**
+     * Returns the singleton instance of the ConversationView.
+     *
+     * @param conversationViewModel      The ConversationViewModel to use.
+     * @param sendMessageController      The SendMessageController to use.
+     * @param syncConversationController The SyncConversationController to use.
+     * @param textToSpeechController     The TextToSpeechController to use.
+     * @param suggestReplyController     The SuggestReplyController to use.
+     * @param translateMessageController The TranslateMessageController to use.
+     * @param suggestReplyViewModel      The SuggestReplyViewModel to use.
+     * @param translateMessageViewModel  The TranslateMessageViewModel to use.
+     * @param signupViewModel            The SignupViewModel to use.
+     * @param viewManagerModel           The ViewManagerModel to use.
+     * @return The singleton instance of the ConversationView.
+     */
+    public static ConversationView getInstance(ConversationViewModel conversationViewModel,
+                                               SendMessageController sendMessageController,
+                                               SyncConversationController syncConversationController,
+                                               TextToSpeechController textToSpeechController,
+                                               SuggestReplyController suggestReplyController,
+                                               TranslateMessageController translateMessageController,
+                                               SuggestReplyViewModel suggestReplyViewModel,
+                                               TranslateMessageViewModel translateMessageViewModel,
+                                               SignupViewModel signupViewModel, ViewManagerModel viewManagerModel) {
+        if (instance == null) {
+            instance = new ConversationView(conversationViewModel, sendMessageController, syncConversationController,
+                    textToSpeechController, suggestReplyController, translateMessageController, suggestReplyViewModel,
+                    translateMessageViewModel, signupViewModel, viewManagerModel);
+        }
+        return instance;
+    }
+
+    /**
+     * Handles property change events.
+     *
+     * @param evt The PropertyChangeEvent representing the change.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        ConversationState state = conversationViewModel.getState();
+        // if the contactToLastMessage map is null (not the same as empty), then the user has just logged in
+        if (state.getTimestampToMessage() == null) {
+            syncConversationController.execute(state.getContactName());
+        }
+
+        DefaultListModel<Map.Entry<LocalDateTime, List<String>>> listModel = new DefaultListModel<>();
+        for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
+            listModel.addElement(entry);
+        }
+        conversationHistory.setModel(listModel);
+        //        ConversationState state = conversationViewModel.getState();
+        //
+        //        if (state.getTimestampToMessage() == null) {
+        //            syncConversationController.execute(state.getContactName());
+        //        }
+        //        conversationHistory.setText("");
+        //
+        //        for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
+        //            String timestamp = entry.getKey().toString();
+        //            String sender = entry.getValue().get(0);
+        //            String message = entry.getValue().get(1);
+        //            conversationHistory.append(String.format("%s %s %s\n", sender, message, timestamp));
+        //        }
+    }
+
+    public JButton getBackButton() {
+        return backButton;
+    }
+
     private static class ConversationHistoryCellRenderer extends JLabel
             implements ListCellRenderer<Map.Entry<LocalDateTime, List<String>>> {
+
         @Override
-        public Component getListCellRendererComponent(JList<? extends Map.Entry<LocalDateTime,
-                List<String>>> list, Map.Entry<LocalDateTime, List<String>> entry, int index,
+        public Component getListCellRendererComponent(JList<? extends Map.Entry<LocalDateTime, List<String>>> list,
+                                                      Map.Entry<LocalDateTime, List<String>> entry, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
             String ldtString = entry.getKey().toLocalTime().toString();
             String[] arr = ldtString.split(":");
@@ -201,8 +270,9 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
 
             String timeFinal = hour.toString() + ":" + arr[1] + " " + amOrPm;
 
-            String cellText = String.format("<html><div style='margin: 5px;'><p><b>%s - %s</b></p>" +
-                    "<p>%s</p></div></html>", entry.getValue().get(0), timeFinal, entry.getValue().get(1));
+            String cellText = String.format(
+                    "<html><div style='margin: 5px;'><p><b>%s - %s</b></p>" + "<p>%s</p></div></html>",
+                    entry.getValue().get(0), timeFinal, entry.getValue().get(1));
             setText(cellText);
             customizeCellAppearance(list, isSelected);
             return this;
@@ -219,62 +289,5 @@ public class ConversationView extends JPanel implements PropertyChangeListener {
                 setForeground(list.getForeground());
             }
         }
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        ConversationState state = conversationViewModel.getState();
-        // if the contactToLastMessage map is null (not the same as empty), then the user has just logged in
-        if (state.getTimestampToMessage() == null) {
-            conversationSyncController.execute(state.getContactName());
-        }
-
-        DefaultListModel<Map.Entry<LocalDateTime, List<String>>> listModel = new DefaultListModel<>();
-        for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
-            listModel.addElement(entry);
-        }
-        conversationHistory.setModel(listModel);
-//        ConversationState state = conversationViewModel.getState();
-//
-//        if (state.getTimestampToMessage() == null) {
-//            conversationSyncController.execute(state.getContactName());
-//        }
-//        conversationHistory.setText("");
-//
-//        for (Map.Entry<LocalDateTime, List<String>> entry : state.getTimestampToMessage().entrySet()) {
-//            String timestamp = entry.getKey().toString();
-//            String sender = entry.getValue().get(0);
-//            String message = entry.getValue().get(1);
-//            conversationHistory.append(String.format("%s %s %s\n", sender, message, timestamp));
-//        }
-    }
-
-
-    public JButton getBackButton() {
-        return backButton;
-    }
-    public static ConversationView getInstance(ConversationViewModel conversationViewModel,
-                                               MessageSenderController messageSenderController,
-                                               ConversationSyncController conversationSyncController,
-                                               TextToSpeechController textToSpeechController,
-                                               ReplySuggesterController replySuggesterController,
-                                               MessageTranslatorController messageTranslatorController,
-                                               ReplySuggesterViewModel replySuggesterViewModel,
-                                               MessageTranslatorViewModel messageTranslatorViewModel,
-                                               SignupViewModel signupViewModel,
-                                               ViewManagerModel viewManagerModel) {
-        if (instance == null) {
-            instance = new ConversationView(conversationViewModel,
-                    messageSenderController,
-                    conversationSyncController,
-                    textToSpeechController,
-                    replySuggesterController,
-                    messageTranslatorController,
-                    replySuggesterViewModel,
-                    messageTranslatorViewModel,
-                    signupViewModel,
-                    viewManagerModel);
-        }
-        return instance;
     }
 }

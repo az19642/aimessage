@@ -1,6 +1,6 @@
 package services.conversation.interface_adapters;
 
-import interface_adapter.ViewModel;
+import interface_adapters.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -10,9 +10,9 @@ import java.beans.PropertyChangeSupport;
  * Contains the state of the conversation view.
  */
 public class ConversationViewModel extends ViewModel {
+    public static final String SYNC_BUTTON_LABEL = "Sync to database";
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private ConversationState state = new ConversationState();
-    public static final String SYNC_BUTTON_LABEL = "Sync to database";
 
     public ConversationViewModel() {
         super("conversation");

@@ -22,8 +22,7 @@ public class AddContactInteractor implements AddContactInputBoundary {
 
     @Override
     public void execute(AddContactInputData addContactInputData) {
-        String result = this.mutatingContactsUserDataAccessInterface.addContact(
-                addContactInputData.getContactName());
+        String result = this.mutatingContactsUserDataAccessInterface.addContact(addContactInputData.getContactName());
 
         if (result.equals("PASS")) {
             mutatingContactsPresenter.prepareSuccessView();

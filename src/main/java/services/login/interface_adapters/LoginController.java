@@ -22,8 +22,7 @@ public class LoginController {
      * @param password The password provided for login.
      */
     public void execute(String username, String password) {
-        LoginInputData loginInputData = new LoginInputData(
-                username, password);
+        LoginInputData loginInputData = new LoginInputData(username, password);
 
         loginUseCaseInteractor.execute(loginInputData);
     }

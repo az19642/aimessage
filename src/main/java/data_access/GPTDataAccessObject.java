@@ -1,29 +1,30 @@
 package data_access;
 
+import com.theokanning.openai.audio.CreateSpeechRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
-import com.theokanning.openai.audio.CreateSpeechRequest;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
-
-import services.password_generation.PasswordGeneratorUserDataAccessInterface;
+import okhttp3.ResponseBody;
+import services.generate_password.GeneratePasswordDataAccessInterface;
+import services.suggest_reply.SuggestReplyDataAccessInterface;
 import services.text_to_speech.TextToSpeechDataAccessInterface;
-import services.suggest_reply.ReplySuggesterUserDataAccessInterface;
+import services.translate_message.TranslateMessageDataAccessInterface;
 
-import okhttp3.*;
-import services.translate_message.TranslatorDataAccessInterface;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents a data access object for generating secure passwords using the GPT model from OpenAI.
+ * This class represents a data access object for generating secure passwords using the GPT model
+ * from OpenAI.
  */
-public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInterface, TextToSpeechDataAccessInterface,
-        ReplySuggesterUserDataAccessInterface, TranslatorDataAccessInterface {
+public class GPTDataAccessObject implements GeneratePasswordDataAccessInterface, TextToSpeechDataAccessInterface,
+        SuggestReplyDataAccessInterface, TranslateMessageDataAccessInterface {
 
     private final OpenAiService service;
 
@@ -34,6 +35,18 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
      */
     public GPTDataAccessObject(String openaiApiKey) {
         this.service = new OpenAiService(openaiApiKey);
+    }
+
+    private static void playMP3(InputStream inputStream) {
+        try {
+            AdvancedPlayer player = new AdvancedPlayer(inputStream);
+
+            // Start playing the MP3 file
+            player.play();
+
+        } catch (JavaLayerException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -57,15 +70,12 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
         messages.add(userMessage);
 
-        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
-                .builder()
-                .model("gpt-4")
-                .messages(messages)
-                .maxTokens(10)
-                .build();
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder().model("gpt-4").messages(
+                messages).maxTokens(10).build();
 
         try {
-            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(
+                    0).getMessage();
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to generate a password.";
@@ -76,16 +86,14 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
      * Generates audio from the provided text using a text-to-speech service and plays it.
      *
      * @param message The text to be converted into audio.
-     * @return {@code true} if the audio generation and playback were successful; {@code false} otherwise.
+     * @return {@code true} if the audio generation and playback were successful; {@code false}
+     * otherwise.
      * @throws IOException If an I/O error occurs during the processing of the audio content.
      */
     @Override
     public boolean generateAudio(String message) {
-        CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder()
-                .model("tts-1")
-                .input(message)
-                .voice("alloy")
-                .build();
+        CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder().model("tts-1").input(message).voice(
+                "alloy").build();
 
         try {
             ResponseBody speech = service.createSpeech(createSpeechRequest);
@@ -99,20 +107,9 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
         }
     }
 
-    private static void playMP3(InputStream inputStream) {
-        try {
-            AdvancedPlayer player = new AdvancedPlayer(inputStream);
-
-            // Start playing the MP3 file
-            player.play();
-
-        } catch (JavaLayerException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
-     * Generates a suggested reply based on the provided prompt and last message of the other user using the GPT model.
+     * Generates a suggested reply based on the provided prompt and last message of the other user
+     * using the GPT model.
      *
      * @param prompt The prompt for generating the suggested reply.
      * @return The generated suggested reply as a string.
@@ -123,14 +120,12 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
         messages.add(userMessage);
 
-        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
-                .builder()
-                .model("gpt-4")
-                .messages(messages)
-                .build();
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder().model("gpt-4").messages(
+                messages).build();
 
         try {
-            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(
+                    0).getMessage();
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to suggest a reply.";
@@ -151,15 +146,13 @@ public class GPTDataAccessObject implements PasswordGeneratorUserDataAccessInter
         ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
         messages.add(userMessage);
 
-        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
-                .builder()
-                .model("gpt-4")
-                .messages(messages)
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder().model("gpt-4").messages(messages)
                 // No maxTokens set to let it depend on the input text
                 .build();
 
         try {
-            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage();
+            ChatMessage responseMessage = service.createChatCompletion(chatCompletionRequest).getChoices().get(
+                    0).getMessage();
             return responseMessage.getContent();
         } catch (Exception e) {
             return "Error: Failed to generate a translation.";

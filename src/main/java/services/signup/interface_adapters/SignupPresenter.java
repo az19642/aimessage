@@ -1,11 +1,11 @@
 package services.signup.interface_adapters;
 
-import services.signup.SignupOutputData;
-import services.signup.SignupState;
-import services.signup.SignupOutputBoundary;
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 import services.login.LoginState;
 import services.login.interface_adapters.LoginViewModel;
+import services.signup.SignupOutputBoundary;
+import services.signup.SignupOutputData;
+import services.signup.SignupState;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +26,7 @@ public class SignupPresenter implements SignupOutputBoundary {
      * @param signupViewModel  The SignupViewModel representing the state of the signup screen.
      * @param loginViewModel   The LoginViewModel representing the state of the login screen.
      */
-    public SignupPresenter(ViewManagerModel viewManagerModel,
-                           SignupViewModel signupViewModel,
+    public SignupPresenter(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel,
                            LoginViewModel loginViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;

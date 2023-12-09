@@ -94,16 +94,6 @@ public class LoginState {
     }
 
     /**
-     * Sets the error message related to the login process.
-     * Compared to the username and password errors, this error is more generic.
-     *
-     * @param loginError The new error message to be set.
-     */
-    public void setLoginError(String loginError) {
-        this.loginError = loginError;
-    }
-
-    /**
      * Gets the error message related to the login process.
      * Compared to the username and password errors, this error is more generic.
      *
@@ -111,5 +101,15 @@ public class LoginState {
      */
     public String getLoginError() {
         return loginError;
+    }
+
+    /**
+     * Sets the error message related to the login process.
+     * Compared to the username and password errors, this error is more generic.
+     *
+     * @param loginError The new error message to be set.
+     */
+    public void setLoginError(String loginError) {
+        this.loginError = loginError;
     }
 }

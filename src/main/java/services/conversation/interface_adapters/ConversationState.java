@@ -1,8 +1,8 @@
 package services.conversation.interface_adapters;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the state of a conversation.
@@ -55,9 +55,13 @@ public class ConversationState {
         this.contactName = contactName;
     }
 
-    public String getMessage() {return this.message;}
+    public String getMessage() {
+        return this.message;
+    }
 
-    public void setMessage(String message) {this.message = message;}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
 
 }

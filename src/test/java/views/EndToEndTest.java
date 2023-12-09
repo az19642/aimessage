@@ -2,29 +2,30 @@ package views;
 
 import app.ConversationViewFactory;
 import app.LoggedInViewFactory;
-import app.LoginUseCaseFactory;
-import app.SignupUseCaseFactory;
+import app.LoginViewFactory;
+import app.SignupViewFactory;
 import data_access.GPTDataAccessObject;
 import data_access.MongoDataAccessObject;
 import entities.CommonUserFactory;
-import interface_adapter.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
+import org.junit.jupiter.api.Test;
 import services.conversation.interface_adapters.ConversationViewModel;
-import services.logged_in.LoggedInState;
+import services.generate_password.interface_adapters.GeneratePasswordViewModel;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 import services.login.LoginState;
 import services.login.interface_adapters.LoginViewModel;
-import services.password_generation.interface_adapters.PasswordGeneratorViewModel;
 import services.signup.SignupState;
 import services.signup.interface_adapters.SignupViewModel;
-import org.junit.jupiter.api.Test;
-import services.logged_in.LoggedInViewModel;
-import services.suggest_reply.interface_adapters.ReplySuggesterViewModel;
+import services.suggest_reply.interface_adapters.SuggestReplyViewModel;
 import services.text_to_speech.interface_adapters.TextToSpeechViewModel;
-import services.translate_message.interface_adapters.MessageTranslatorViewModel;
+import services.translate_message.interface_adapters.TranslateMessageViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class EndToEndTest {
 
@@ -45,52 +46,51 @@ class EndToEndTest {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         ConversationViewModel conversationViewModel = new ConversationViewModel();
-        PasswordGeneratorViewModel passwordGeneratorViewModel = new PasswordGeneratorViewModel();
+        GeneratePasswordViewModel generatePasswordViewModel = new GeneratePasswordViewModel();
         TextToSpeechViewModel textToSpeechViewModel = new TextToSpeechViewModel();
-        ReplySuggesterViewModel replySuggesterViewModel = new ReplySuggesterViewModel();
-        MessageTranslatorViewModel messageTranslatorViewModel = new MessageTranslatorViewModel();
+        SuggestReplyViewModel suggestReplyViewModel = new SuggestReplyViewModel();
+        TranslateMessageViewModel translateMessageViewModel = new TranslateMessageViewModel();
 
-        MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(
-                System.getenv("MONGO_PASSWORD"),
-                new CommonUserFactory()
-        );
+        MongoDataAccessObject mongoDataAccessObject = new MongoDataAccessObject(System.getenv("MONGO_PASSWORD"),
+                new CommonUserFactory());
 
         GPTDataAccessObject gptDataAccessObject;
         gptDataAccessObject = new GPTDataAccessObject(System.getenv("OPENAI_API_KEY"));
 
-        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-                mongoDataAccessObject, passwordGeneratorViewModel, gptDataAccessObject);
+        SignupView signupView = SignupViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                generatePasswordViewModel, mongoDataAccessObject, gptDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+        LoginView loginView = LoginViewFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 loggedInViewModel, mongoDataAccessObject);
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(viewManagerModel, loggedInViewModel,
-                conversationViewModel ,mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
+                conversationViewModel, mongoDataAccessObject, mongoDataAccessObject, mongoDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         ConversationView conversationView = ConversationViewFactory.create(viewManagerModel, conversationViewModel,
-                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, textToSpeechViewModel,
-                replySuggesterViewModel, messageTranslatorViewModel, signupViewModel);
+                mongoDataAccessObject, mongoDataAccessObject, gptDataAccessObject, gptDataAccessObject,
+                gptDataAccessObject, textToSpeechViewModel, suggestReplyViewModel, translateMessageViewModel,
+                signupViewModel);
         views.add(conversationView, conversationView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);
         viewManagerModel.firePropertyChanged();
 
-        SignupState currentState = signupViewModel.getState();
+        SignupState signupState = signupViewModel.getState();
 
         mongoDataAccessObject.deleteUser("newTest");
         // Set the test username
-        currentState.setUsername(("newTest"));
+        signupState.setUsername(("newTest"));
 
         // Click the generate password button, which saves the password to the state
         assertEquals("sign up", viewManagerModel.getActiveView());
         signupView.getGeneratePasswordButton().doClick();
 
         // Update the state with the repeated password
-        String generatedPassword = currentState.getPassword();
-        currentState.setRepeatPassword(generatedPassword);
+        String generatedPassword = signupState.getPassword();
+        signupState.setRepeatPassword(generatedPassword);
 
 
         // Sign up a new user

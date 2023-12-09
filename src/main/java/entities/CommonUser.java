@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * This class represents a common user of the software
- * Every user will have a unique username
+ * This class represents a common user.
  */
 class CommonUser implements User {
 
@@ -15,8 +14,17 @@ class CommonUser implements User {
     private String preferredLanguage;
     private List<Contact> contacts;
 
-    CommonUser(String name, String password, String preferredLanguage,
-               LocalDateTime creationTime, List<Contact> contacts) {
+    /**
+     * Constructs a new CommonUser object.
+     *
+     * @param name              The name of the user.
+     * @param password          The password of the user.
+     * @param preferredLanguage The preferred language of the user.
+     * @param creationTime      The creation time of the user.
+     * @param contacts          The contacts of the user.
+     */
+    CommonUser(String name, String password, String preferredLanguage, LocalDateTime creationTime,
+               List<Contact> contacts) {
         this.name = name;
         this.password = password;
         this.preferredLanguage = preferredLanguage;
@@ -54,20 +62,27 @@ class CommonUser implements User {
         return preferredLanguage;
     }
 
+
     /**
-     * Retrieves the List of contacts associated with this user.
+     * Retrieves the contacts associated with this user.
      *
-     * @return the List of contacts of this user
+     * @return A list of contacts of this user.
      */
     @Override
     public List<Contact> getContacts() {
         return contacts;
     }
 
+    /**
+     * Retrieves the contact with the given name.
+     *
+     * @param contactName The name of the contact to retrieve.
+     * @return The contact with the given name.
+     */
     @Override
     public Contact getContact(String contactName) {
 
-        for(Contact contact: contacts) {
+        for (Contact contact : contacts) {
             if (contact.getName().equals(contactName)) {
                 return contact;
             }
@@ -76,10 +91,11 @@ class CommonUser implements User {
         return null;
     }
 
+
     /**
-     * Retrieves the creation time associated with this object.
+     * Retrieves the creation time of this user.
      *
-     * @return the creation time of the object
+     * @return The LocalDateTime for the creation time of this user.
      */
     @Override
     public LocalDateTime getCreationTime() {

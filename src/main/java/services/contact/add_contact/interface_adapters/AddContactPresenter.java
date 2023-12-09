@@ -1,9 +1,9 @@
 package services.contact.add_contact.interface_adapters;
 
 
-import services.logged_in.LoggedInState;
-import services.logged_in.LoggedInViewModel;
 import services.contact.add_contact.AddContactOutputBoundary;
+import services.logged_in.interface_adapters.LoggedInState;
+import services.logged_in.interface_adapters.LoggedInViewModel;
 
 /**
  * Presenter responsible for handling the output of the mutating contacts use case.
@@ -19,7 +19,6 @@ public class AddContactPresenter implements AddContactOutputBoundary {
 
     /**
      * Prepares the view for a successful mutation of contacts by providing a success message.
-     *
      */
     @Override
     public void prepareSuccessView() {

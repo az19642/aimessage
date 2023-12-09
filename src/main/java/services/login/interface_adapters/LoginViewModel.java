@@ -1,7 +1,7 @@
 package services.login.interface_adapters;
 
+import interface_adapters.ViewModel;
 import services.login.LoginState;
-import interface_adapter.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
